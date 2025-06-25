@@ -63,7 +63,7 @@
             flex-direction: column; /* Stack elements vertically */
             align-items: center;
             justify-content: center;
-            gap: 0.5rem; /* Reduced gap for stacked elements */
+            gap: 0; /* Space between elements in header (now 0) */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow for header */
             text-align: center; /* Center text within header */
         }
@@ -71,20 +71,20 @@
         .app-header h1 { /* This is "Employee Performance Drafting Tool" */
             font-size: 1.75rem; /* Smaller than h2 now */
             font-weight: 700;
-            margin: 0;
+            margin: 0; /* Explicitly set margin to 0 */
             text-align: center;
         }
         .app-header h2 { /* This is "Employee Performance Hub" */
-            font-size: 2.25rem; /* Bigger than h1 now */
+            font-size: 3.25rem; /* Bigger than h1 now */
             font-weight: 600;
-            margin: 0;
+            margin: 0; /* Explicitly set margin to 0 */
             color: white;
         }
         #sudani-logo {
             height: 45px; /* Adjust logo size */
             width: auto;
             filter: brightness(0) invert(1); /* Makes logo white */
-            margin-bottom: 0.5rem; /* Space below logo */
+            margin: 0; /* Explicitly set margin to 0 */
         }
         /* No need to flip for RTL if using column-reverse or aligning center */
         html[dir="rtl"] .app-header {
@@ -396,7 +396,10 @@
     <div class="app-main-container">
         <header class="app-header">
             <h2 data-i18n="employeePerformanceHub">Employee Performance Hub</h2>
-            <img id="sudani-logo" src="Sudani_logo.png" alt="">
+            <!-- To make the logo portable, replace the src attribute with a Base64 encoded image string. -->
+            <!-- You can use online tools to convert your 'Sudani_logo.png' to a Base64 string. -->
+            <!-- Example: <img id="sudani-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Sudani Logo"> -->
+            <img id="sudani-logo" src="Sudani_logo.png" alt="Sudani Logo">
             <h1 data-i18n="appSubTitle">Employee Performance Drafting Tool</h1>
         </header>
 
@@ -596,182 +599,11 @@
                 placeholderAccomplishments: 'e.g., Successfully launched feature A, received positive feedback from users.',
                 placeholderManagerObservations: "e.g., Noted employee's proactive approach to problem-solving.",
                 placeholderNextStepsCheckIn: 'e.g., Follow up on software Y updates, research new training opportunities.',
-                referencesTitle: 'References', // New
-                referencesContent: 'This section provides resources and references for effective performance management practices:', // New
-                reference1: '1. Harvard Business Review: "How to Give Performance Reviews" - [Link](https://hbr.org/2021/01/how-to-give-performance-reviews)', // New
-                reference2: '2. Forbes: "The Importance Of Employee Performance Reviews" - [Link](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)', // New
-                reference3: '3. SHRM: "Performance Management" - [Link](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)', // New
-            },
-            ar: {
-                employeePerformanceHub: 'مركز أداء الموظفين', // New
-                appTitle: 'مساعد صياغة الأداء', // Kept for old reference, but subtitle will be used
-                appSubTitle: 'أداة صياغة أداء الموظفين', // Updated
-                smartGoalsBtn: 'أهداف ذكية',
-                appraisalFeedbackBtn: 'ملاحظات التقييم',
-                performanceNotesBtn: 'ملاحظات الأداء',
-                idpBtn: 'خطة التطوير الفردي',
-                regularCheckInBtn: 'التغذية الراجعة الدورية',
-                referencesBtn: 'المراجع', // New
-                smartGoalDrafting: 'صياغة أهداف ذكية',
-                goalName: 'اسم الهدف',
-                targetKpi: 'الهدف / مؤشر الأداء الرئيسي',
-                deadline: 'الموعد النهائي',
-                successCriteriaInputLabel: 'معايير النجاح الخاصة بك (اختياري)',
-                generateSubtasks: 'توليد مهام فرعية قابلة للتنفيذ',
-                generateSmartGoal: 'توليد هدف ذكي',
-                generatedDrafts: 'المسودات المتولدة:',
-                smartGoalDraft: 'مسودة هدف ذكي',
-                goalLabel: 'الهدف:',
-                targetKpiLabel: 'الهدف / مؤشر الأداء الرئيسي:',
-                suggestedSubtasks: 'المهام الفرعية المقترحة:',
-                copyToClipboard: 'نسخ إلى الحافظة',
-                copied: 'تم النسخ!',
-                failedToCopy: 'فشل نسخ النص. يرجى النسخ يدويًا.',
-                fillAllMandatoryFields: 'يرجى ملء جميع الحقول الإلزامية: اسم الهدف، الهدف/مؤشر الأداء الرئيسي، والموعد النهائي.',
-                failedToGenerate: 'فشل التوليد:',
-                failedToGenerateGoals: 'فشل في توليد أهداف ذكية أو تلقى استجابة فارغة. يرجى محاولة تعديل مدخلاتك.',
-                targetKpiNotAvailable: 'غير متوفر',
-                suggestSuccessCriteria: 'اقتراح معايير النجاح',
-                suggestedSuccessCriteria: 'معايير النجاح المقترحة:',
-
-                appraisalFeedback: 'ملاحظات تقييم الأداء',
-                selectPerformanceTier: 'اختر مستوى الأداء',
-                poorPerformance: 'أداء ضعيف',
-                belowExpectations: 'أقل من التوقعات',
-                meetExpectations: 'يلبي التوقعات',
-                exceedExpectations: 'يتجاوز التوقعات',
-                outstanding: 'متميز',
-                inputsFor: 'مدخلات لـ',
-                employeeDidntAchieveGoals: 'تأكيد عدم تحقيق الموظف لجميع الأهداف',
-                documentedExamples: 'أمثلة موثقة للسلوكيات أو النتائج التي أدت إلى هذا التقييم',
-                managerSupportExamples: 'أمثلة على الدعم المقدم من المدير لتعزيز الأداء',
-                strengthsWeaknessesAnalysis: 'تحليل نقاط القوة والضعف',
-                projectsGoalsUnmet: 'المشاريع/الأهداف/المبادرات التي لم تتحقق التوقعات فيها',
-                documentedBehaviorResults: 'أمثلة موثقة للسلوك/النتائج التي لم تلبي التوقعات',
-                managerSupportToImprove: 'أمثلة لدعم المدير لتحسين السلوك',
-                proposedTrainingPlan: 'خطة تدريب فردية مقترحة',
-                skillsForFutureAdvancement: 'المهارات والخبرات المطلوبة للتقدم المستقبلي',
-                plannedResponsibilities: 'المسؤوليات المخطط لها',
-                accomplishedResponsibilities: 'المسؤوليات المنجزة',
-                coreResponsibilities: 'المسؤوليات الأساسية',
-                additionalAchievements: 'إنجازات إضافية',
-                justificationAdditional: 'مبرر التصنيف "إضافية"',
-                achievementsImpact: 'تأثير هذه الإنجازات.',
-                outstandingSubOption: 'خيار فرعي متميز',
-                selectAnOption: 'اختر خيارًا',
-                workedInRiskAreas: 'عمل في منطقة خطر',
-                createdInnovation: 'أوجد ابتكارًا',
-                exceededTarget: 'تجاوز الهدف',
-                missionDetails: 'تفاصيل المهمة (الموقع، الوقت، سياق الخطر)',
-                solutionDescription: 'وصف الحل',
-                businessImpactMetrics: 'مقاييس تأثير العمل',
-                targetSurpassMetrics: 'مقاييس تجاوز الهدف (كمية)',
-                impactExceededTarget: 'التأثير',
-                generateFeedback: 'توليد الملاحظات',
-                generatedFeedback: 'الملاحظات المتولدة:',
-                fillAppraisalMandatoryFields: 'يرجى اختيار مستوى أداء وملء جميع الحقول الإلزامية للمستوى المحدد.',
-
-                performanceNotes: 'ملاحظات الأداء',
-                dateOfObservation: 'تاريخ الملاحظة',
-                feedbackType: 'نوع الملاحظة',
-                recognition: 'تقدير',
-                development: 'تطوير',
-                general: 'عام',
-                observedBehaviorAction: 'السلوك/الإجراء الملاحظ',
-                contextSituation: 'السياق/الموقف',
-                impactOutcome: 'التأثير/النتيجة',
-                sentimentIndicator: 'مؤشر الشعور',
-                positive: 'إيجابي',
-                negative: 'سلبي',
-                neutral: 'محايد',
-                alignmentGoalsValues: 'التوافق مع الأهداف/القيم',
-                nextSteps: 'الخطوات التالية',
-                generatePerformanceNote: 'توليد ملاحظة أداء',
-                generatedNote: 'الملاحظة المتولدة:',
-                fillNoteMandatoryFields: 'يرجى ملء جميع الحقول الإلزامية: تاريخ الملاحظة، نوع الملاحظة، السلوك/الإجراء الملاحظ، السياق/الموقف، التأثير/النتيجة، ومؤشر الشعور.',
-
-                idp: 'خطة التطوير الفردي',
-                employeeCurrentRole: 'الدور الوظيفي الحالي للموظف',
-                currentSkillsStrengths: 'المهارات ونقاط القوة الحالية',
-                desiredSkillsDevelopment: 'المهارات/مجالات التطوير المرغوبة',
-                careerAspirations: 'التطلعات المهنية',
-
-                developmentTarget: 'المهارة/الكفاءة/الهدف المستهدف للتطوير',
-                developmentActivities: 'أنشطة التطوير',
-                addActivity: 'إضافة',
-                trainingCourses: 'تدريب/دورات',
-                workshopsCertifications: 'ورش عمل/شهادات',
-                jobShadowingMentoring: 'تظليل وظيفي/توجيه',
-                stretchAssignments: 'مهام تحدي',
-                researchTopics: 'مواضيع بحثية',
-                networking: 'بناء العلاقات',
-                supportResources: 'الدعم والموارد',
-                managerOrgSupport: 'دعم المدير/المنظمة المطلوب',
-                budgetTimeEstimates: 'تقديرات الميزانية/الوقت',
-                toolsSystemsNeeded: 'الأدوات/الأنظمة المطلوبة',
-                activityTypeLabel: 'نوع النشاط',
-                detailedDescription: 'وصف مفصل',
-
-                regularCheckInFeedback: 'التغذية الراجعة الدورية',
-                dateOfCheckIn: 'تاريخ تسجيل الدخول',
-                progressOnGoals: 'التقدم في الأهداف/المشاريع',
-                challenges: 'التحديات/العوائق (اختياري)',
-                accomplishments: 'الإنجازات/النقاط البارزة (اختياري)',
-                managerObservations: 'ملاحظات المدير (اختياري)',
-                nextStepsCheckIn: 'الخطوات التالية/بنود العمل المتفق عليها (اختياري)',
-                generateCheckInFeedback: 'توليد التغذية الراجعة الدورية',
-                generatedCheckInFeedback: 'التغذية الراجعة الدورية المتولدة:',
-                fillCheckInMandatoryFields: 'يرجى ملء جميع الحقول الإلزامية للتغذية الراجعة الدورية: التاريخ والتقدم في الأهداف.',
-
-
-                generateIdp: 'توليد خطة التطوير الفردي',
-                generatedIdpDraft: 'مسودة خطة التطوير الفردي المتولدة:',
-                fillIdpMandatoryFields: 'يرجى ملء جميع الحقول الإلزامية لخطة التطوير الفردي.',
-
-                placeholderGoalName: 'مثال: زيادة رضا العملاء',
-                placeholderTargetKpi: 'مثال: نقاط NPS بمقدار 10 نقاط',
-                placeholderDeadline: 'اختر تاريخًا',
-                placeholderSuccessCriteriaInput: 'مثال: تحقيق 90% في نقاط رضا العملاء',
-                placeholderEmployeeDidntAchieveGoals: 'تأكيد ما إذا كان الموظف قد حقق جميع الأهداف (نعم/لا)',
-                placeholderDocumentedExamples: 'قدم أمثلة محددة على السلوكيات أو النتائج.',
-                placeholderManagerSupportExamples: 'صف الدعم المقدم (مثل التدريب، التوجيه).',
-                placeholderStrengthsWeaknessesAnalysis: 'تحليل نقاط القوة الرئيسية ومجالات التطوير.',
-                placeholderProjectsGoalsUnmet: 'اذكر المشاريع أو الأهداف التي لم تتحقق التوقعات فيها.',
-                placeholderDocumentedBehaviorResults: 'قدم أمثلة على السلوكيات أو النتائج التي لم ترق إلى المستوى المطلوب.',
-                placeholderManagerSupportToImprove: 'أمثلة لدعم الإدارة لتحسين الأداء.',
-                placeholderProposedTrainingPlan: 'حدد خطة تدريب فردية مقترحة.',
-                placeholderSkillsForFutureAdvancement: 'حدد المهارات والمعرفة والخبرات اللازمة للنمو الوظيفي.',
-                placeholderPlannedResponsibilities: 'مثال: مسؤول عن تقرير مبيعات الربع الأول، إدارة قاعدة بيانات العملاء.',
-                placeholderAccomplishedResponsibilities: 'مثال: تم تسليم تقرير مبيعات الربع الأول في الموعد المحدد، وتم تحديث 95% من سجلات العملاء بنجاح.',
-                placeholderCoreResponsibilities: 'صف كيفية أداء المسؤوليات الأساسية.',
-                placeholderAdditionalAchievements: 'تفصيل الإنجازات التي تتجاوز المسؤوليات الأساسية.',
-                placeholderJustificationAdditional: 'شرح سبب أهمية هذه الإنجازات الإضافية.',
-                placeholderAchievementsImpact: 'وصف تأثير هذه الإنجازات.',
-                placeholderMissionDetails: 'تقديم تفاصيل حول المهمة والموقع والوقت وسياق المخاطر.',
-                placeholderSolutionDescription: 'وصف الحل المبتكر الذي تم إنشاؤه.',
-                placeholderBusinessImpactMetrics: 'تحديد تأثير العمل كميًا للابتكار (مثال: توفير التكاليف، زيادة الإيرادات).',
-                placeholderTargetSurpassMetrics: 'تقديم تفاصيل كمية حول كيفية تجاوز الأهداف.',
-                placeholderImpactExceededTarget: 'وصف تأثير تجاوز الهدف.',
-                placeholderObservedBehaviorAction: 'صف السلوك أو الإجراء المحدد الذي تمت ملاحظته.',
-                placeholderContextSituation: 'صف الموقف أو السياق الذي حدث فيه السلوك/الإجراء.',
-                placeholderImpactOutcome: 'صف التأثير أو النتيجة المترتبة على السلوك/الإجراء الملاحظ.',
-                placeholderAlignmentGoalsValues: 'اشرح كيفية توافق السلوك (أو عدم توافقه) مع أهداف الشركة أو قيمها.',
-                placeholderNextSteps: 'حدد أي إجراءات متابعة أو مناقشات أو خطط.',
-                placeholderDevelopmentTarget: 'مثال: إدارة المشاريع، مهارات القيادة',
-                placeholderActivityDescription: 'مثال: إكمال دورة "محترف إدارة المشاريع" المعتمدة',
-                placeholderManagerOrgSupport: 'مثال: على المدير تقديم التوجيه، ميزانية للتدريب الخارجي',
-                placeholderBudgetTimeEstimates: 'مثال: 1500 دولار، 40 ساعة على مدى 3 أشهر',
-                placeholderToolsSystemsNeeded: 'مثال: الوصول إلى Jira، Salesforce',
-                placeholderProgressOnGoals: 'مثال: تم الانتهاء من المرحلة الأولى من المشروع س، وتم الالتزام بجميع المواعيد النهائية.',
-                placeholderChallenges: 'مثال: واجهت مشاكل فنية في البرنامج ص، وتم حلها بالتعاون مع فريق ع.',
-                placeholderAccomplishments: 'مثال: تم إطلاق الميزة أ بنجاح، وتلقينا ردود فعل إيجابية من المستخدمين.',
-                placeholderManagerObservations: "مثال: لاحظت المبادرة الاستباقية للموظف في حل المشكلات.",
-                placeholderNextStepsCheckIn: 'مثال: متابعة تحديثات البرنامج ص، والبحث عن فرص تدريب جديدة.',
                 referencesTitle: 'المراجع', // New
-                referencesContent: 'يقدم هذا القسم موارد ومراجع لممارسات إدارة الأداء الفعالة:', // New
-                reference1: '1. هارفارد بيزنس ريفيو: "كيفية تقديم تقييمات الأداء" - [رابط](https://hbr.org/2021/01/how-to-give-performance-reviews)', // New
-                reference2: '2. فوربس: "أهمية مراجعات أداء الموظفين" - [رابط](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)', // New
-                reference3: '3. SHRM: "إدارة الأداء" - [رابط](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)', // New
+                referencesContent: 'This section provides resources and references for effective performance management practices:', // New
+                reference1: '1. Harvard Business Review: "How to Give Performance Reviews" - [رابط](https://hbr.org/2021/01/how-to-give-performance-reviews)', // New
+                reference2: '2. Forbes: "The Importance Of Employee Performance Reviews" - [رابط](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)', // New
+                reference3: '3. SHRM: "Performance Management" - [رابط](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)', // New
             }
         };
 
@@ -1016,7 +848,7 @@
             });
             document.querySelectorAll('#app-content [data-i18n-placeholder]').forEach(element => {
                 const key = element.getAttribute('data-i18n-placeholder');
-                if (translations[currentLanguage][key]) {
+                if (translations[currentLanguage][key]) { // Corrected from current_language
                     element.setAttribute('placeholder', translations[currentLanguage][key]);
                 }
             });
