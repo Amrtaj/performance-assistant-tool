@@ -396,7 +396,7 @@
     <div class="app-main-container">
         <header class="app-header">
             <h2 data-i18n="employeePerformanceHub">Employee Performance Hub</h2>
-            <img id="sudani-logo" src="Sudani_logo.png" alt="Sudani Logo">
+            <img id="sudani-logo" src="Sudani_logo.png" alt="">
             <h1 data-i18n="appSubTitle">Employee Performance Drafting Tool</h1>
         </header>
 
@@ -407,6 +407,7 @@
                 <li><button id="nav-performanceNote" class="nav-button" data-i18n="performanceNotesBtn">Performance Notes</button></li>
                 <li><button id="nav-idp" class="nav-button" data-i18n="idpBtn">Individual Development Plan</button></li>
                 <li><button id="nav-regularCheckIn" class="nav-button" data-i18n="regularCheckInBtn">Periodic Feedback</button></li>
+                <li><button id="nav-references" class="nav-button" data-i18n="referencesBtn">References</button></li>
             </ul>
             <div class="language-switcher">
                 <button id="lang-en" class="lang-button active">EN</button>
@@ -439,6 +440,7 @@
                 performanceNotesBtn: 'Performance Notes',
                 idpBtn: 'Individual Development Plan',
                 regularCheckInBtn: 'Periodic Feedback',
+                referencesBtn: 'References', // New
                 smartGoalDrafting: 'SMART Goal Drafting',
                 goalName: 'Goal Name',
                 targetKpi: 'Target/KPI',
@@ -594,6 +596,11 @@
                 placeholderAccomplishments: 'e.g., Successfully launched feature A, received positive feedback from users.',
                 placeholderManagerObservations: "e.g., Noted employee's proactive approach to problem-solving.",
                 placeholderNextStepsCheckIn: 'e.g., Follow up on software Y updates, research new training opportunities.',
+                referencesTitle: 'References', // New
+                referencesContent: 'This section provides resources and references for effective performance management practices:', // New
+                reference1: '1. Harvard Business Review: "How to Give Performance Reviews" - [Link](https://hbr.org/2021/01/how-to-give-performance-reviews)', // New
+                reference2: '2. Forbes: "The Importance Of Employee Performance Reviews" - [Link](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)', // New
+                reference3: '3. SHRM: "Performance Management" - [Link](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)', // New
             },
             ar: {
                 employeePerformanceHub: 'مركز أداء الموظفين', // New
@@ -604,6 +611,7 @@
                 performanceNotesBtn: 'ملاحظات الأداء',
                 idpBtn: 'خطة التطوير الفردي',
                 regularCheckInBtn: 'التغذية الراجعة الدورية',
+                referencesBtn: 'المراجع', // New
                 smartGoalDrafting: 'صياغة أهداف ذكية',
                 goalName: 'اسم الهدف',
                 targetKpi: 'الهدف / مؤشر الأداء الرئيسي',
@@ -759,6 +767,11 @@
                 placeholderAccomplishments: 'مثال: تم إطلاق الميزة أ بنجاح، وتلقينا ردود فعل إيجابية من المستخدمين.',
                 placeholderManagerObservations: "مثال: لاحظت المبادرة الاستباقية للموظف في حل المشكلات.",
                 placeholderNextStepsCheckIn: 'مثال: متابعة تحديثات البرنامج ص، والبحث عن فرص تدريب جديدة.',
+                referencesTitle: 'المراجع', // New
+                referencesContent: 'يقدم هذا القسم موارد ومراجع لممارسات إدارة الأداء الفعالة:', // New
+                reference1: '1. هارفارد بيزنس ريفيو: "كيفية تقديم تقييمات الأداء" - [رابط](https://hbr.org/2021/01/how-to-give-performance-reviews)', // New
+                reference2: '2. فوربس: "أهمية مراجعات أداء الموظفين" - [رابط](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)', // New
+                reference3: '3. SHRM: "إدارة الأداء" - [رابط](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)', // New
             }
         };
 
@@ -2064,6 +2077,40 @@
             generateCheckInBtnIcon.style.display = 'none';
         }
 
+        // Module 6: References (New Module)
+        function renderReferences() {
+            activeModuleRenderer = renderReferences;
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'module-section';
+            contentDiv.innerHTML = `
+                <h2 class="text-xl font-bold mb-4" data-i18n="referencesTitle">References</h2>
+                <div class="output-item">
+                    <p class="mb-4" data-i18n="referencesContent">This section provides resources and references for effective performance management practices:</p>
+                    <ul class="list-disc list-inside">
+                        <li class="mb-2" data-i18n="reference1">1. Harvard Business Review: "How to Give Performance Reviews" - <a href="https://hbr.org/2021/01/how-to-give-performance-reviews" target="_blank" class="text-blue-600 hover:underline">Link</a></li>
+                        <li class="mb-2" data-i18n="reference2">2. Forbes: "The Importance Of Employee Performance Reviews" - <a href="https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f" target="_blank" class="text-blue-600 hover:underline">Link</a></li>
+                        <li class="mb-2" data-i18n="reference3">3. SHRM: "Performance Management" - <a href="https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx" target="_blank" class="text-blue-600 hover:underline">Link</a></li>
+                    </ul>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = '';
+            document.getElementById('app-content').appendChild(contentDiv);
+
+            // Apply translations to static elements of this module after creation
+            document.querySelectorAll('#app-content [data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    if (element.tagName === 'A') { // Keep the link structure for anchor tags
+                        const linkText = translations[currentLanguage][key].split(' - ')[0];
+                        const linkUrl = element.href;
+                        element.innerHTML = `${linkText} - <a href="${linkUrl}" target="_blank" class="text-blue-600 hover:underline">Link</a>`;
+                    } else {
+                        element.textContent = translations[currentLanguage][key];
+                    }
+                }
+            });
+        }
+
 
         // Navigation logic
         const appContent = document.getElementById('app-content');
@@ -2072,7 +2119,8 @@
             'nav-performanceAppraisal': renderPerformanceAppraisalFeedback,
             'nav-performanceNote': renderPerformanceNote,
             'nav-idp': renderIdp,
-            'nav-regularCheckIn': renderRegularCheckInFeedback
+            'nav-regularCheckIn': renderRegularCheckInFeedback,
+            'nav-references': renderReferences // Add new references module
         };
 
         function activateButton(buttonId) {
@@ -2117,6 +2165,10 @@
         document.getElementById('nav-regularCheckIn').addEventListener('click', () => {
             renderRegularCheckInFeedback();
             activateButton('nav-regularCheckIn');
+        });
+        document.getElementById('nav-references').addEventListener('click', () => { // New event listener for references
+            renderReferences();
+            activateButton('nav-references');
         });
     </script>
 </body>
