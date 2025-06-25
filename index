@@ -1,0 +1,2175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="appTitle">Performance Drafting Assistant</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Arabic font (Noto Sans Arabic) for better display -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Colors inspired by LinkedIn's aesthetic */
+        :root {
+            --linkedin-blue-primary: #0a66c2; /* LinkedIn's main blue for accents, active states */
+            --linkedin-blue-dark: #004182;    /* Darker blue for headers */
+            --linkedin-blue-light: #e6f2ff;   /* Very light blue for subtle backgrounds */
+            --linkedin-gray-50: #f3f2ef;      /* Main background color */
+            --linkedin-gray-100: #e0e0e0;     /* Border colors, light elements */
+            --linkedin-gray-200: #c4c4c4;     /* Slightly darker gray for some elements */
+            --linkedin-text-dark: #1f1f1f;     /* Dark text */
+            --linkedin-text-medium: #6b6b6b;  /* Medium gray text */
+            --linkedin-text-light: #999999;   /* Lighter gray for placeholders, hints */
+            --linkedin-red: #dc3545;          /* Error/alert red */
+            --linkedin-green: #28a745;        /* Success green */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--linkedin-gray-50);
+            color: var(--linkedin-text-dark);
+            line-height: 1.5; /* Improved readability */
+        }
+        html[dir="rtl"] body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
+
+        /* General Container & Module Styling */
+        .app-main-container {
+            max-width: 1000px; /* Slightly wider main content area */
+            margin: 0 auto; /* Center the container */
+            padding: 1.5rem; /* Consistent padding */
+        }
+
+        .module-section {
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* Rounded corners */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06); /* Subtle shadow */
+            padding: 2rem; /* Generous padding */
+            margin-bottom: 2rem; /* Space between modules */
+            border: 1px solid var(--linkedin-gray-100); /* Light border */
+        }
+
+        /* Header Styling */
+        .app-header {
+            background-color: var(--linkedin-blue-dark); /* Darker blue header */
+            color: white;
+            padding: 1rem 1.5rem; /* Adjusted padding */
+            border-radius: 0.75rem; /* Rounded corners for header */
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem; /* Reduced gap for stacked elements */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow for header */
+            text-align: center; /* Center text within header */
+        }
+        /* Updated font sizes for hierarchy */
+        .app-header h1 { /* This is "Employee Performance Drafting Tool" */
+            font-size: 1.75rem; /* Smaller than h2 now */
+            font-weight: 700;
+            margin: 0;
+            text-align: center;
+        }
+        .app-header h2 { /* This is "Employee Performance Hub" */
+            font-size: 2.25rem; /* Bigger than h1 now */
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+        #sudani-logo {
+            height: 45px; /* Adjust logo size */
+            width: auto;
+            filter: brightness(0) invert(1); /* Makes logo white */
+            margin-bottom: 0.5rem; /* Space below logo */
+        }
+        /* No need to flip for RTL if using column-reverse or aligning center */
+        html[dir="rtl"] .app-header {
+            flex-direction: column; /* Keep column direction for RTL */
+        }
+
+        /* Navigation Bar Styling */
+        .nav-bar {
+            background-color: #ffffff;
+            padding: 0.75rem 1rem; /* Adjusted padding */
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between; /* Space out nav items and language buttons */
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            gap: 0.5rem; /* Space between nav items/language buttons */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+        .nav-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Center nav buttons */
+            gap: 0.75rem; /* Space between buttons */
+            flex-grow: 1; /* Allow list to take available space */
+            list-style: none; /* Remove bullet points */
+            padding: 0; /* Remove default padding */
+            margin: 0; /* Remove default margin */
+        }
+        .nav-button {
+            padding: 0.6rem 1.2rem; /* Comfortable button padding */
+            border-radius: 9999px; /* Pill shape */
+            background-color: transparent; /* Default transparent */
+            color: var(--linkedin-text-medium); /* Lighter text for inactive */
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: 1px solid var(--linkedin-gray-100); /* Subtle border */
+            white-space: nowrap; /* Prevent wrapping nav text */
+        }
+        .nav-button:hover {
+            background-color: var(--linkedin-blue-light); /* Light blue hover */
+            color: var(--linkedin-blue-primary); /* Primary blue text on hover */
+            border-color: var(--linkedin-blue-primary);
+        }
+        .nav-button.active {
+            background-color: var(--linkedin-blue-primary); /* LinkedIn blue for active */
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Slight shadow for active */
+            border-color: var(--linkedin-blue-primary);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .lang-button {
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.375rem; /* Slightly rounded */
+            background-color: var(--linkedin-gray-50);
+            color: var(--linkedin-text-medium);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid var(--linkedin-gray-100);
+        }
+        .lang-button:hover {
+            background-color: var(--linkedin-gray-100);
+            color: var(--linkedin-text-dark);
+        }
+        .lang-button.active {
+            background-color: var(--linkedin-blue-primary);
+            color: white;
+            border-color: var(--linkedin-blue-primary);
+        }
+
+        /* Input Group & Fields */
+        .input-group {
+            margin-bottom: 1.25rem; /* Consistent spacing */
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.4rem; /* Closer to input */
+            font-weight: 600;
+            color: var(--linkedin-text-dark);
+            font-size: 0.95rem; /* Slightly larger labels */
+        }
+        .input-group input[type="text"],
+        .input-group input[type="date"],
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 0.75rem 1rem; /* Generous padding */
+            border: 1px solid var(--linkedin-gray-100);
+            border-radius: 0.375rem; /* Consistent roundedness */
+            background-color: #ffffff;
+            color: var(--linkedin-text-dark);
+            transition: all 0.2s ease-in-out;
+        }
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--linkedin-blue-primary);
+            box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.2); /* LinkedIn-style focus ring */
+        }
+
+        /* Checkbox Group */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: var(--linkedin-text-dark);
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 0.6rem;
+            height: 1.15rem; /* Slightly larger checkbox */
+            width: 1.15rem;
+            border-color: var(--linkedin-gray-200);
+            border-radius: 0.25rem;
+            accent-color: var(--linkedin-blue-primary); /* Use accent-color for checkbox fill */
+        }
+
+        /* Primary Action Button (Generate) */
+        .button-generate {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0.85rem 1.5rem; /* Larger button */
+            background-color: var(--linkedin-blue-primary);
+            color: white;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+        .button-generate:hover {
+            background-color: var(--linkedin-blue-dark); /* Darker blue on hover */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        }
+        .button-generate:disabled {
+            background-color: var(--linkedin-gray-200); /* Gray for disabled */
+            color: var(--linkedin-text-medium);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Output Area */
+        .output-area {
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: var(--linkedin-blue-light); /* Light blue background for output */
+            border-radius: 0.75rem;
+            border: 1px solid var(--linkedin-blue-primary); /* Blue border */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Inner shadow */
+        }
+        .output-area h3 {
+            color: var(--linkedin-blue-dark); /* Dark blue heading */
+            font-size: 1.25rem; /* Larger heading */
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .output-item {
+            background-color: #ffffff;
+            padding: 1.25rem; /* More padding */
+            border-radius: 0.5rem;
+            margin-bottom: 1.25rem; /* Space between output items */
+            border: 1px solid var(--linkedin-gray-100);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .output-item:last-child {
+            margin-bottom: 0;
+        }
+        .output-item h4 {
+            font-weight: 600;
+            color: var(--linkedin-text-dark);
+            margin-bottom: 0.75rem;
+        }
+        .output-item p {
+            color: var(--linkedin-text-dark);
+            font-size: 0.95rem;
+        }
+
+        /* Copy Button */
+        .copy-button {
+            background-color: var(--linkedin-blue-primary); /* Consistent blue */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: inline-flex; /* Use inline-flex for proper alignment */
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            float: right; /* Keep it right aligned */
+        }
+        .copy-button:hover {
+            background-color: var(--linkedin-blue-dark);
+        }
+        .copy-button:disabled {
+            background-color: var(--linkedin-gray-200);
+            color: var(--linkedin-text-medium);
+            cursor: not-allowed;
+        }
+        html[dir="rtl"] .copy-button {
+            float: left; /* Align left for RTL */
+        }
+
+        /* Error Message */
+        .error-message {
+            background-color: var(--linkedin-red);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Spinner Icon */
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Icons within buttons */
+        .button-generate .icon, .copy-button .icon {
+            width: 1.1em; /* Adjust icon size relative to font */
+            height: 1.1em;
+            margin-right: 0.5em; /* Space between icon and text */
+        }
+        html[dir="rtl"] .button-generate .icon, html[dir="rtl"] .copy-button .icon {
+            margin-right: 0;
+            margin-left: 0.5em;
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .app-main-container {
+                padding: 1rem;
+            }
+            .app-header h1 {
+                font-size: 1.5rem;
+            }
+            .app-header h2 {
+                font-size: 1.2rem;
+            }
+            #sudani-logo {
+                height: 35px;
+            }
+            .nav-bar {
+                flex-direction: column;
+                align-items: stretch; /* Stretch to fill width */
+            }
+            .nav-list {
+                flex-direction: column; /* Stack nav items vertically */
+                align-items: stretch;
+            }
+            .nav-list li {
+                width: 100%; /* Full width for stacked nav buttons */
+            }
+            .nav-button {
+                width: 100%; /* Ensure full width */
+                text-align: center;
+                padding: 0.75rem 1rem;
+            }
+            .language-switcher {
+                margin-top: 1rem;
+                justify-content: center; /* Center language buttons */
+                width: 100%;
+            }
+            .module-section {
+                padding: 1.5rem;
+            }
+            .input-group label {
+                font-size: 0.9rem;
+            }
+            .input-group input, .input-group textarea, .input-group select {
+                font-size: 0.95rem;
+            }
+            .button-generate {
+                font-size: 0.95rem;
+            }
+            .output-area {
+                padding: 1.5rem;
+            }
+            .output-area h3 {
+                font-size: 1.1rem;
+            }
+            .output-item {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="app-main-container">
+        <header class="app-header">
+            <h2 data-i18n="employeePerformanceHub">Employee Performance Hub</h2>
+            <img id="sudani-logo" src="Sudani_logo.png" alt="">
+            <h1 data-i18n="appSubTitle">Employee Performance Drafting Tool</h1>
+        </header>
+
+        <nav class="nav-bar">
+            <ul class="nav-list">
+                <li><button id="nav-smartGoal" class="nav-button" data-i18n="smartGoalsBtn">SMART Goals</button></li>
+                <li><button id="nav-performanceAppraisal" class="nav-button" data-i18n="appraisalFeedbackBtn">Appraisal Feedback</button></li>
+                <li><button id="nav-performanceNote" class="nav-button" data-i18n="performanceNotesBtn">Performance Notes</button></li>
+                <li><button id="nav-idp" class="nav-button" data-i18n="idpBtn">Individual Development Plan</button></li>
+                <li><button id="nav-regularCheckIn" class="nav-button" data-i18n="regularCheckInBtn">Periodic Feedback</button></li>
+                <li><button id="nav-references" class="nav-button" data-i18n="referencesBtn">References</button></li>
+            </ul>
+            <div class="language-switcher">
+                <button id="lang-en" class="lang-button active">EN</button>
+                <button id="lang-ar" class="lang-button">AR</button>
+            </div>
+        </nav>
+
+        <main id="app-content">
+            <!-- Content for each module will be loaded here dynamically -->
+        </main>
+    </div>
+
+    <script>
+        // Icon SVGs (cleaned up and aligned with LinkedIn's style - simple line icons)
+        const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+        const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M20 6 9 17l-5-5"></path></svg>`;
+        const loaderIcon = `<svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>`;
+
+        // Translation Dictionary
+        const translations = {
+            en: {
+                employeePerformanceHub: 'Employee Performance Hub', // New
+                appTitle: 'Performance Drafting Assistant', // Kept for old reference, but subtitle will be used
+                appSubTitle: 'Employee Performance Drafting Tool', // Updated
+                smartGoalsBtn: 'SMART Goals',
+                appraisalFeedbackBtn: 'Appraisal Feedback',
+                performanceNotesBtn: 'Performance Notes',
+                idpBtn: 'Individual Development Plan',
+                regularCheckInBtn: 'Periodic Feedback',
+                referencesBtn: 'References', // New
+                smartGoalDrafting: 'SMART Goal Drafting',
+                goalName: 'Goal Name',
+                targetKpi: 'Target/KPI',
+                deadline: 'Deadline',
+                successCriteriaInputLabel: 'Your Success Criteria (Optional)',
+                generateSubtasks: 'Generate actionable subtasks',
+                generateSmartGoal: 'Generate SMART Goal',
+                generatedDrafts: 'Generated Drafts:',
+                smartGoalDraft: 'Smart Goal Draft',
+                goalLabel: 'Goal:',
+                targetKpiLabel: 'Target/KPI:',
+                suggestedSubtasks: 'Suggested Subtasks:',
+                copyToClipboard: 'Copy to Clipboard',
+                copied: 'Copied!',
+                failedToCopy: 'Failed to copy text. Please copy manually.',
+                fillAllMandatoryFields: 'Please fill in all mandatory fields: Goal Name, Target/KPI, and Deadline.',
+                failedToGenerate: 'Failed to generate:',
+                failedToGenerateGoals: 'Failed to generate SMART goals or received an empty response. Please try adjusting your inputs.',
+                targetKpiNotAvailable: 'N/A',
+                suggestSuccessCriteria: 'Suggest success criteria',
+                suggestedSuccessCriteria: 'Suggested Success Criteria:',
+
+                appraisalFeedback: 'Performance Appraisal Feedback',
+                selectPerformanceTier: 'Select Performance Tier',
+                poorPerformance: 'Poor Performance',
+                belowExpectations: 'Below Expectations',
+                meetExpectations: 'Meet Expectations',
+                exceedExpectations: 'Exceed Expectations',
+                outstanding: 'Outstanding',
+                inputsFor: 'Inputs for',
+                employeeDidntAchieveGoals: 'Confirmation that the employee didn’t achieve all goals',
+                documentedExamples: 'Documented examples of behaviors or outcomes that led to this evaluation',
+                managerSupportExamples: 'Examples of support provided by the manager to enhance performance',
+                strengthsWeaknessesAnalysis: 'Strengths and weaknesses analysis',
+                projectsGoalsUnmet: 'Projects/goals/initiatives where expectations were not met',
+                documentedBehaviorResults: 'Documented behavior/result examples that didn’t meet expectations',
+                managerSupportToImprove: 'Manager support examples to improve behavior',
+                proposedTrainingPlan: 'Proposed individual training plan',
+                skillsForFutureAdvancement: 'Skills and experiences required for future advancement',
+                plannedResponsibilities: 'Planned Responsibilities',
+                accomplishedResponsibilities: 'Accomplished Responsibilities',
+                coreResponsibilities: 'Core responsibilities',
+                additionalAchievements: 'Additional achievements',
+                justificationAdditional: 'Justification for “additional” classification',
+                achievementsImpact: 'Impact of these achievements',
+                outstandingSubOption: 'Outstanding Sub-option',
+                selectAnOption: 'Select an option',
+                workedInRiskAreas: 'Worked in risk area',
+                createdInnovation: 'Created innovation',
+                exceededTarget: 'Exceeded target',
+                missionDetails: 'Mission Details (location, time, risk context)',
+                solutionDescription: 'Solution description',
+                businessImpactMetrics: 'Business impact metrics',
+                targetSurpassMetrics: 'Target surpass metrics (quantitative)',
+                impactExceededTarget: 'Impact',
+                generateFeedback: 'Generate Feedback',
+                generatedFeedback: 'Generated Feedback:',
+                fillAppraisalMandatoryFields: 'Please select a performance tier and fill in all mandatory fields for the selected tier.',
+
+                performanceNotes: 'Performance Notes',
+                dateOfObservation: 'Date of Observation',
+                feedbackType: 'Feedback Type',
+                recognition: 'Recognition',
+                development: 'Development',
+                general: 'General',
+                observedBehaviorAction: 'Observed Behavior/Action',
+                contextSituation: 'Context/Situation',
+                impactOutcome: 'Impact/Outcome',
+                sentimentIndicator: 'Sentiment Indicator',
+                positive: 'Positive',
+                negative: 'Negative',
+                neutral: 'Neutral',
+                alignmentGoalsValues: 'Alignment with Goals/Values',
+                nextSteps: 'Next Steps',
+                generatePerformanceNote: 'Generate Performance Note',
+                generatedNote: 'Generated Note:',
+                fillNoteMandatoryFields: 'Please fill in all mandatory fields: Date of Observation, Feedback Type, Observed Behavior/Action, Context/Situation, Impact/Outcome, and Sentiment Indicator.',
+
+                idp: 'Individual Development Plan',
+                employeeCurrentRole: 'Employee\'s Current Role',
+                currentSkillsStrengths: 'Current Skills and Strengths',
+                desiredSkillsDevelopment: 'Desired Skills/Areas for Development',
+                careerAspirations: 'Career Aspirations',
+
+                developmentTarget: 'Development Target Skill/Competency/Goal',
+                developmentActivities: 'Development Activities',
+                addActivity: 'Add',
+                trainingCourses: 'Training/Courses',
+                workshopsCertifications: 'Workshops/Certifications',
+                jobShadowingMentoring: 'Job Shadowing/Mentoring',
+                stretchAssignments: 'Stretch Assignments',
+                researchTopics: 'Research Topics',
+                networking: 'Networking',
+                supportResources: 'Support & Resources',
+                managerOrgSupport: 'Manager/Org Support Required',
+                budgetTimeEstimates: 'Budget/Time Estimates',
+                toolsSystemsNeeded: 'Tools/Systems Needed',
+                activityTypeLabel: 'Activity Type',
+                detailedDescription: 'Detailed Description',
+
+                regularCheckInFeedback: 'Periodic Feedback',
+                dateOfCheckIn: 'Date of Check-in',
+                progressOnGoals: 'Progress on Goals/Projects',
+                challenges: 'Challenges/Roadblocks (Optional)',
+                accomplishments: 'Accomplishments/Highlights (Optional)',
+                managerObservations: 'Manager Observations/Feedback (Optional)',
+                nextStepsCheckIn: 'Next Steps/Action Items (Optional)',
+                generateCheckInFeedback: 'Generate Periodic Feedback',
+                generatedCheckInFeedback: 'Generated Periodic Feedback:',
+                fillCheckInMandatoryFields: 'Please fill in all mandatory fields for Periodic Feedback: Date and Progress on Goals.',
+
+
+                generateIdp: 'Generate IDP',
+                generatedIdpDraft: 'Generated IDP Draft:',
+                fillIdpMandatoryFields: 'Please fill in all mandatory fields for the Individual Development Plan.',
+
+                placeholderGoalName: 'e.g., Increase customer satisfaction',
+                placeholderTargetKpi: 'e.g., NPS score by 10 points',
+                placeholderDeadline: 'Select a date',
+                placeholderSuccessCriteriaInput: 'e.g., Achieve 90% customer satisfaction score',
+                placeholderEmployeeDidntAchieveGoals: 'Confirm whether the employee achieved all goals (Yes/No)',
+                placeholderDocumentedExamples: 'Provide specific examples of behaviors or outcomes.',
+                placeholderManagerSupportExamples: 'Describe support provided (e.g., coaching, training).',
+                placeholderStrengthsWeaknessesAnalysis: 'Analyze key strengths and areas for development.',
+                placeholderProjectsGoalsUnmet: 'List projects or goals where expectations were not met.',
+                placeholderDocumentedBehaviorResults: 'Provide examples of behaviors or results that fell short.',
+                placeholderManagerSupportToImprove: 'Examples of managerial support to improve performance.',
+                placeholderProposedTrainingPlan: 'Outline a proposed individual training plan.',
+                placeholderSkillsForFutureAdvancement: 'Identify skills, knowledge, and experiences needed for career growth.',
+                placeholderPlannedResponsibilities: 'e.g., Responsible for Q1 sales report, managed customer database.',
+                placeholderAccomplishedResponsibilities: 'e.g., Delivered Q1 sales report on time, successfully updated 95% of customer records.',
+                placeholderCoreResponsibilities: 'Describe how core responsibilities were performed.',
+                placeholderAdditionalAchievements: 'Detail achievements beyond core responsibilities.',
+                placeholderJustificationAdditional: 'Explain why these additional achievements are significant.',
+                placeholderAchievementsImpact: 'Describe the impact of these achievements.',
+                placeholderMissionDetails: 'Provide details about the mission, location, time, and risk context.',
+                placeholderSolutionDescription: 'Describe the innovative solution created.',
+                placeholderBusinessImpactMetrics: 'Quantify the business impact of the innovation (e.g., cost savings, revenue increase).',
+                placeholderTargetSurpassMetrics: 'Provide quantitative details on how targets were surpassed.',
+                placeholderImpactExceededTarget: 'Describe the impact of exceeding the target.',
+                placeholderObservedBehaviorAction: 'Describe the specific behavior or action observed.',
+                placeholderContextSituation: 'Describe the situation or context in which the behavior/action occurred.',
+                placeholderImpactOutcome: 'Describe the impact or outcome of the observed behavior/action.',
+                placeholderAlignmentGoalsValues: 'Explain how the behavior aligns (or not) with company goals or values.',
+                placeholderNextSteps: 'Outline any follow-up actions, discussions, or plans.',
+                placeholderDevelopmentTarget: 'e.g., Project Management, Leadership Skills',
+                placeholderActivityDescription: 'e.g., Complete "Project Management Professional" certification course',
+                placeholderManagerOrgSupport: 'e.g., Manager to provide mentorship, Budget for external training',
+                placeholderBudgetTimeEstimates: 'e.g., $1500, 40 hours over 3 months',
+                placeholderToolsSystemsNeeded: 'e.g., Access to Jira, Salesforce',
+                placeholderProgressOnGoals: 'e.g., Completed Phase 1 of Project X, met all deadlines.',
+                placeholderChallenges: 'e.g., Faced technical issues with software Y, resolved by collaborating with Z team.',
+                placeholderAccomplishments: 'e.g., Successfully launched feature A, received positive feedback from users.',
+                placeholderManagerObservations: "e.g., Noted employee's proactive approach to problem-solving.",
+                placeholderNextStepsCheckIn: 'e.g., Follow up on software Y updates, research new training opportunities.',
+                referencesTitle: 'References', // New
+                referencesContent: 'This section provides resources and references for effective performance management practices:', // New
+                reference1: '1. Harvard Business Review: "How to Give Performance Reviews" - [Link](https://hbr.org/2021/01/how-to-give-performance-reviews)', // New
+                reference2: '2. Forbes: "The Importance Of Employee Performance Reviews" - [Link](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)', // New
+                reference3: '3. SHRM: "Performance Management" - [Link](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)', // New
+            },
+            ar: {
+                employeePerformanceHub: 'مركز أداء الموظفين', // New
+                appTitle: 'مساعد صياغة الأداء', // Kept for old reference, but subtitle will be used
+                appSubTitle: 'أداة صياغة أداء الموظفين', // Updated
+                smartGoalsBtn: 'أهداف ذكية',
+                appraisalFeedbackBtn: 'ملاحظات التقييم',
+                performanceNotesBtn: 'ملاحظات الأداء',
+                idpBtn: 'خطة التطوير الفردي',
+                regularCheckInBtn: 'التغذية الراجعة الدورية',
+                referencesBtn: 'المراجع', // New
+                smartGoalDrafting: 'صياغة أهداف ذكية',
+                goalName: 'اسم الهدف',
+                targetKpi: 'الهدف / مؤشر الأداء الرئيسي',
+                deadline: 'الموعد النهائي',
+                successCriteriaInputLabel: 'معايير النجاح الخاصة بك (اختياري)',
+                generateSubtasks: 'توليد مهام فرعية قابلة للتنفيذ',
+                generateSmartGoal: 'توليد هدف ذكي',
+                generatedDrafts: 'المسودات المتولدة:',
+                smartGoalDraft: 'مسودة هدف ذكي',
+                goalLabel: 'الهدف:',
+                targetKpiLabel: 'الهدف / مؤشر الأداء الرئيسي:',
+                suggestedSubtasks: 'المهام الفرعية المقترحة:',
+                copyToClipboard: 'نسخ إلى الحافظة',
+                copied: 'تم النسخ!',
+                failedToCopy: 'فشل نسخ النص. يرجى النسخ يدويًا.',
+                fillAllMandatoryFields: 'يرجى ملء جميع الحقول الإلزامية: اسم الهدف، الهدف/مؤشر الأداء الرئيسي، والموعد النهائي.',
+                failedToGenerate: 'فشل التوليد:',
+                failedToGenerateGoals: 'فشل في توليد أهداف ذكية أو تلقى استجابة فارغة. يرجى محاولة تعديل مدخلاتك.',
+                targetKpiNotAvailable: 'غير متوفر',
+                suggestSuccessCriteria: 'اقتراح معايير النجاح',
+                suggestedSuccessCriteria: 'معايير النجاح المقترحة:',
+
+                appraisalFeedback: 'ملاحظات تقييم الأداء',
+                selectPerformanceTier: 'اختر مستوى الأداء',
+                poorPerformance: 'أداء ضعيف',
+                belowExpectations: 'أقل من التوقعات',
+                meetExpectations: 'يلبي التوقعات',
+                exceedExpectations: 'يتجاوز التوقعات',
+                outstanding: 'متميز',
+                inputsFor: 'مدخلات لـ',
+                employeeDidntAchieveGoals: 'تأكيد عدم تحقيق الموظف لجميع الأهداف',
+                documentedExamples: 'أمثلة موثقة للسلوكيات أو النتائج التي أدت إلى هذا التقييم',
+                managerSupportExamples: 'أمثلة على الدعم المقدم من المدير لتعزيز الأداء',
+                strengthsWeaknessesAnalysis: 'تحليل نقاط القوة والضعف',
+                projectsGoalsUnmet: 'المشاريع/الأهداف/المبادرات التي لم تتحقق التوقعات فيها',
+                documentedBehaviorResults: 'أمثلة موثقة للسلوك/النتائج التي لم تلبي التوقعات',
+                managerSupportToImprove: 'أمثلة لدعم المدير لتحسين السلوك',
+                proposedTrainingPlan: 'خطة تدريب فردية مقترحة',
+                skillsForFutureAdvancement: 'المهارات والخبرات المطلوبة للتقدم المستقبلي',
+                plannedResponsibilities: 'المسؤوليات المخطط لها',
+                accomplishedResponsibilities: 'المسؤوليات المنجزة',
+                coreResponsibilities: 'المسؤوليات الأساسية',
+                additionalAchievements: 'إنجازات إضافية',
+                justificationAdditional: 'مبرر التصنيف "إضافية"',
+                achievementsImpact: 'تأثير هذه الإنجازات.',
+                outstandingSubOption: 'خيار فرعي متميز',
+                selectAnOption: 'اختر خيارًا',
+                workedInRiskAreas: 'عمل في منطقة خطر',
+                createdInnovation: 'أوجد ابتكارًا',
+                exceededTarget: 'تجاوز الهدف',
+                missionDetails: 'تفاصيل المهمة (الموقع، الوقت، سياق الخطر)',
+                solutionDescription: 'وصف الحل',
+                businessImpactMetrics: 'مقاييس تأثير العمل',
+                targetSurpassMetrics: 'مقاييس تجاوز الهدف (كمية)',
+                impactExceededTarget: 'التأثير',
+                generateFeedback: 'توليد الملاحظات',
+                generatedFeedback: 'الملاحظات المتولدة:',
+                fillAppraisalMandatoryFields: 'يرجى اختيار مستوى أداء وملء جميع الحقول الإلزامية للمستوى المحدد.',
+
+                performanceNotes: 'ملاحظات الأداء',
+                dateOfObservation: 'تاريخ الملاحظة',
+                feedbackType: 'نوع الملاحظة',
+                recognition: 'تقدير',
+                development: 'تطوير',
+                general: 'عام',
+                observedBehaviorAction: 'السلوك/الإجراء الملاحظ',
+                contextSituation: 'السياق/الموقف',
+                impactOutcome: 'التأثير/النتيجة',
+                sentimentIndicator: 'مؤشر الشعور',
+                positive: 'إيجابي',
+                negative: 'سلبي',
+                neutral: 'محايد',
+                alignmentGoalsValues: 'التوافق مع الأهداف/القيم',
+                nextSteps: 'الخطوات التالية',
+                generatePerformanceNote: 'توليد ملاحظة أداء',
+                generatedNote: 'الملاحظة المتولدة:',
+                fillNoteMandatoryFields: 'يرجى ملء جميع الحقول الإلزامية: تاريخ الملاحظة، نوع الملاحظة، السلوك/الإجراء الملاحظ، السياق/الموقف، التأثير/النتيجة، ومؤشر الشعور.',
+
+                idp: 'خطة التطوير الفردي',
+                employeeCurrentRole: 'الدور الوظيفي الحالي للموظف',
+                currentSkillsStrengths: 'المهارات ونقاط القوة الحالية',
+                desiredSkillsDevelopment: 'المهارات/مجالات التطوير المرغوبة',
+                careerAspirations: 'التطلعات المهنية',
+
+                developmentTarget: 'المهارة/الكفاءة/الهدف المستهدف للتطوير',
+                developmentActivities: 'أنشطة التطوير',
+                addActivity: 'إضافة',
+                trainingCourses: 'تدريب/دورات',
+                workshopsCertifications: 'ورش عمل/شهادات',
+                jobShadowingMentoring: 'تظليل وظيفي/توجيه',
+                stretchAssignments: 'مهام تحدي',
+                researchTopics: 'مواضيع بحثية',
+                networking: 'بناء العلاقات',
+                supportResources: 'الدعم والموارد',
+                managerOrgSupport: 'دعم المدير/المنظمة المطلوب',
+                budgetTimeEstimates: 'تقديرات الميزانية/الوقت',
+                toolsSystemsNeeded: 'الأدوات/الأنظمة المطلوبة',
+                activityTypeLabel: 'نوع النشاط',
+                detailedDescription: 'وصف مفصل',
+
+                regularCheckInFeedback: 'التغذية الراجعة الدورية',
+                dateOfCheckIn: 'تاريخ تسجيل الدخول',
+                progressOnGoals: 'التقدم في الأهداف/المشاريع',
+                challenges: 'التحديات/العوائق (اختياري)',
+                accomplishments: 'الإنجازات/النقاط البارزة (اختياري)',
+                managerObservations: 'ملاحظات المدير (اختياري)',
+                nextStepsCheckIn: 'الخطوات التالية/بنود العمل المتفق عليها (اختياري)',
+                generateCheckInFeedback: 'توليد التغذية الراجعة الدورية',
+                generatedCheckInFeedback: 'التغذية الراجعة الدورية المتولدة:',
+                fillCheckInMandatoryFields: 'يرجى ملء جميع الحقول الإلزامية للتغذية الراجعة الدورية: التاريخ والتقدم في الأهداف.',
+
+
+                generateIdp: 'توليد خطة التطوير الفردي',
+                generatedIdpDraft: 'مسودة خطة التطوير الفردي المتولدة:',
+                fillIdpMandatoryFields: 'يرجى ملء جميع الحقول الإلزامية لخطة التطوير الفردي.',
+
+                placeholderGoalName: 'مثال: زيادة رضا العملاء',
+                placeholderTargetKpi: 'مثال: نقاط NPS بمقدار 10 نقاط',
+                placeholderDeadline: 'اختر تاريخًا',
+                placeholderSuccessCriteriaInput: 'مثال: تحقيق 90% في نقاط رضا العملاء',
+                placeholderEmployeeDidntAchieveGoals: 'تأكيد ما إذا كان الموظف قد حقق جميع الأهداف (نعم/لا)',
+                placeholderDocumentedExamples: 'قدم أمثلة محددة على السلوكيات أو النتائج.',
+                placeholderManagerSupportExamples: 'صف الدعم المقدم (مثل التدريب، التوجيه).',
+                placeholderStrengthsWeaknessesAnalysis: 'تحليل نقاط القوة الرئيسية ومجالات التطوير.',
+                placeholderProjectsGoalsUnmet: 'اذكر المشاريع أو الأهداف التي لم تتحقق التوقعات فيها.',
+                placeholderDocumentedBehaviorResults: 'قدم أمثلة على السلوكيات أو النتائج التي لم ترق إلى المستوى المطلوب.',
+                placeholderManagerSupportToImprove: 'أمثلة لدعم الإدارة لتحسين الأداء.',
+                placeholderProposedTrainingPlan: 'حدد خطة تدريب فردية مقترحة.',
+                placeholderSkillsForFutureAdvancement: 'حدد المهارات والمعرفة والخبرات اللازمة للنمو الوظيفي.',
+                placeholderPlannedResponsibilities: 'مثال: مسؤول عن تقرير مبيعات الربع الأول، إدارة قاعدة بيانات العملاء.',
+                placeholderAccomplishedResponsibilities: 'مثال: تم تسليم تقرير مبيعات الربع الأول في الموعد المحدد، وتم تحديث 95% من سجلات العملاء بنجاح.',
+                placeholderCoreResponsibilities: 'صف كيفية أداء المسؤوليات الأساسية.',
+                placeholderAdditionalAchievements: 'تفصيل الإنجازات التي تتجاوز المسؤوليات الأساسية.',
+                placeholderJustificationAdditional: 'شرح سبب أهمية هذه الإنجازات الإضافية.',
+                placeholderAchievementsImpact: 'وصف تأثير هذه الإنجازات.',
+                placeholderMissionDetails: 'تقديم تفاصيل حول المهمة والموقع والوقت وسياق المخاطر.',
+                placeholderSolutionDescription: 'وصف الحل المبتكر الذي تم إنشاؤه.',
+                placeholderBusinessImpactMetrics: 'تحديد تأثير العمل كميًا للابتكار (مثال: توفير التكاليف، زيادة الإيرادات).',
+                placeholderTargetSurpassMetrics: 'تقديم تفاصيل كمية حول كيفية تجاوز الأهداف.',
+                placeholderImpactExceededTarget: 'وصف تأثير تجاوز الهدف.',
+                placeholderObservedBehaviorAction: 'صف السلوك أو الإجراء المحدد الذي تمت ملاحظته.',
+                placeholderContextSituation: 'صف الموقف أو السياق الذي حدث فيه السلوك/الإجراء.',
+                placeholderImpactOutcome: 'صف التأثير أو النتيجة المترتبة على السلوك/الإجراء الملاحظ.',
+                placeholderAlignmentGoalsValues: 'اشرح كيفية توافق السلوك (أو عدم توافقه) مع أهداف الشركة أو قيمها.',
+                placeholderNextSteps: 'حدد أي إجراءات متابعة أو مناقشات أو خطط.',
+                placeholderDevelopmentTarget: 'مثال: إدارة المشاريع، مهارات القيادة',
+                placeholderActivityDescription: 'مثال: إكمال دورة "محترف إدارة المشاريع" المعتمدة',
+                placeholderManagerOrgSupport: 'مثال: على المدير تقديم التوجيه، ميزانية للتدريب الخارجي',
+                placeholderBudgetTimeEstimates: 'مثال: 1500 دولار، 40 ساعة على مدى 3 أشهر',
+                placeholderToolsSystemsNeeded: 'مثال: الوصول إلى Jira، Salesforce',
+                placeholderProgressOnGoals: 'مثال: تم الانتهاء من المرحلة الأولى من المشروع س، وتم الالتزام بجميع المواعيد النهائية.',
+                placeholderChallenges: 'مثال: واجهت مشاكل فنية في البرنامج ص، وتم حلها بالتعاون مع فريق ع.',
+                placeholderAccomplishments: 'مثال: تم إطلاق الميزة أ بنجاح، وتلقينا ردود فعل إيجابية من المستخدمين.',
+                placeholderManagerObservations: "مثال: لاحظت المبادرة الاستباقية للموظف في حل المشكلات.",
+                placeholderNextStepsCheckIn: 'مثال: متابعة تحديثات البرنامج ص، والبحث عن فرص تدريب جديدة.',
+                referencesTitle: 'المراجع', // New
+                referencesContent: 'يقدم هذا القسم موارد ومراجع لممارسات إدارة الأداء الفعالة:', // New
+                reference1: '1. هارفارد بيزنس ريفيو: "كيفية تقديم تقييمات الأداء" - [رابط](https://hbr.org/2021/01/how-to-give-performance-reviews)', // New
+                reference2: '2. فوربس: "أهمية مراجعات أداء الموظفين" - [رابط](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)', // New
+                reference3: '3. SHRM: "إدارة الأداء" - [رابط](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)', // New
+            }
+        };
+
+        let currentLanguage = localStorage.getItem('appLanguage') || 'en';
+        let activeModuleRenderer = renderSmartGoalDrafting; // Keep track of the currently active module renderer
+
+        /**
+         * Calls the Gemini API with the given prompt and optional schema.
+         * @param {string} prompt The text prompt to send to the Gemini API.
+         * @param {object|null} schema Optional JSON schema for structured responses.
+         * @returns {Promise<string|object>} The generated text or parsed JSON object.
+         */
+        async function callGeminiApi(prompt, schema = null) {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+
+            // For structured output, add generationConfig
+            if (schema) {
+                payload.generationConfig = {
+                    responseMimeType: "application/json",
+                    responseSchema: schema
+                };
+            }
+
+            const apiKey = ""; // API key is provided by the environment
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            console.log("Calling Gemini API with payload:", payload);
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    console.error(`Gemini API call failed with status ${response.status}:`, errorBody);
+                    throw new Error(`API call failed with status ${response.status}: ${errorBody}`);
+                }
+
+                const result = await response.json();
+                console.log("Gemini API raw response:", result);
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    console.log("Gemini API generated text part:", text);
+
+                    // If a schema was provided, attempt to parse as JSON, otherwise return plain text
+                    return schema ? JSON.parse(text) : text;
+                } else {
+                    console.error("Unexpected API response structure or no candidates found:", result);
+                    throw new Error("Could not generate response: Unexpected API response structure or no content.");
+                }
+            } catch (error) {
+                console.error("Error during Gemini API call:", error);
+                throw new Error(`Failed to connect to the AI model or process its response: ${error.message}`);
+                }
+            }
+
+
+        // Function to set the language and update UI
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('appLanguage', lang);
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+            // Update all elements with data-i18n attributes
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    // Handle placeholder text specifically
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.setAttribute('placeholder', translations[lang][key]);
+                    } else if (element.id === 'appTitle') { // Update document title for 'appTitle'
+                        document.title = translations[lang].appTitle;
+                    } else if (element.id === 'appSubTitle') { // Update subtitle
+                        element.textContent = translations[lang].appSubTitle;
+                    } else if (element.id === 'employeePerformanceHub') { // Update new top title
+                        element.textContent = translations[lang].employeePerformanceHub;
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // Update elements with dynamic placeholder attributes (for newly rendered content)
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    element.setAttribute('placeholder', translations[lang][key]);
+                }
+            });
+
+
+            // Update button texts for language switchers
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-ar').classList.toggle('active', lang === 'ar');
+
+            // Re-render the active module to apply translations to dynamically generated content
+            // This is crucial to refresh content like radio button labels and dynamically created inputs
+            // Ensure this is NOT called from inside the render functions themselves to prevent recursion
+            if (activeModuleRenderer) {
+                // Call the renderer, but do not call setLanguage inside it
+                const currentRenderer = activeModuleRenderer; // Store to avoid race condition if activeModuleRenderer changes during re-render
+                activeModuleRenderer = null; // Temporarily nullify to prevent recursive call
+                currentRenderer(); // Execute the renderer
+                activeModuleRenderer = currentRenderer; // Restore
+            }
+
+            // Ensure special text for buttons (like copy/copied) is updated
+            const copyButtons = document.querySelectorAll('.copy-button');
+            copyButtons.forEach(button => {
+                const span = button.querySelector('span');
+                const isCurrentlyCopiedText = span && (span.textContent === translations['en'].copied || span.textContent === translations['ar'].copied);
+
+                if (isCurrentlyCopiedText) {
+                    span.textContent = translations[lang].copied;
+                } else if (span) {
+                    span.textContent = translations[lang].copyToClipboard;
+                }
+            });
+        }
+
+
+        // Reusable Copy to Clipboard Component (as a function that returns HTML)
+        function createCopyButton(textToCopy, id) {
+            const button = document.createElement('button');
+            button.className = 'copy-button';
+            button.innerHTML = `${copyIcon} <span>${translations[currentLanguage].copyToClipboard}</span>`;
+            button.id = id;
+            button.disabled = !textToCopy;
+
+            button.onclick = () => {
+                if (textToCopy) {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = textToCopy;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        button.innerHTML = `${checkIcon} <span>${translations[currentLanguage].copied}</span>`;
+                        setTimeout(() => {
+                            button.innerHTML = `${copyIcon} <span>${translations[currentLanguage].copyToClipboard}</span>`;
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                        // Using a simple div for message instead of alert
+                        const messageBox = document.createElement('div');
+                        messageBox.className = 'fixed bottom-4 right-4 bg-red-600 text-white p-3 rounded-md shadow-lg';
+                        messageBox.textContent = translations[currentLanguage].failedToCopy;
+                        document.body.appendChild(messageBox);
+                        setTimeout(() => {
+                            document.body.removeChild(messageBox);
+                        }, 3000);
+                    }
+                    document.body.removeChild(textarea);
+                }
+            };
+            return button;
+        }
+
+        // Function to display error messages
+        function displayError(containerId, messageKey) {
+            const container = document.getElementById(containerId);
+            let errorDiv = container.querySelector('.error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                container.prepend(errorDiv);
+            }
+            errorDiv.innerHTML = `<span class="block sm:inline">${translations[currentLanguage][messageKey] || messageKey}</span>`;
+            errorDiv.style.display = translations[currentLanguage][messageKey] || messageKey ? 'block' : 'none';
+        }
+
+        // Module 1: SMART Goal Drafting
+        function renderSmartGoalDrafting() {
+            activeModuleRenderer = renderSmartGoalDrafting;
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'module-section';
+            contentDiv.innerHTML = `
+                <h2 class="text-xl font-bold mb-4" data-i18n="smartGoalDrafting">SMART Goal Drafting</h2>
+                <div id="smart-goal-error-container"></div>
+                <div class="input-group">
+                    <label for="goalName" data-i18n="goalName">Goal Name <span class="text-red-500">*</span></label>
+                    <input type="text" id="goalName" placeholder="e.g., Increase customer satisfaction" data-i18n-placeholder="placeholderGoalName" required>
+                </div>
+                <div class="input-group">
+                    <label for="targetKpi" data-i18n="targetKpi">Target/KPI <span class="text-red-500">*</span></label>
+                    <input type="text" id="targetKpi" placeholder="e.g., NPS score by 10 points" data-i18n-placeholder="placeholderTargetKpi" required>
+                </div>
+                <div class="input-group">
+                    <label for="deadline" data-i18n="deadline">Deadline <span class="text-red-500">*</span></label>
+                    <input type="date" id="deadline" data-i18n-placeholder="placeholderDeadline" required>
+                </div>
+                <div class="input-group">
+                    <label for="userSuccessCriteria" data-i18n="successCriteriaInputLabel">Your Success Criteria (Optional)</label>
+                    <textarea id="userSuccessCriteria" rows="2" placeholder="e.g., Achieve 90% customer satisfaction score" data-i18n-placeholder="placeholderSuccessCriteriaInput"></textarea>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="generateSubtasks">
+                    <label for="generateSubtasks" data-i18n="generateSubtasks">Generate actionable subtasks</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="suggestSuccessCriteria">
+                    <label for="suggestSuccessCriteria" data-i18n="suggestSuccessCriteria">Suggest success criteria</label>
+                </div>
+                <button id="generateGoalBtn" class="button-generate">
+                    ${loaderIcon} <span data-i18n="generateSmartGoal">Generate SMART Goal</span>
+                </button>
+                <div id="smart-goal-output" class="output-area hidden">
+                    <h3 class="text-lg font-bold mb-2" data-i18n="generatedDrafts">Generated Drafts:</h3>
+                    <div id="smart-goal-drafts-container">
+                        <!-- Smart goals will be inserted here -->
+                    </div>
+                    <div id="subtasks-draft-section" class="output-item hidden">
+                        <h4 class="font-semibold" data-i18n="suggestedSubtasks">Suggested Subtasks:</h4>
+                        <p id="subtasksDraftText" class="whitespace-pre-wrap"></p>
+                        <div class="flex justify-end" id="subtasksCopyButtonContainer"></div>
+                    </div>
+                    <div id="success-criteria-draft-section" class="output-item hidden mt-2">
+                        <h4 class="font-semibold" data-i18n="suggestedSuccessCriteria">Suggested Success Criteria:</h4>
+                        <p id="successCriteriaDraftText" class="whitespace-pre-wrap"></p>
+                        <div class="flex justify-end" id="successCriteriaCopyButtonContainer"></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = '';
+            document.getElementById('app-content').appendChild(contentDiv);
+
+            // Apply translations to static elements of this module after creation, without triggering re-render
+            document.querySelectorAll('#app-content [data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+            document.querySelectorAll('#app-content [data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[currentLanguage][key]) {
+                    element.setAttribute('placeholder', translations[currentLanguage][key]);
+                }
+            });
+
+            const goalNameInput = document.getElementById('goalName');
+            const targetKpiInput = document.getElementById('targetKpi');
+            const deadlineInput = document.getElementById('deadline');
+            const userSuccessCriteriaInput = document.getElementById('userSuccessCriteria');
+            const generateSubtasksCheckbox = document.getElementById('generateSubtasks');
+            const suggestSuccessCriteriaCheckbox = document.getElementById('suggestSuccessCriteria');
+            const generateGoalBtn = document.getElementById('generateGoalBtn');
+            const smartGoalOutputDiv = document.getElementById('smart-goal-output');
+            const smartGoalsDraftsContainer = document.getElementById('smart-goal-drafts-container');
+            const subtasksDraftSection = document.getElementById('subtasks-draft-section');
+            const subtasksDraftText = document.getElementById('subtasksDraftText');
+            const subtasksCopyButtonContainer = document.getElementById('subtasksCopyButtonContainer');
+            const successCriteriaDraftSection = document.getElementById('success-criteria-draft-section');
+            const successCriteriaDraftText = document.getElementById('successCriteriaDraftText');
+            const successCriteriaCopyButtonContainer = document.getElementById('successCriteriaCopyButtonContainer');
+            const generateGoalBtnSpan = generateGoalBtn.querySelector('span');
+            const generateGoalBtnIcon = generateGoalBtn.querySelector('svg');
+
+            generateGoalBtn.onclick = async () => {
+                displayError('smart-goal-error-container', '');
+
+                const goalName = goalNameInput.value.trim();
+                const targetKpi = targetKpiInput.value.trim();
+                const deadline = deadlineInput.value.trim();
+                const userProvidedSuccessCriteria = userSuccessCriteriaInput.value.trim();
+                const generateSubtasks = generateSubtasksCheckbox.checked;
+                const suggestSuccessCriteria = suggestSuccessCriteriaCheckbox.checked;
+
+                if (!goalName || !targetKpi || !deadline) {
+                    displayError('smart-goal-error-container', 'fillAllMandatoryFields');
+                    return;
+                }
+
+                generateGoalBtn.disabled = true;
+                generateGoalBtnSpan.textContent = translations[currentLanguage]['generateSmartGoal'];
+                generateGoalBtnIcon.style.display = 'inline-block';
+
+                smartGoalOutputDiv.classList.add('hidden');
+                smartGoalsDraftsContainer.innerHTML = '';
+                subtasksDraftText.textContent = '';
+                subtasksDraftSection.classList.add('hidden');
+                subtasksCopyButtonContainer.innerHTML = '';
+                successCriteriaDraftText.textContent = '';
+                successCriteriaDraftSection.classList.add('hidden');
+                successCriteriaCopyButtonContainer.innerHTML = '';
+
+                const goalSchema = {
+                    type: "ARRAY",
+                    items: {
+                        type: "OBJECT",
+                        properties: {
+                            "goal": { "type": "STRING" },
+                            "target": { "type": "STRING" }
+                        },
+                        "propertyOrdering": ["goal", "target"]
+                    }
+                };
+
+                let goalPrompt = `Draft 3 distinct SMART goals (Specific, Measurable, Achievable, Relevant, Time-bound) and their corresponding targets/KPIs.
+    Each goal must accurately integrate the provided Goal Name: "${goalName}", Target/KPI: "${targetKpi}", and Deadline: "${deadline}".
+    Focus on making each goal statement highly actionable, quantifiable, and time-bound by directly reflecting these inputs.`;
+
+                if (userProvidedSuccessCriteria) {
+                    goalPrompt += ` User also provided the following success criteria to consider: "${userProvidedSuccessCriteria}". Incorporate this into the goals if relevant.`;
+                }
+
+                goalPrompt += ` Ensure the output is a JSON array of objects, where each object has a 'goal' property containing a single, concise SMART goal statement and a 'target' property containing the target/KPI explicitly stated or clearly derived from the input for that goal.
+    Generate this in ${currentLanguage === 'ar' ? 'Arabic' : 'English'}.
+    Example for English: [{"goal": "Increase customer satisfaction by improving service response time by 10% by 2024-12-31.", "target": "NPS score by 10 points"}, {"goal": "Reduce project delivery delays by 15% through optimized resource allocation by end of Q4.", "target": "15% reduction in delays"}, {"goal": "Enhance team productivity by implementing new agile methodologies, aiming for a 20% increase in output by March 15, 2025.", "target": "20% increase in output"}].
+    Example for Arabic: [{"goal": "زيادة رضا العملاء بتحسين وقت استجابة الخدمة بنسبة 10% بحلول 31-12-2024.", "target": "زيادة نقاط NPS بمقدار 10 نقاط"}, {"goal": "تقليل تأخيرات تسليم المشاريع بنسبة 15% من خلال تحسين تخصيص الموارد بحلول نهاية الربع الرابع.", "target": "تقليل بنسبة 15% في التأخيرات"}, {"goal": "تعزيز إنتاجية الفريق بتطبيق منهجيات أجايل جديدة، بهدف زيادة الإنتاج بنسبة 20% بحلول 15 مارس 2025.", "target": "زيادة بنسبة 20% في الإنتاجية"}]`;
+
+                try {
+                    const goalsResponse = await callGeminiApi(goalPrompt, goalSchema);
+                    
+                    if (Array.isArray(goalsResponse) && goalsResponse.length > 0) {
+                        goalsResponse.forEach((item, index) => {
+                            const goalText = item.goal;
+                            const targetText = item.target || translations[currentLanguage]['targetKpiNotAvailable'];
+                            if (goalText) {
+                                const goalBlock = document.createElement('div');
+                                goalBlock.className = 'output-item';
+                                goalBlock.innerHTML = `
+                                    <h4 class="font-semibold">${translations[currentLanguage].smartGoalDraft} ${index + 1}:</h4>
+                                    <p class="whitespace-pre-wrap mb-2"><strong>${translations[currentLanguage].goalLabel}</strong> ${goalText}</p>
+                                    <p class="whitespace-pre-wrap"><strong>${translations[currentLanguage].targetKpiLabel}</strong> ${targetText}</p>
+                                    <div class="flex justify-end" id="smartGoalCopyButtonContainer${index}"></div>
+                                `;
+                                smartGoalsDraftsContainer.appendChild(goalBlock);
+                                document.getElementById(`smartGoalCopyButtonContainer${index}`).appendChild(createCopyButton(`${translations[currentLanguage].goalLabel} ${goalText}\n${translations[currentLanguage].targetKpiLabel} ${targetText}`, `copy-smart-goal-${index}`));
+                            }
+                        });
+                        smartGoalOutputDiv.classList.remove('hidden');
+                    } else {
+                        displayError('smart-goal-error-container', 'failedToGenerateGoals');
+                    }
+
+
+                    if (generateSubtasks) {
+                        const primaryGoal = goalsResponse[0]?.goal || `${goalName} to ${targetKpi} by ${deadline}`;
+                        const subtaskPrompt = `Given the specific SMART goal: "${primaryGoal}", provide a detailed, actionable, and numbered list of subtasks required to achieve this goal effectively. Ensure each subtask is clearly defined and contributes directly to the main goal. Generate this in ${currentLanguage === 'ar' ? 'Arabic' : 'English'}.`;
+                        const subtaskResponse = await callGeminiApi(subtaskPrompt);
+                        subtasksDraftText.textContent = subtaskResponse;
+                        subtasksDraftSection.classList.remove('hidden');
+                        subtasksCopyButtonContainer.appendChild(createCopyButton(subtaskResponse, 'copy-subtasks'));
+                    }
+
+                    if (suggestSuccessCriteria && !userProvidedSuccessCriteria) {
+                        const primaryGoal = goalsResponse[0]?.goal || `${goalName} to ${targetKpi} by ${deadline}`;
+                        const successCriteriaPrompt = `Given the SMART goal: "${primaryGoal}", suggest specific and measurable success criteria that would indicate the successful achievement of this goal. Provide a numbered list. Generate this in ${currentLanguage === 'ar' ? 'Arabic' : 'English'}.`;
+                        const successCriteriaResponse = await callGeminiApi(successCriteriaPrompt);
+                        successCriteriaDraftText.textContent = successCriteriaResponse;
+                        successCriteriaDraftSection.classList.remove('hidden');
+                        successCriteriaCopyButtonContainer.appendChild(createCopyButton(successCriteriaResponse, 'copy-success-criteria'));
+                    }
+
+                } catch (err) {
+                    displayError('smart-goal-error-container', 'failedToGenerate');
+                } finally {
+                    generateGoalBtn.disabled = false;
+                    generateGoalBtnSpan.textContent = translations[currentLanguage]['generateSmartGoal'];
+                    generateGoalBtnIcon.style.display = 'none';
+                }
+            };
+            generateGoalBtnIcon.style.display = 'none';
+        }
+
+        // Module 2: Performance Appraisal Feedback
+        function renderPerformanceAppraisalFeedback() {
+            activeModuleRenderer = renderPerformanceAppraisalFeedback;
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'module-section';
+            contentDiv.innerHTML = `
+                <h2 class="text-xl font-bold mb-4" data-i18n="appraisalFeedback">Performance Appraisal Feedback</h2>
+                <div id="appraisal-error-container"></div>
+                <div class="input-group">
+                    <label for="performanceTier" data-i18n="selectPerformanceTier">Select Performance Tier <span class="text-red-500">*</span></label>
+                    <select id="performanceTier">
+                        <option value="" data-i18n="selectAnOption">${translations[currentLanguage].selectAnOption}</option>
+                        <option value="Poor Performance" data-i18n="poorPerformance">${translations[currentLanguage].poorPerformance}</option>
+                        <option value="Below Expectations" data-i18n="belowExpectations">${translations[currentLanguage].belowExpectations}</option>
+                        <option value="Meet Expectations" data-i18n="meetExpectations">${translations[currentLanguage].meetExpectations}</option>
+                        <option value="Exceed Expectations" data-i18n="exceedExpectations">${translations[currentLanguage].exceedExpectations}</option>
+                        <option value="Outstanding" data-i18n="outstanding">${translations[currentLanguage].outstanding}</option>
+                    </select>
+                </div>
+                <div id="tierInputsContainer" class="module-section hidden">
+                    <h3 class="font-bold mb-2" id="tierInputsTitle"></h3>
+                    <!-- Tier-specific inputs will be rendered here -->
+                </div>
+                <button id="generateFeedbackBtn" class="button-generate" disabled>
+                    ${loaderIcon} <span data-i18n="generateFeedback">Generate Feedback</span>
+                </button>
+                <div id="feedback-output" class="output-area hidden">
+                    <h3 class="text-lg font-bold mb-2" data-i18n="generatedFeedback">Generated Feedback:</h3>
+                    <div id="feedback-draft-section" class="output-item">
+                        <p id="feedbackDraftText" class="whitespace-pre-wrap"></p>
+                        <div class="flex justify-end" id="feedbackCopyButtonContainer"></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = '';
+            document.getElementById('app-content').appendChild(contentDiv);
+
+            const performanceTierSelect = document.getElementById('performanceTier');
+            const tierInputsContainer = document.getElementById('tierInputsContainer');
+            const tierInputsTitle = document.getElementById('tierInputsTitle');
+            const generateFeedbackBtn = document.getElementById('generateFeedbackBtn');
+            const feedbackOutputDiv = document.getElementById('feedback-output');
+            const feedbackDraftText = document.getElementById('feedbackDraftText');
+            const feedbackCopyButtonContainer = document.getElementById('feedbackCopyButtonContainer');
+            const generateFeedbackBtnSpan = generateFeedbackBtn.querySelector('span');
+            const generateFeedbackBtnIcon = generateFeedbackBtn.querySelector('svg');
+
+            let currentPerformanceTier = '';
+            let currentInputs = {};
+
+            performanceTierSelect.addEventListener('change', (e) => {
+                currentPerformanceTier = e.target.value;
+                currentInputs = {};
+                feedbackDraftText.textContent = '';
+                feedbackOutputDiv.classList.add('hidden');
+                displayError('appraisal-error-container', '');
+                if (currentPerformanceTier) {
+                    renderTierSpecificInputs();
+                    generateFeedbackBtn.disabled = false;
+                } else {
+                    tierInputsContainer.classList.add('hidden');
+                    tierInputsContainer.innerHTML = '';
+                    generateFeedbackBtn.disabled = true;
+                }
+            });
+
+            // Apply translations to static elements of this module after creation
+            document.querySelectorAll('#app-content [data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+            document.querySelectorAll('#app-content [data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[currentLanguage][key]) {
+                    element.setAttribute('placeholder', translations[currentLanguage][key]);
+                }
+            });
+
+            function renderTierSpecificInputs() {
+                tierInputsContainer.classList.remove('hidden');
+                tierInputsTitle.textContent = `${translations[currentLanguage].inputsFor} ${performanceTierSelect.options[performanceTierSelect.selectedIndex].text}:`;
+                tierInputsContainer.innerHTML = `<h3 class="font-bold mb-2">${translations[currentLanguage].inputsFor} ${performanceTierSelect.options[performanceTierSelect.selectedIndex].text}:</h3>`;
+
+                let inputsHtml = '';
+                switch (currentPerformanceTier) {
+                    case 'Poor Performance':
+                        inputsHtml = `
+                            <div class="input-group">
+                                <label for="employeeDidntAchieveGoals" data-i18n="employeeDidntAchieveGoals">Confirmation that the employee didn’t achieve all goals <span class="text-red-500">*</span></label>
+                                <textarea id="employeeDidntAchieveGoals" name="employeeDidntAchieveGoals" rows="2" placeholder="Confirm whether the employee achieved all goals (Yes/No)" data-i18n-placeholder="placeholderEmployeeDidntAchieveGoals" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="documentedExamples" data-i18n="documentedExamples">Documented examples of behaviors or outcomes that led to this evaluation <span class="text-red-500">*</span></label>
+                                <textarea id="documentedExamples" name="documentedExamples" rows="3" placeholder="Provide specific examples of behaviors or outcomes." data-i18n-placeholder="placeholderDocumentedExamples" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="managerSupportExamples" data-i18n="managerSupportExamples">Examples of support provided by the manager to enhance performance <span class="text-red-500">*</span></label>
+                                <textarea id="managerSupportExamples" name="managerSupportExamples" rows="3" placeholder="Describe support provided (e.g., coaching, training)." data-i18n-placeholder="placeholderManagerSupportExamples" required></textarea>
+                            </div>
+                        `;
+                        break;
+                    case 'Below Expectations':
+                        inputsHtml = `
+                            <div class="input-group">
+                                <label for="strengthsWeaknessesAnalysis" data-i18n="strengthsWeaknessesAnalysis">Strengths and weaknesses analysis <span class="text-red-500">*</span></label>
+                                <textarea id="strengthsWeaknessesAnalysis" name="strengthsWeaknessesAnalysis" rows="3" placeholder="Analyze key strengths and areas for development." data-i18n-placeholder="placeholderStrengthsWeaknessesAnalysis" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="projectsGoalsUnmet" data-i18n="projectsGoalsUnmet">Projects/goals/initiatives where expectations were not met <span class="text-red-500">*</span></label>
+                                <textarea id="projectsGoalsUnmet" name="projectsGoalsUnmet" rows="3" placeholder="List projects or goals where expectations were not met." data-i18n-placeholder="placeholderProjectsGoalsUnmet" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="documentedBehaviorResults" data-i18n="documentedBehaviorResults">Documented behavior/result examples that didn’t meet expectations <span class="text-red-500">*</span></label>
+                                <textarea id="documentedBehaviorResults" name="documentedBehaviorResults" rows="3" placeholder="Provide examples of behaviors or results that fell short." data-i18n-placeholder="placeholderDocumentedBehaviorResults" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="managerSupportToImprove" data-i18n="managerSupportToImprove">Manager support examples to improve behavior <span class="text-red-500">*</span></label>
+                                <textarea id="managerSupportToImprove" name="managerSupportToImprove" rows="3" placeholder="Examples of managerial support to improve performance." data-i18n-placeholder="placeholderManagerSupportToImprove" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="proposedTrainingPlan" data-i18n="proposedTrainingPlan">Proposed individual training plan <span class="text-red-500">*</span></label>
+                                <textarea id="proposedTrainingPlan" name="proposedTrainingPlan" rows="3" placeholder="Outline a proposed individual training plan." data-i18n-placeholder="placeholderProposedTrainingPlan" required></textarea>
+                            </div>
+                        `;
+                        break;
+                    case 'Meet Expectations':
+                        inputsHtml = `
+                            <div class="input-group">
+                                <label for="skillsForFutureAdvancement" data-i18n="skillsForFutureAdvancement">Skills and experiences required for future advancement <span class="text-red-500">*</span></label>
+                                <textarea id="skillsForFutureAdvancement" name="skillsForFutureAdvancement" rows="3" placeholder="Identify skills, knowledge, and experiences needed for career growth." data-i18n-placeholder="placeholderSkillsForFutureAdvancement" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="plannedResponsibilities" data-i18n="plannedResponsibilities">Planned Responsibilities <span class="text-red-500">*</span></label>
+                                <textarea id="plannedResponsibilities" name="plannedResponsibilities" rows="3" placeholder="e.g., Responsible for Q1 sales report, managed customer database." data-i18n-placeholder="placeholderPlannedResponsibilities" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="accomplishedResponsibilities" data-i18n="accomplishedResponsibilities">Accomplished Responsibilities <span class="text-red-500">*</span></label>
+                                <textarea id="accomplishedResponsibilities" name="accomplishedResponsibilities" rows="3" placeholder="e.g., Delivered Q1 sales report on time, successfully updated 95% of customer records." data-i18n-placeholder="placeholderAccomplishedResponsibilities" required></textarea>
+                            </div>
+                        `;
+                        break;
+                    case 'Exceed Expectations':
+                        inputsHtml = `
+                            <div class="input-group">
+                                <label for="coreResponsibilities" data-i18n="coreResponsibilities">Core responsibilities <span class="text-red-500">*</span></label>
+                                <textarea id="coreResponsibilities" name="coreResponsibilities" rows="3" placeholder="Describe how core responsibilities were performed." data-i18n-placeholder="placeholderCoreResponsibilities" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="additionalAchievements" data-i18n="additionalAchievements">Additional achievements <span class="text-red-500">*</span></label>
+                                <textarea id="additionalAchievements" name="additionalAchievements" rows="3" placeholder="Detail achievements beyond core responsibilities." data-i18n-placeholder="placeholderAdditionalAchievements" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="justificationAdditional" data-i18n="justificationAdditional">Justification for “additional” classification <span class="text-red-500">*</span></label>
+                                <textarea id="justificationAdditional" name="justificationAdditional" rows="3" placeholder="Explain why these additional achievements are significant." data-i18n-placeholder="placeholderJustificationAdditional" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="achievementsImpact" data-i18n="achievementsImpact">Impact of these achievements <span class="text-red-500">*</span></label>
+                                <textarea id="achievementsImpact" name="achievementsImpact" rows="3" placeholder="Describe the impact of these achievements." data-i18n-placeholder="placeholderAchievementsImpact" required></textarea>
+                            </div>
+                        `;
+                        break;
+                    case 'Outstanding':
+                        inputsHtml = `
+                            <div class="input-group">
+                                <label for="outstandingSubOption" data-i18n="outstandingSubOption">Outstanding Sub-option <span class="text-red-500">*</span></label>
+                                <select id="outstandingSubOption" name="outstandingSubOption" required>
+                                    <option value="" data-i18n="selectAnOption">${translations[currentLanguage].selectAnOption}</option>
+                                    <option value="Worked in risk area" data-i18n="workedInRiskAreas">${translations[currentLanguage].workedInRiskAreas}</option>
+                                    <option value="Created innovation" data-i18n="createdInnovation">${translations[currentLanguage].createdInnovation}</option>
+                                    <option value="Exceeded target" data-i18n="exceededTarget">${translations[currentLanguage].exceededTarget}</option>
+                                </select>
+                            </div>
+                            <div id="outstandingSubOptionInputs"></div>
+                        `;
+                        break;
+                }
+                tierInputsContainer.insertAdjacentHTML('beforeend', inputsHtml);
+
+                // Apply translations to newly added inputs
+                tierInputsContainer.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[currentLanguage][key]) {
+                        if (element.tagName !== 'INPUT' && element.tagName !== 'TEXTAREA' && element.tagName !== 'SELECT' && element.tagName !== 'OPTION') {
+                            element.textContent = translations[currentLanguage][key];
+                        }
+                    }
+                });
+                tierInputsContainer.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (translations[currentLanguage][key]) {
+                        element.setAttribute('placeholder', translations[currentLanguage][key]);
+                    }
+                });
+
+
+                const dynamicInputs = tierInputsContainer.querySelectorAll('textarea, input, select');
+                dynamicInputs.forEach(input => {
+                    input.value = currentInputs[input.name] || '';
+                    input.addEventListener('input', (e) => {
+                        currentInputs[e.target.name] = e.target.value;
+                        if (e.target.name === 'outstandingSubOption') {
+                            renderOutstandingSubOptionInputs(e.target.value);
+                        }
+                    });
+                });
+            }
+
+            function renderOutstandingSubOptionInputs(subOption) {
+                const subOptionInputsDiv = document.getElementById('outstandingSubOptionInputs');
+                subOptionInputsDiv.innerHTML = '';
+
+                let subOptionHtml = '';
+                switch (subOption) {
+                    case 'Worked in risk area':
+                        subOptionHtml = `
+                            <div class="input-group">
+                                <label for="missionDetails" data-i18n="missionDetails">Mission Details (location, time, risk context) <span class="text-red-500">*</span></label>
+                                <textarea id="missionDetails" name="missionDetails" rows="3" placeholder="Provide details about the mission, location, time, and risk context." data-i18n-placeholder="placeholderMissionDetails" required></textarea>
+                            </div>
+                        `;
+                        break;
+                    case 'Created innovation':
+                        subOptionHtml = `
+                            <div class="input-group">
+                                <label for="solutionDescription" data-i18n="solutionDescription">Solution description <span class="text-red-500">*</span></label>
+                                <textarea id="solutionDescription" name="solutionDescription" rows="3" placeholder="Describe the innovative solution created." data-i18n-placeholder="placeholderSolutionDescription" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="businessImpactMetrics" data-i18n="businessImpactMetrics">Business impact metrics <span class="text-red-500">*</span></label>
+                                <textarea id="businessImpactMetrics" name="businessImpactMetrics" rows="3" placeholder="Quantify the business impact of the innovation (e.g., cost savings, revenue increase)." data-i18n-placeholder="placeholderBusinessImpactMetrics" required></textarea>
+                            </div>
+                        `;
+                        break;
+                    case 'Exceeded target':
+                        subOptionHtml = `
+                            <div class="input-group">
+                                <label for="targetSurpassMetrics" data-i18n="targetSurpassMetrics">Target surpass metrics (quantitative) <span class="text-red-500">*</span></label>
+                                <textarea id="targetSurpassMetrics" name="targetSurpassMetrics" rows="3" placeholder="Provide quantitative details on how targets were surpassed." data-i18n-placeholder="placeholderTargetSurpassMetrics" required></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="impactExceededTarget" data-i18n="impactExceededTarget">Impact <span class="text-red-500">*</span></label>
+                                <textarea id="impactExceededTarget" name="impactExceededTarget" rows="3" placeholder="Describe the impact of exceeding the target." data-i18n-placeholder="placeholderImpactExceededTarget" required></textarea>
+                            </div>
+                        `;
+                        break;
+                }
+                subOptionInputsDiv.insertAdjacentHTML('beforeend', subOptionHtml);
+
+                subOptionInputsDiv.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[currentLanguage][key]) {
+                        if (element.tagName !== 'INPUT' && element.tagName !== 'TEXTAREA' && element.tagName !== 'SELECT' && element.tagName !== 'OPTION') {
+                            element.textContent = translations[currentLanguage][key];
+                        }
+                    }
+                });
+                subOptionInputsDiv.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (translations[currentLanguage][key]) {
+                        element.setAttribute('placeholder', translations[currentLanguage][key]);
+                    }
+                });
+
+
+                const subTextareas = subOptionInputsDiv.querySelectorAll('textarea, select');
+                subTextareas.forEach(input => {
+                    input.value = currentInputs[input.name] || '';
+                    input.addEventListener('input', (e) => {
+                        currentInputs[e.target.name] = e.target.value;
+                        validateInputs();
+                    });
+                });
+            }
+
+            function validateInputs() {
+                if (!currentPerformanceTier) return false;
+
+                let requiredFields = [];
+                switch (currentPerformanceTier) {
+                    case 'Poor Performance':
+                        requiredFields = ['employeeDidntAchieveGoals', 'documentedExamples', 'managerSupportExamples'];
+                        break;
+                    case 'Below Expectations':
+                        requiredFields = ['strengthsWeaknessesAnalysis', 'projectsGoalsUnmet', 'documentedBehaviorResults', 'managerSupportToImprove', 'proposedTrainingPlan'];
+                        break;
+                    case 'Meet Expectations':
+                        requiredFields = ['skillsForFutureAdvancement', 'plannedResponsibilities', 'accomplishedResponsibilities'];
+                        break;
+                    case 'Exceed Expectations':
+                        requiredFields = ['coreResponsibilities', 'additionalAchievements', 'justificationAdditional', 'achievementsImpact'];
+                        break;
+                    case 'Outstanding':
+                        requiredFields = ['outstandingSubOption'];
+                        if (currentInputs.outstandingSubOption) {
+                            switch (currentInputs.outstandingSubOption) {
+                                case 'Worked in risk area':
+                                    requiredFields.push('missionDetails');
+                                    break;
+                                case 'Created innovation':
+                                    requiredFields.push('solutionDescription', 'businessImpactMetrics');
+                                    break;
+                                case 'Exceeded target':
+                                    requiredFields.push('targetSurpassMetrics', 'impactExceededTarget');
+                                    break;
+                            }
+                        }
+                        break;
+                }
+
+                for (const field of requiredFields) {
+                    if (!currentInputs[field] || currentInputs[field].trim() === '') {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            generateFeedbackBtn.onclick = async () => {
+                displayError('appraisal-error-container', '');
+
+                if (!validateInputs()) {
+                    displayError('appraisal-error-container', 'fillAppraisalMandatoryFields');
+                    return;
+                }
+
+                generateFeedbackBtn.disabled = true;
+                generateFeedbackBtnSpan.textContent = translations[currentLanguage]['generateFeedback'];
+                generateFeedbackBtnIcon.style.display = 'inline-block';
+
+                feedbackOutputDiv.classList.add('hidden');
+                feedbackDraftText.textContent = '';
+                feedbackCopyButtonContainer.innerHTML = '';
+
+                let prompt = `Generate a precise performance appraisal comment for the "${currentPerformanceTier}" tier, strictly using the following details provided by the user. Avoid any generic praise or commentary; ensure each part of the generated comment directly reflects the given inputs and is context-bound.\n\n`;
+
+                switch (currentPerformanceTier) {
+                    case 'Poor Performance':
+                        prompt += `Confirmation that the employee didn’t achieve all goals: "${currentInputs.employeeDidntAchieveGoals}".\n`;
+                        prompt += `Documented examples of behaviors or outcomes that led to this evaluation: "${currentInputs.documentedExamples}".\n`;
+                        prompt += `Examples of support provided by the manager to enhance performance: "${currentInputs.managerSupportExamples}".\n`;
+                        break;
+                    case 'Below Expectations':
+                        prompt += `Strengths and weaknesses analysis: "${currentInputs.strengthsWeaknessesAnalysis}".\n`;
+                        prompt += `Projects/goals/initiatives where expectations were not met: "${currentInputs.projectsGoalsUnmet}".\n`;
+                        prompt += `Documented behavior/result examples that didn’t meet expectations: "${currentInputs.documentedBehaviorResults}".\n`;
+                        prompt += `Manager support examples to improve behavior: "${currentInputs.managerSupportToImprove}".\n`;
+                        prompt += `Proposed individual training plan: "${currentInputs.proposedTrainingPlan}".\n`;
+                        break;
+                    case 'Meet Expectations':
+                        prompt += `Skills and experiences required for future advancement: "${currentInputs.skillsForFutureAdvancement}".\n`;
+                        prompt += `Planned Responsibilities: "${currentInputs.plannedResponsibilities}".\n`;
+                        prompt += `Accomplished Responsibilities: "${currentInputs.accomplishedResponsibilities}".\n`;
+                        break;
+                    case 'Exceed Expectations':
+                        prompt += `Core responsibilities: "${currentInputs.coreResponsibilities}".\n`;
+                        prompt += `Additional achievements: "${currentInputs.additionalAchievements}".\n`;
+                        prompt += `Justification for “additional” classification: "${currentInputs.justificationAdditional}".\n`;
+                        prompt += `Impact of these achievements: "${currentInputs.achievementsImpact}".\n`;
+                        break;
+                    case 'Outstanding':
+                        prompt += `Outstanding Sub-option: "${currentInputs.outstandingSubOption}".\n`;
+                        switch (currentInputs.outstandingSubOption) {
+                            case 'Worked in risk area':
+                                prompt += `Mission Details (location, time, risk context): "${currentInputs.missionDetails}".\n`;
+                                break;
+                            case 'Created innovation':
+                                prompt += `Solution description: "${currentInputs.solutionDescription}".\n`;
+                                prompt += `Business impact metrics: "${currentInputs.businessImpactMetrics}".\n`;
+                                break;
+                            case 'Exceeded target':
+                                prompt += `Target surpass metrics (quantitative): "${currentInputs.targetSurpassMetrics}".\n`;
+                                prompt += `Impact: "${currentInputs.impactExceededTarget}".\n`;
+                                break;
+                        }
+                        break;
+                }
+                prompt += `Generate this feedback in ${currentLanguage === 'ar' ? 'Arabic' : 'English'}.`;
+
+
+                try {
+                    const feedbackResponse = await callGeminiApi(prompt);
+                    feedbackDraftText.textContent = feedbackResponse;
+                    feedbackOutputDiv.classList.remove('hidden');
+                    feedbackCopyButtonContainer.appendChild(createCopyButton(feedbackResponse, 'copy-feedback'));
+                } catch (err) {
+                    displayError('appraisal-error-container', 'failedToGenerate');
+                } finally {
+                    generateFeedbackBtn.disabled = false;
+                    generateFeedbackBtnSpan.textContent = translations[currentLanguage]['generateFeedback'];
+                    generateFeedbackBtnIcon.style.display = 'none';
+                }
+            };
+            generateFeedbackBtnIcon.style.display = 'none';
+        }
+
+        // Module 3: Performance Notes
+        function renderPerformanceNote() {
+            activeModuleRenderer = renderPerformanceNote;
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'module-section';
+            contentDiv.innerHTML = `
+                <h2 class="text-xl font-bold mb-4" data-i18n="performanceNotes">Performance Notes</h2>
+                <div id="performance-note-error-container"></div>
+                <div class="input-group">
+                    <label for="dateOfObservation" data-i18n="dateOfObservation">Date of Observation <span class="text-red-500">*</span></label>
+                    <input type="date" id="dateOfObservation" required>
+                </div>
+                <div class="input-group">
+                    <label for="feedbackType" data-i18n="feedbackType">Feedback Type <span class="text-red-500">*</span></label>
+                    <select id="feedbackType" required>
+                        <option value="" data-i18n="selectAnOption">${translations[currentLanguage].selectAnOption}</option>
+                        <option value="Recognition" data-i18n="recognition">${translations[currentLanguage].recognition}</option>
+                        <option value="Development" data-i18n="development">${translations[currentLanguage].development}</option>
+                        <option value="General" data-i18n="general">${translations[currentLanguage].general}</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="observedBehaviorAction" data-i18n="observedBehaviorAction">Observed Behavior/Action <span class="text-red-500">*</span></label>
+                    <textarea id="observedBehaviorAction" rows="3" placeholder="Describe the specific behavior or action observed." data-i18n-placeholder="placeholderObservedBehaviorAction" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="contextSituation" data-i18n="contextSituation">Context/Situation <span class="text-red-500">*</span></label>
+                    <textarea id="contextSituation" rows="3" placeholder="Describe the situation or context in which the behavior/action occurred." data-i18n-placeholder="placeholderContextSituation" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="impactOutcome" data-i18n="impactOutcome">Impact/Outcome <span class="text-red-500">*</span></label>
+                    <textarea id="impactOutcome" rows="3" placeholder="Describe the impact or outcome of the observed behavior/action." data-i18n-placeholder="placeholderImpactOutcome" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="sentimentIndicator" data-i18n="sentimentIndicator">Sentiment Indicator <span class="text-red-500">*</span></label>
+                    <select id="sentimentIndicator" required>
+                        <option value="" data-i18n="selectAnOption">${translations[currentLanguage].selectAnOption}</option>
+                        <option value="Positive" data-i18n="positive">${translations[currentLanguage].positive}</option>
+                        <option value="Negative" data-i18n="negative">${translations[currentLanguage].negative}</option>
+                        <option value="Neutral" data-i18n="neutral">${translations[currentLanguage].neutral}</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="alignmentGoalsValues" data-i18n="alignmentGoalsValues">Alignment with Goals/Values (Optional)</label>
+                    <textarea id="alignmentGoalsValues" rows="3" placeholder="Explain how the behavior aligns (or not) with company goals or values." data-i18n-placeholder="placeholderAlignmentGoalsValues"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="nextSteps" data-i18n="nextSteps">Next Steps (Optional)</label>
+                    <textarea id="nextSteps" rows="3" placeholder="Outline any follow-up actions, discussions, or plans." data-i18n-placeholder="placeholderNextSteps"></textarea>
+                </div>
+                <button id="generateNoteBtn" class="button-generate">
+                    ${loaderIcon} <span data-i18n="generatePerformanceNote">Generate Performance Note</span>
+                </button>
+                <div id="note-output" class="output-area hidden">
+                    <h3 class="text-lg font-bold mb-2" data-i18n="generatedNote">Generated Note:</h3>
+                    <div id="note-draft-section" class="output-item">
+                        <p id="noteDraftText" class="whitespace-pre-wrap"></p>
+                        <div class="flex justify-end" id="noteCopyButtonContainer"></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = '';
+            document.getElementById('app-content').appendChild(contentDiv);
+
+            const dateOfObservationInput = document.getElementById('dateOfObservation');
+            const feedbackTypeSelect = document.getElementById('feedbackType');
+            const observedBehaviorActionTextarea = document.getElementById('observedBehaviorAction');
+            const contextSituationTextarea = document.getElementById('contextSituation');
+            const impactOutcomeTextarea = document.getElementById('impactOutcome');
+            const sentimentIndicatorSelect = document.getElementById('sentimentIndicator');
+            const alignmentGoalsValuesTextarea = document.getElementById('alignmentGoalsValues');
+            const nextStepsTextarea = document.getElementById('nextSteps');
+
+            const generateNoteBtn = document.getElementById('generateNoteBtn');
+            const noteOutputDiv = document.getElementById('note-output');
+            const noteDraftText = document.getElementById('noteDraftText');
+            const noteCopyButtonContainer = document.getElementById('noteCopyButtonContainer');
+            const generateNoteBtnSpan = generateNoteBtn.querySelector('span');
+            const generateNoteBtnIcon = generateNoteBtn.querySelector('svg');
+
+            // Apply translations to static elements of this module after creation
+            document.querySelectorAll('#app-content [data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+            document.querySelectorAll('#app-content [data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[currentLanguage][key]) {
+                    element.setAttribute('placeholder', translations[currentLanguage][key]);
+                }
+            });
+
+            generateNoteBtn.onclick = async () => {
+                displayError('performance-note-error-container', '');
+
+                const dateOfObservation = dateOfObservationInput.value.trim();
+                const feedbackType = feedbackTypeSelect.value.trim();
+                const observedBehaviorAction = observedBehaviorActionTextarea.value.trim();
+                const contextSituation = contextSituationTextarea.value.trim();
+                const impactOutcome = impactOutcomeTextarea.value.trim();
+                const sentimentIndicator = sentimentIndicatorSelect.value.trim();
+                const alignmentGoalsValues = alignmentGoalsValuesTextarea.value.trim();
+                const nextSteps = nextStepsTextarea.value.trim();
+
+                if (!dateOfObservation || !feedbackType || !observedBehaviorAction || !contextSituation || !impactOutcome || !sentimentIndicator) {
+                    displayError('performance-note-error-container', 'fillNoteMandatoryFields');
+                    return;
+                }
+
+                generateNoteBtn.disabled = true;
+                generateNoteBtnSpan.textContent = translations[currentLanguage]['generatePerformanceNote'];
+                generateNoteBtnIcon.style.display = 'inline-block';
+
+                noteOutputDiv.classList.add('hidden');
+                noteDraftText.textContent = '';
+                noteCopyButtonContainer.innerHTML = '';
+
+                let prompt = `Generate a concise and accurate performance note based on the following details. Ensure the generated note directly reflects only the provided inputs:\n\n`;
+                prompt += `Date of Observation: "${dateOfObservation}"\n`;
+                prompt += `Feedback Type: "${feedbackType}"\n`;
+                prompt += `Observed Behavior/Action: "${observedBehaviorAction}"\n`;
+                prompt += `Context/Situation: "${contextSituation}"\n`;
+                prompt += `Impact/Outcome: "${impactOutcome}"\n`;
+                prompt += `Sentiment Indicator: "${sentimentIndicator}"\n`;
+
+                if (alignmentGoalsValues) {
+                    prompt += `Alignment with Goals/Values: "${alignmentGoalsValues}"\n`;
+                }
+                if (nextSteps) {
+                    prompt += `Next Steps: "${nextSteps}"\n`;
+                }
+                prompt += `Generate this performance note in ${currentLanguage === 'ar' ? 'Arabic' : 'English'}.`;
+
+
+                try {
+                    const noteResponse = await callGeminiApi(prompt);
+                    noteDraftText.textContent = noteResponse;
+                    noteOutputDiv.classList.remove('hidden');
+                    noteCopyButtonContainer.appendChild(createCopyButton(noteResponse, 'copy-note'));
+                } catch (err) {
+                    displayError('performance-note-error-container', 'failedToGenerate');
+                } finally {
+                    generateNoteBtn.disabled = false;
+                    generateNoteBtnSpan.textContent = translations[currentLanguage]['generatePerformanceNote'];
+                    generateNoteBtnIcon.style.display = 'none';
+                }
+            };
+            generateNoteBtnIcon.style.display = 'none';
+        }
+
+
+        // Module 4: IDP (Individual Development Plan)
+        function renderIdp() {
+            activeModuleRenderer = renderIdp;
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'module-section';
+            contentDiv.innerHTML = `
+                <h2 class="text-xl font-bold mb-4" data-i18n="idp">Individual Development Plan</h2>
+                <div id="idp-error-container"></div>
+                <div class="input-group">
+                    <label for="developmentTarget" data-i18n="developmentTarget">Development Target Skill/Competency/Goal <span class="text-red-500">*</span></label>
+                    <input type="text" id="developmentTarget" placeholder="e.g., Project Management, Leadership Skills" data-i18n-placeholder="placeholderDevelopmentTarget" required>
+                </div>
+
+                <div class="input-group">
+                    <label class="block mb-2 font-semibold text-gray-700" data-i18n="developmentActivities">Development Activities <span class="text-red-500">*</span></label>
+                    <div id="developmentActivitiesContainer" class="border border-gray-300 rounded-md p-4 bg-white">
+                        <!-- Dynamic activity inputs will be added here -->
+                    </div>
+                    <button type="button" id="addActivityBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md mt-4 inline-flex items-center">
+                        + <span data-i18n="addActivity">Add</span>
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <h3 class="font-bold mb-2" data-i18n="supportResources">Support & Resources:</h3>
+                    <label for="managerOrgSupport" data-i18n="managerOrgSupport">Manager/Org Support Required <span class="text-red-500">*</span></label>
+                    <textarea id="managerOrgSupport" rows="3" placeholder="e.g., Manager to provide mentorship, Budget for external training" data-i18n-placeholder="placeholderManagerOrgSupport" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="budgetTimeEstimates" data-i18n="budgetTimeEstimates">Budget/Time Estimates <span class="text-red-500">*</span></label>
+                    <textarea id="budgetTimeEstimates" rows="3" placeholder="e.g., $1500, 40 hours over 3 months" data-i18n-placeholder="placeholderBudgetTimeEstimates" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="toolsSystemsNeeded" data-i18n="toolsSystemsNeeded">Tools/Systems Needed <span class="text-red-500">*</span></label>
+                    <textarea id="toolsSystemsNeeded" rows="3" placeholder="e.g., Access to Jira, Salesforce" data-i18n-placeholder="placeholderToolsSystemsNeeded" required></textarea>
+                </div>
+
+                <button id="generateIdpBtn" class="button-generate">
+                    ${loaderIcon} <span data-i18n="generateIdp">Generate IDP</span>
+                </button>
+                <div id="idp-output" class="output-area hidden">
+                    <h3 class="text-lg font-bold mb-2" data-i18n="generatedIdpDraft">Generated IDP Draft:</h3>
+                    <div id="idp-draft-section" class="output-item">
+                        <p id="idpDraftText" class="whitespace-pre-wrap"></p>
+                        <div class="flex justify-end" id="idpCopyButtonContainer"></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = '';
+            document.getElementById('app-content').appendChild(contentDiv);
+
+            const developmentTargetInput = document.getElementById('developmentTarget');
+            const developmentActivitiesContainer = document.getElementById('developmentActivitiesContainer');
+            const addActivityBtn = document.getElementById('addActivityBtn');
+            const managerOrgSupportTextarea = document.getElementById('managerOrgSupport');
+            const budgetTimeEstimatesTextarea = document.getElementById('budgetTimeEstimates');
+            const toolsSystemsNeededTextarea = document.getElementById('toolsSystemsNeeded');
+
+            const generateIdpBtn = document.getElementById('generateIdpBtn');
+            const idpOutputDiv = document.getElementById('idp-output');
+            const idpDraftText = document.getElementById('idpDraftText');
+            const idpCopyButtonContainer = document.getElementById('idpCopyButtonContainer');
+            const generateIdpBtnSpan = generateIdpBtn.querySelector('span');
+            const generateIdpBtnIcon = generateIdpBtn.querySelector('svg');
+
+            let developmentActivities = [];
+
+            function addDevelopmentActivityInput(activity = { type: '', description: '' }) {
+                const activityDiv = document.createElement('div');
+                activityDiv.className = 'flex flex-col sm:flex-row gap-4 mb-4 items-end';
+                activityDiv.innerHTML = `
+                    <div class="flex-grow">
+                        <label class="block mb-2 font-semibold text-gray-700" data-i18n="activityTypeLabel">Activity Type <span class="text-red-500">*</span></label>
+                        <select class="w-full p-2 border border-gray-300 rounded-md development-activity-type" required>
+                            <option value="" data-i18n="selectAnOption">${translations[currentLanguage].selectAnOption}</option>
+                            <option value="Training/Courses" data-i18n="trainingCourses">${translations[currentLanguage].trainingCourses}</option>
+                            <option value="Workshops/Certifications" data-i18n="workshopsCertifications">${translations[currentLanguage].workshopsCertifications}</option>
+                            <option value="Job Shadowing/Mentoring" data-i18n="jobShadowingMentoring">${translations[currentLanguage].jobShadowingMentoring}</option>
+                            <option value="Stretch Assignments" data-i18n="stretchAssignments">${translations[currentLanguage].stretchAssignments}</option>
+                            <option value="Research Topics" data-i18n="researchTopics">${translations[currentLanguage].researchTopics}</option>
+                            <option value="Networking" data-i18n="networking">${translations[currentLanguage].networking}</option>
+                        </select>
+                    </div>
+                    <div class="flex-grow-[2]">
+                        <label class="block mb-2 font-semibold text-gray-700" data-i18n="detailedDescription">Detailed Description <span class="text-red-500">*</span></label>
+                        <textarea rows="2" class="w-full p-2 border border-gray-300 rounded-md development-activity-description" placeholder="e.g., Complete 'Project Management Professional' certification course" data-i18n-placeholder="placeholderActivityDescription" required></textarea>
+                    </div>
+                    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-md flex-shrink-0 remove-activity-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                `;
+                developmentActivitiesContainer.appendChild(activityDiv);
+
+                const typeSelect = activityDiv.querySelector('.development-activity-type');
+                const descriptionTextarea = activityDiv.querySelector('.development-activity-description');
+                const removeBtn = activityDiv.querySelector('.remove-activity-btn');
+
+                // Apply translations to the new activity row's static text
+                activityDiv.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[currentLanguage][key]) {
+                        element.textContent = translations[currentLanguage][key];
+                    }
+                });
+                activityDiv.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (translations[currentLanguage][key]) {
+                        element.setAttribute('placeholder', translations[currentLanguage][key]);
+                    }
+                });
+
+
+                typeSelect.value = activity.type;
+                descriptionTextarea.value = activity.description;
+
+                // Update the internal array when input changes
+                typeSelect.addEventListener('change', () => {
+                    const index = Array.from(developmentActivitiesContainer.children).indexOf(activityDiv);
+                    if (index !== -1) {
+                        developmentActivities[index].type = typeSelect.value;
+                        validateIdpInputs();
+                    }
+                });
+                descriptionTextarea.addEventListener('input', () => {
+                    const index = Array.from(developmentActivitiesContainer.children).indexOf(activityDiv);
+                    if (index !== -1) {
+                        developmentActivities[index].description = descriptionTextarea.value;
+                        validateIdpInputs();
+                    }
+                });
+
+                removeBtn.addEventListener('click', () => {
+                    const index = Array.from(developmentActivitiesContainer.children).indexOf(activityDiv);
+                    if (index !== -1) {
+                        developmentActivities.splice(index, 1);
+                        developmentActivitiesContainer.removeChild(activityDiv);
+                        validateIdpInputs();
+                    }
+                });
+
+                developmentActivities.push({ type: typeSelect.value, description: descriptionTextarea.value });
+                validateIdpInputs();
+            }
+
+            addDevelopmentActivityInput(); // Initial activity input row
+
+            addActivityBtn.addEventListener('click', () => {
+                addDevelopmentActivityInput();
+            });
+
+            // Apply translations to static elements of this module after creation
+            document.querySelectorAll('#app-content [data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+            document.querySelectorAll('#app-content [data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[currentLanguage][key]) {
+                    element.setAttribute('placeholder', translations[currentLanguage][key]);
+                }
+            });
+
+            function validateIdpInputs() {
+                const targetValid = developmentTargetInput.value.trim() !== '';
+                const managerSupportValid = managerOrgSupportTextarea.value.trim() !== '';
+                const budgetTimeValid = budgetTimeEstimatesTextarea.value.trim() !== '';
+                const toolsSystemsValid = toolsSystemsNeededTextarea.value.trim() !== '';
+
+                const activitiesValid = developmentActivities.length > 0 &&
+                                        developmentActivities.every(activity => activity.type.trim() !== '' && activity.description.trim() !== '');
+
+                const allValid = targetValid && activitiesValid && managerSupportValid && budgetTimeValid && toolsSystemsValid;
+                generateIdpBtn.disabled = !allValid;
+                return allValid;
+            }
+
+            developmentTargetInput.addEventListener('input', validateIdpInputs);
+            managerOrgSupportTextarea.addEventListener('input', validateIdpInputs);
+            budgetTimeEstimatesTextarea.addEventListener('input', validateIdpInputs);
+            toolsSystemsNeededTextarea.addEventListener('input', validateIdpInputs);
+
+            validateIdpInputs(); // Initial validation
+
+            generateIdpBtn.onclick = async () => {
+                displayError('idp-error-container', '');
+
+                if (!validateIdpInputs()) {
+                    displayError('idp-error-container', 'fillIdpMandatoryFields');
+                    return;
+                }
+
+                generateIdpBtn.disabled = true;
+                generateIdpBtnSpan.textContent = translations[currentLanguage]['generateIdp'];
+                generateIdpBtnIcon.style.display = 'inline-block';
+
+                idpOutputDiv.classList.add('hidden');
+                idpDraftText.textContent = '';
+                idpCopyButtonContainer.innerHTML = '';
+
+                const developmentTarget = developmentTargetInput.value.trim();
+                const managerOrgSupport = managerOrgSupportTextarea.value.trim();
+                const budgetTimeEstimates = budgetTimeEstimatesTextarea.value.trim();
+                const toolsSystemsNeeded = toolsSystemsNeededTextarea.value.trim();
+
+                let activitiesPrompt = developmentActivities.map(activity =>
+                    `- ${activity.type}: ${activity.description}`
+                ).join('\n');
+
+
+                const prompt = `Generate a detailed Individual Development Plan (IDP) with high accuracy by strictly using the following provided information:\n\n` +
+                    `Development Target Skill/Competency/Goal: "${developmentTarget}"\n\n` +
+                    `Development Activities:\n${activitiesPrompt}\n\n` +
+                    `Support & Resources:\n` +
+                    `- Manager/Org Support Required: "${managerOrgSupport}"\n` +
+                    `- Budget/Time Estimates: "${budgetTimeEstimates}"\n` +
+                    `- Tools/Systems Needed: "${toolsSystemsNeeded}"\n\n` +
+                    `The IDP MUST precisely cover these sections and derive content directly from the inputs, focusing on actionable plans related to the development target and activities. Format the output clearly with bolded headings and well-structured bullet points. Generate this in ${currentLanguage === 'ar' ? 'Arabic' : 'English'}.`;
+
+                try {
+                    const idpResponse = await callGeminiApi(prompt);
+                    idpDraftText.textContent = idpResponse;
+                    idpOutputDiv.classList.remove('hidden');
+                    idpCopyButtonContainer.appendChild(createCopyButton(idpResponse, 'copy-idp'));
+                } catch (err) {
+                    displayError('idp-error-container', 'failedToGenerate');
+                } finally {
+                    generateIdpBtn.disabled = false;
+                    generateIdpBtnSpan.textContent = translations[currentLanguage]['generateIdp'];
+                    generateIdpBtnIcon.style.display = 'none';
+                }
+            };
+            generateIdpBtnIcon.style.display = 'none';
+        }
+
+        // Module 5: Regular Check-In Feedback (New Module)
+        function renderRegularCheckInFeedback() {
+            activeModuleRenderer = renderRegularCheckInFeedback;
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'module-section';
+            contentDiv.innerHTML = `
+                <h2 class="text-xl font-bold mb-4" data-i18n="regularCheckInFeedback">Periodic Feedback</h2>
+                <div id="check-in-error-container"></div>
+                <div class="input-group">
+                    <label for="dateOfCheckIn" data-i18n="dateOfCheckIn">Date of Check-in <span class="text-red-500">*</span></label>
+                    <input type="date" id="dateOfCheckIn" required>
+                </div>
+                <div class="input-group">
+                    <label for="progressOnGoals" data-i18n="progressOnGoals">Progress on Goals/Projects <span class="text-red-500">*</span></label>
+                    <textarea id="progressOnGoals" rows="3" placeholder="e.g., Completed Phase 1 of Project X, met all deadlines." data-i18n-placeholder="placeholderProgressOnGoals" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="challenges" data-i18n="challenges">Challenges/Roadblocks (Optional)</label>
+                    <textarea id="challenges" rows="3" placeholder="e.g., Faced technical issues with software Y, resolved by collaborating with Z team." data-i18n-placeholder="placeholderChallenges"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="accomplishments" data-i18n="accomplishments">Accomplishments/Highlights (Optional)</label>
+                    <textarea id="accomplishments" rows="3" placeholder="e.g., Successfully launched feature A, received positive feedback from users." data-i18n-placeholder="placeholderAccomplishments"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="managerObservations" data-i18n="managerObservations">Manager Observations/Feedback (Optional)</label>
+                    <textarea id="managerObservations" rows="3" placeholder="e.g., Noted employee's proactive approach to problem-solving." data-i18n-placeholder="placeholderManagerObservations"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="nextStepsCheckIn" data-i18n="nextStepsCheckIn">Next Steps/Action Items (Optional)</label>
+                    <textarea id="nextStepsCheckIn" rows="3" placeholder="e.g., Follow up on software Y updates, research new training opportunities." data-i18n-placeholder="placeholderNextStepsCheckIn"></textarea>
+                </div>
+                <button id="generateCheckInBtn" class="button-generate">
+                    ${loaderIcon} <span data-i18n="generateCheckInFeedback">Generate Periodic Feedback</span>
+                </button>
+                <div id="check-in-output" class="output-area hidden">
+                    <h3 class="text-lg font-bold mb-2" data-i18n="generatedCheckInFeedback">Generated Periodic Feedback:</h3>
+                    <div id="check-in-draft-section" class="output-item">
+                        <p id="checkInDraftText" class="whitespace-pre-wrap"></p>
+                        <div class="flex justify-end" id="checkInCopyButtonContainer"></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = '';
+            document.getElementById('app-content').appendChild(contentDiv);
+
+            // Apply translations to static elements of this module after creation
+            document.querySelectorAll('#app-content [data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+            document.querySelectorAll('#app-content [data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[currentLanguage][key]) {
+                    element.setAttribute('placeholder', translations[currentLanguage][key]);
+                }
+            });
+
+            const dateOfCheckInInput = document.getElementById('dateOfCheckIn');
+            const progressOnGoalsTextarea = document.getElementById('progressOnGoals');
+            const challengesTextarea = document.getElementById('challenges');
+            const accomplishmentsTextarea = document.getElementById('accomplishments');
+            const managerObservationsTextarea = document.getElementById('managerObservations');
+            const nextStepsCheckInTextarea = document.getElementById('nextStepsCheckIn');
+
+            const generateCheckInBtn = document.getElementById('generateCheckInBtn');
+            const checkInOutputDiv = document.getElementById('check-in-output');
+            const checkInDraftText = document.getElementById('checkInDraftText');
+            const checkInCopyButtonContainer = document.getElementById('checkInCopyButtonContainer');
+            const generateCheckInBtnSpan = generateCheckInBtn.querySelector('span');
+            const generateCheckInBtnIcon = generateCheckInBtn.querySelector('svg');
+
+            function validateCheckInInputs() {
+                const dateValid = dateOfCheckInInput.value.trim() !== '';
+                const progressValid = progressOnGoalsTextarea.value.trim() !== '';
+                return dateValid && progressValid;
+            }
+
+            dateOfCheckInInput.addEventListener('input', () => { generateCheckInBtn.disabled = !validateCheckInInputs(); });
+            progressOnGoalsTextarea.addEventListener('input', () => { generateCheckInBtn.disabled = !validateCheckInInputs(); });
+
+            generateCheckInBtn.disabled = !validateCheckInInputs(); // Initial state
+
+            generateCheckInBtn.onclick = async () => {
+                displayError('check-in-error-container', '');
+
+                if (!validateCheckInInputs()) {
+                    displayError('check-in-error-container', 'fillCheckInMandatoryFields');
+                    return;
+                }
+
+                generateCheckInBtn.disabled = true;
+                generateCheckInBtnSpan.textContent = translations[currentLanguage]['generateCheckInFeedback'];
+                generateCheckInBtnIcon.style.display = 'inline-block';
+
+                checkInOutputDiv.classList.add('hidden');
+                checkInDraftText.textContent = '';
+                checkInCopyButtonContainer.innerHTML = '';
+
+                const dateOfCheckIn = dateOfCheckInInput.value.trim();
+                const progressOnGoals = progressOnGoalsTextarea.value.trim();
+                const challenges = challengesTextarea.value.trim();
+                const accomplishments = accomplishmentsTextarea.value.trim();
+                const managerObservations = managerObservationsTextarea.value.trim();
+                const nextStepsCheckIn = nextStepsCheckInTextarea.value.trim();
+
+                let prompt = `Generate a concise and professional periodic feedback summary based on the following details. Ensure the summary directly reflects only the provided inputs and is context-bound.\n\n`;
+                prompt += `Date of Check-in: "${dateOfCheckIn}"\n`;
+                prompt += `Progress on Goals/Projects: "${progressOnGoals}"\n`;
+                if (challenges) {
+                    prompt += `Challenges/Roadblocks: "${challenges}"\n`;
+                }
+                if (accomplishments) {
+                    prompt += `Accomplishments/Highlights: "${accomplishments}"\n`;
+                }
+                if (managerObservations) {
+                    prompt += `Manager Observations/Feedback: "${managerObservations}"\n`;
+                }
+                if (nextStepsCheckIn) {
+                    prompt += `Next Steps: "${nextStepsCheckIn}"\n`;
+                }
+                prompt += `Generate this feedback in ${currentLanguage === 'ar' ? 'Arabic' : 'English'}.`;
+
+
+                try {
+                    const checkInResponse = await callGeminiApi(prompt);
+                    checkInDraftText.textContent = checkInResponse;
+                    checkInOutputDiv.classList.remove('hidden');
+                    checkInCopyButtonContainer.appendChild(createCopyButton(checkInResponse, 'copy-check-in'));
+                } catch (err) {
+                    displayError('check-in-error-container', 'failedToGenerate');
+                } finally {
+                    generateCheckInBtn.disabled = false;
+                    generateCheckInBtnSpan.textContent = translations[currentLanguage]['generateCheckInFeedback'];
+                    generateCheckInBtnIcon.style.display = 'none';
+                }
+            };
+            generateCheckInBtnIcon.style.display = 'none';
+        }
+
+        // Module 6: References (New Module)
+        function renderReferences() {
+            activeModuleRenderer = renderReferences;
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'module-section';
+            contentDiv.innerHTML = `
+                <h2 class="text-xl font-bold mb-4" data-i18n="referencesTitle">References</h2>
+                <div class="output-item">
+                    <p class="mb-4" data-i18n="referencesContent">This section provides resources and references for effective performance management practices:</p>
+                    <ul class="list-disc list-inside">
+                        <li class="mb-2" data-i18n="reference1">1. Harvard Business Review: "How to Give Performance Reviews" - <a href="https://hbr.org/2021/01/how-to-give-performance-reviews" target="_blank" class="text-blue-600 hover:underline">Link</a></li>
+                        <li class="mb-2" data-i18n="reference2">2. Forbes: "The Importance Of Employee Performance Reviews" - <a href="https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f" target="_blank" class="text-blue-600 hover:underline">Link</a></li>
+                        <li class="mb-2" data-i18n="reference3">3. SHRM: "Performance Management" - <a href="https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx" target="_blank" class="text-blue-600 hover:underline">Link</a></li>
+                    </ul>
+                </div>
+            `;
+            document.getElementById('app-content').innerHTML = '';
+            document.getElementById('app-content').appendChild(contentDiv);
+
+            // Apply translations to static elements of this module after creation
+            document.querySelectorAll('#app-content [data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    if (element.tagName === 'A') { // Keep the link structure for anchor tags
+                        const linkText = translations[currentLanguage][key].split(' - ')[0];
+                        const linkUrl = element.href;
+                        element.innerHTML = `${linkText} - <a href="${linkUrl}" target="_blank" class="text-blue-600 hover:underline">Link</a>`;
+                    } else {
+                        element.textContent = translations[currentLanguage][key];
+                    }
+                }
+            });
+        }
+
+
+        // Navigation logic
+        const appContent = document.getElementById('app-content');
+        const navButtons = {
+            'nav-smartGoal': renderSmartGoalDrafting,
+            'nav-performanceAppraisal': renderPerformanceAppraisalFeedback,
+            'nav-performanceNote': renderPerformanceNote,
+            'nav-idp': renderIdp,
+            'nav-regularCheckIn': renderRegularCheckInFeedback,
+            'nav-references': renderReferences // Add new references module
+        };
+
+        function activateButton(buttonId) {
+            Object.keys(navButtons).forEach(id => {
+                const button = document.getElementById(id);
+                if (id === buttonId) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+
+        // Initial load
+        window.onload = () => {
+            setLanguage(currentLanguage);
+            activateButton('nav-smartGoal');
+            renderSmartGoalDrafting(); // Load the default module on start
+        };
+
+        // Attach language switchers
+        document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('lang-ar').addEventListener('click', () => setLanguage('ar'));
+
+        // Attach navigation listeners
+        document.getElementById('nav-smartGoal').addEventListener('click', () => {
+            renderSmartGoalDrafting();
+            activateButton('nav-smartGoal');
+        });
+        document.getElementById('nav-performanceAppraisal').addEventListener('click', () => {
+            renderPerformanceAppraisalFeedback();
+            activateButton('nav-performanceAppraisal');
+        });
+        document.getElementById('nav-performanceNote').addEventListener('click', () => {
+            renderPerformanceNote();
+            activateButton('nav-performanceNote');
+        });
+        document.getElementById('nav-idp').addEventListener('click', () => {
+            renderIdp();
+            activateButton('nav-idp');
+        });
+        document.getElementById('nav-regularCheckIn').addEventListener('click', () => {
+            renderRegularCheckInFeedback();
+            activateButton('nav-regularCheckIn');
+        });
+        document.getElementById('nav-references').addEventListener('click', () => { // New event listener for references
+            renderReferences();
+            activateButton('nav-references');
+        });
+    </script>
+</body>
+</html>
