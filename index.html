@@ -38,9 +38,11 @@
 
         /* General Container & Module Styling */
         .app-main-container {
-            max-width: 1000px; /* Slightly wider main content area */
+            width: 100%; /* Make it fluid */
+            max-width: 1000px; /* Max width for larger screens */
             margin: 0 auto; /* Center the container */
             padding: 1.5rem; /* Consistent padding */
+            box-sizing: border-box; /* Include padding in width */
         }
 
         .module-section {
@@ -60,36 +62,40 @@
             border-radius: 0.75rem; /* Rounded corners for header */
             margin-bottom: 1.5rem;
             display: flex;
-            flex-direction: column; /* Stack elements vertically */
+            flex-direction: row; /* Changed to row for logo on left */
             align-items: center;
-            justify-content: center;
-            gap: 0; /* Space between elements in header (now 0) */
+            justify-content: flex-start; /* Align items to the start */
+            gap: 1rem; /* Space between logo and text */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow for header */
-            text-align: center; /* Center text within header */
+            text-align: left; /* Align text to left */
+            opacity: 0; /* Start invisible for animation */
+            animation: fadeIn 1s ease-out forwards; /* Apply fade-in animation */
         }
-        /* Updated font sizes for hierarchy */
+
+        /* Keyframes for fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .app-header h1 { /* This is "Employee Performance Drafting Tool" */
-            font-size: 1.75rem; /* Smaller than h2 now */
+            font-size: 2.25rem; /* Adjusted font size for single title */
             font-weight: 700;
             margin: 0; /* Explicitly set margin to 0 */
-            text-align: center;
+            flex-grow: 1; /* Allow h1 to take available space */
+            text-align: center; /* Center the title */
         }
-        .app-header h2 { /* This is "Employee Performance Hub" */
-            font-size: 3.25rem; /* Bigger than h1 now */
-            font-weight: 600;
-            margin: 0; /* Explicitly set margin to 0 */
-            color: white;
-        }
-        #sudani-logo {
-            height: 45px; /* Adjust logo size */
-            width: auto;
-            filter: brightness(0) invert(1); /* Makes logo white */
-            margin: 0; /* Explicitly set margin to 0 */
-        }
-        /* No need to flip for RTL if using column-reverse or aligning center */
+        /* Removed h2 specific styles as it's no longer used */
+
+        /* Removed #sudani-logo specific styles as it's no longer used */
         html[dir="rtl"] .app-header {
-            flex-direction: column; /* Keep column direction for RTL */
+            flex-direction: row-reverse; /* Reverse order for RTL to keep logo on left */
+            justify-content: flex-end; /* Align items to the end for RTL */
         }
+        html[dir="rtl"] .app-header h1 {
+            text-align: center; /* Center text on mobile */
+        }
+
 
         /* Navigation Bar Styling */
         .nav-bar {
@@ -385,26 +391,108 @@
             gap: 1rem; /* Space between cards */
         }
 
+        /* IDP specific styles */
+        .development-target-block {
+            border: 1px solid var(--linkedin-gray-100);
+            background-color: var(--linkedin-gray-50);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .development-target-block .remove-block-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            color: var(--linkedin-red);
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0;
+        }
+        .development-target-block .remove-block-btn:hover {
+            color: var(--linkedin-blue-dark);
+        }
+        .development-target-block h4 {
+            margin-bottom: 1rem;
+            color: var(--linkedin-blue-dark);
+        }
+        .development-target-block .input-group {
+            margin-bottom: 1rem; /* Slightly tighter spacing within a block */
+        }
+        .development-target-block .add-button {
+            background-color: var(--linkedin-blue-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .development-target-block .add-button:hover {
+            background-color: var(--linkedin-blue-dark);
+        }
+        .development-target-block .activity-group,
+        .development-target-block .support-group {
+            border: 1px solid var(--linkedin-gray-200);
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+            position: relative;
+        }
+        .development-target-block .activity-group .remove-activity-btn,
+        .development-target-block .support-group .remove-support-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--linkedin-red);
+            cursor: pointer;
+            font-size: 1.2rem;
+            line-height: 1;
+            padding: 0;
+        }
+        .development-target-block .activity-group .remove-activity-btn:hover,
+        .development-target-block .support-group .remove-support-btn:hover {
+            color: var(--linkedin-blue-dark);
+        }
+
+
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .app-main-container {
                 padding: 1rem;
             }
+            .app-header {
+                flex-direction: column; /* Stack elements vertically on small screens */
+                align-items: center;
+                text-align: center;
+                gap: 0.5rem; /* Smaller gap for mobile */
+            }
+            html[dir="rtl"] .app-header {
+                flex-direction: column; /* Keep column direction for RTL on mobile */
+                align-items: center;
+            }
             .app-header h1 {
-                font-size: 1.5rem;
+                text-align: center; /* Center text on mobile */
+                font-size: 1.8rem; /* Adjust font size for mobile */
             }
-            .app-header h2 {
-                font-size: 1.2rem;
-            }
-            #sudani-logo {
-                height: 35px;
-            }
+            /* Removed #sudani-logo specific styles for mobile as it's no longer used */
             .nav-bar {
                 flex-direction: column;
                 align-items: stretch; /* Stretch to fill width */
             }
             .nav-list {
-                flex-direction: column; /* Stack nav items vertically */
+                flex-direction: column;
                 align-items: stretch;
             }
             .nav-list li {
@@ -447,11 +535,7 @@
 <body class="p-4">
     <div class="app-main-container">
         <header class="app-header">
-            <h2 data-i18n="employeePerformanceHub">Employee Performance Hub</h2>
-            <!-- To make the logo portable, replace the src attribute with a Base64 encoded image string. -->
-            <!-- You can use online tools to convert your 'Sudani_logo.png' to a Base64 string. -->
-            <!-- Example: <img id="sudani-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Sudani Logo"> -->
-            <img id="sudani-logo" src="https://placehold.co/100x45/004182/FFFFFF?text=Logo" alt="Sudani Logo">
+            <!-- Removed the logo image -->
             <h1 data-i18n="appSubTitle">Employee Performance Drafting Tool</h1>
         </header>
 
@@ -483,6 +567,9 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>`;
+        const addIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+        const removeIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+
 
         // Translation Dictionary
         const translations = {
@@ -554,6 +641,11 @@
                 generateFeedback: 'Generate Feedback',
                 generatedFeedback: 'Generated Feedback:',
                 fillAppraisalMandatoryFields: 'Please select a performance tier and fill in all mandatory fields for the selected tier.',
+                exceededTheTarget: 'Exceeded the target',
+                additionalResponsibilities: 'Additional Responsibilities',
+                justificationAdditionalResponsibilities: 'Justification for “additional” Responsibilities',
+                impactResponsibilitiesAchievements: 'Impact of these Responsibilities / achievements',
+
 
                 performanceNotes: 'Performance Notes',
                 dateOfObservation: 'Date of Observation',
@@ -582,7 +674,7 @@
 
                 developmentTarget: 'Development Target Skill/Competency/Goal',
                 developmentActivities: 'Development Activities',
-                addActivity: 'Add',
+                addActivity: 'Add Activity',
                 trainingCourses: 'Training/Courses',
                 workshopsCertifications: 'Workshops/Certifications',
                 jobShadowingMentoring: 'Job Shadowing/Mentoring',
@@ -595,6 +687,8 @@
                 toolsSystemsNeeded: 'Tools/Systems Needed',
                 activityTypeLabel: 'Activity Type',
                 detailedDescription: 'Detailed Description',
+                addDevelopmentTarget: 'Add Development Target',
+                removeTarget: 'Remove Target',
 
                 regularCheckInFeedback: 'Periodic Feedback',
                 dateOfCheckIn: 'Date of Check-in',
@@ -653,19 +747,155 @@
                 placeholderManagerObservations: "e.g., Noted employee's proactive approach to problem-solving.",
                 placeholderNextStepsCheckIn: 'e.g., Follow up on software Y updates, research new training opportunities.',
                 learnGrowIntroContent: 'This section provides resources and references for effective performance management practices, helping you and your team to learn and grow:',
-                performancePlanningSubcategory: 'Employee Performance Planning: Setting SMART Goals & Cascading Objectives',
-                performancePlanningContent: 'This section provides resources for effective goal setting and performance planning, including techniques for SMART goal creation and cascading objectives within an organization:',
-                reference1: '1. Harvard Business Review: "How to Give Performance Reviews" - [Link](https://hbr.org/2021/01/how-to-give-performance-reviews)',
-                reference2: '2. Forbes: "The Importance Of Employee Performance Reviews" - [Link](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)',
-                reference3: '3. SHRM: "Performance Management" - [Link](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)',
-                // New translations for article cards
-                reference1Title: 'How to Give Performance Reviews',
-                reference1Description: 'A comprehensive guide from HBR on effective performance evaluations.',
-                reference2Title: 'The Importance Of Employee Performance Reviews',
-                reference2Description: 'Forbes discusses why regular performance reviews are crucial for employee growth and organizational success.',
-                reference3Title: 'Performance Management (SHRM)',
-                reference3Description: 'SHRM\'s overview on performance management, covering various aspects and best practices.',
-                readMore: 'Read More'
+                smartGoalsCategory: 'Unlocking Achievement: The Power of SMART Goals', // Changed from performancePlanningSubcategory
+                smartGoalsCategoryContentIntro: 'Setting goals is fundamental to progress, whether in our personal lives, careers, or organizations. Yet, vague aspirations like "get in shape," "do better at work," or "increase sales" often fade into the background, leaving us feeling stagnant. This is where the SMART goal framework emerges as a powerful, practical tool for transforming nebulous desires into actionable, achievable plans. By applying the SMART criteria, individuals and teams significantly increase their chances of success.',
+                whatAreSmartGoals: 'What are SMART Goals?',
+                smartSpecific: 'S - Specific:',
+                smartSpecificContent: 'Goals must be clear, unambiguous, and well-defined. They answer the questions: What exactly needs to be accomplished? Why is it important? Who is involved? Where will it happen? Which resources or constraints are relevant?',
+                smartSpecificNotExample: 'Not SMART: "Improve customer service."',
+                smartSpecificExample: 'SMART: "Reduce average customer call wait time by 15% within the Support Department by Q4 through hiring two additional agents and implementing a new call-routing software."',
+                smartMeasurable: 'M - Measurable:',
+                smartMeasurableContent: 'Goals must include concrete criteria for tracking progress and determining when the goal has been achieved. How much? How many? How will you know you\'ve succeeded?',
+                smartMeasurableNotExample: 'Not SMART: "Write more reports."',
+                smartMeasurableExample: 'SMART: "Complete and submit the monthly financial analysis report by the 5th business day of each month for the next six months."',
+                smartAchievable: 'A - Achievable (or Attainable):',
+                smartAchievableContent: 'Goals should be realistic and attainable, given available resources, skills, and time. While they should stretch capabilities, they shouldn\'t be impossible. Is the goal feasible?',
+                smartAchievableNotExample: 'Not SMART: "Double the company\'s market share in one month."',
+                smartAchievableExample: 'SMART: "Increase market share by 5% in the Northeast region by the end of the fiscal year through a targeted digital marketing campaign and partnership with two regional distributors."',
+                smartRelevant: 'R - Relevant (or Realistic):',
+                smartRelevantContent: 'Goals must matter and align with broader objectives. Does this goal contribute to the larger mission or strategic plan? Is it the right time? Does it fit within the current context?',
+                smartRelevantNotExample: 'Not SMART (for an entry-level engineer): "Become CEO next year."',
+                smartRelevantExample: 'SMART: "Complete the advanced project management certification within the next 12 months to qualify for a Senior Engineer role, aligning with the department\'s goal of enhancing technical leadership."',
+                smartTimeBound: 'T - Time-bound:',
+                smartTimeBoundContent: 'Goals need a clearly defined deadline or timeframe. This creates urgency, prevents procrastination, and provides a target to work towards. When will this be achieved? What can be done today? In six weeks?',
+                smartTimeBoundNotExample: 'Not SMART: "Learn Spanish."',
+                smartTimeBoundExample: 'SMART: "Achieve conversational fluency in Spanish (able to hold a 30-minute discussion on everyday topics) by December 31st by completing a Level B1 online course and attending weekly conversation practice sessions."',
+                whyUseSmartGoals: 'Why Use SMART Goals?',
+                whyUseSmartGoalsContentIntro: 'The power of the SMART framework lies in its structure and clarity:',
+                enhancedClarityFocus: 'Enhanced Clarity & Focus:',
+                enhancedClarityFocusContent: 'Eliminates ambiguity, ensuring everyone understands exactly what needs to be done.',
+                improvedMotivationCommitment: 'Improved Motivation & Commitment:',
+                improvedMotivationCommitmentContent: 'Measurable progress and achievable steps provide milestones that boost motivation and foster a sense of accomplishment.',
+                betterResourceAllocation: 'Better Resource Allocation:',
+                betterResourceAllocationContent: 'Knowing the specifics helps allocate time, money, and personnel effectively.',
+                objectiveEvaluation: 'Objective Evaluation:',
+                objectiveEvaluationContent: 'Measurable criteria allow for objective assessment of progress and success, removing subjectivity.',
+                increasedAccountability: 'Increased Accountability:',
+                increasedAccountabilityContent: 'Clear ownership and deadlines make it easier to track responsibility and performance.',
+                higherSuccessRates: 'Higher Success Rates:',
+                higherSuccessRatesContent: 'By addressing feasibility and relevance upfront, SMART goals significantly increase the likelihood of actual achievement compared to vague intentions.',
+                puttingSmartGoalsIntoPractice: 'Putting SMART Goals into Practice',
+                puttingSmartGoalsIntoPracticeContentIntro: 'Implementing SMART goals is straightforward:',
+                defineTheObjective: 'Define the Objective:',
+                defineTheObjectiveContent: 'Start with your broad ambition.',
+                applyTheSmartFilter: 'Apply the SMART Filter:',
+                applyTheSmartFilterContent: 'Systematically evaluate and refine the goal against each of the five criteria.',
+                documentCommunicate: 'Document & Communicate:',
+                documentCommunicateContent: 'Write the goal down clearly using the SMART structure and share it with relevant stakeholders.',
+                createActionSteps: 'Create Action Steps:',
+                createActionStepsContent: 'Break the SMART goal down into smaller, manageable tasks with their own deadlines.',
+                trackProgress: 'Track Progress:',
+                trackProgressContent: 'Regularly monitor progress using the measurable criteria. Adjust tactics if needed, but be cautious about changing the core goal unless circumstances drastically shift.',
+                reviewReflect: 'Review & Reflect:',
+                reviewReflectContent: 'Upon reaching the deadline, evaluate the outcome. What worked? What didn\'t? Apply these lessons to future SMART goals.',
+                conclusion: 'Conclusion',
+                conclusionContent: 'The SMART goal framework is more than just an acronym; it\'s a proven methodology for turning aspiration into reality. By demanding specificity, measurability, achievability, relevance, and timeliness, it provides the structure necessary for focused effort, effective tracking, and ultimate success. Whether aiming for personal development, career advancement, or organizational targets, applying the SMART principles transforms the daunting task of goal achievement into a clear, manageable, and highly attainable process. Embrace the SMART framework and unlock your potential for meaningful accomplishment.',
+                // Removed specific reference titles and descriptions
+                readMore: 'Read More',
+
+                // New content for Performance Justification article
+                epjTitle: 'The Art and Science of Employee Performance Justification: A Manager\'s Guide for Review Committees',
+                epjIntro: 'In the structured ecosystem of performance management, the Employee Performance Justification (EPJ) stands as a critical document. It\'s the bridge between a manager\'s direct observation and the broader organizational perspective represented by the Performance Review Committee (PRC). Far more than just restating a rating, a well-crafted EPJ provides the essential context, evidence, and rationale that transforms a subjective assessment into a defensible, objective decision-making tool for the committee. This article outlines the purpose, key components, and best practices for managers writing effective Performance Justifications.',
+                epjPurpose: 'The Crucial Purpose of Performance Justification',
+                epjPurposeTransparency: 'Transparency and Accountability:',
+                epjPurposeTransparencyContent: 'It forces managers to articulate the "why" behind the rating, moving beyond gut feeling to documented reasoning. This promotes fairness and reduces potential bias.',
+                epjPurposeEvidence: 'Evidence-Based Decision Making:',
+                epjPurposeEvidenceContent: 'It provides the PRC with concrete examples and data points supporting the manager\'s evaluation, enabling informed deliberations about promotions, compensation, development needs, or performance improvement plans.',
+                epjPurposeConsistency: 'Consistency and Calibration:',
+                epjPurposeConsistencyContent: 'By requiring managers to explicitly justify ratings using agreed-upon criteria, EPJs help the PRC identify and address inconsistencies across departments or managers, leading to fairer organization-wide outcomes.',
+                epjPurposeLegal: 'Legal and Ethical Safeguarding:',
+                epjPurposeLegalContent: 'A well-documented justification serves as crucial evidence should a performance rating be challenged, demonstrating the decision was based on objective factors related to the job.',
+                epjPurposeDevelopment: 'Development Focus:',
+                epjPurposeDevelopmentContent: 'Highlighting specific strengths and weaknesses with concrete examples provides a solid foundation for the PRC to endorse targeted development plans or resources.',
+                epjComponents: 'Core Components of an Effective Performance Justification',
+                epjOverallRating: 'Overall Performance Rating:',
+                epjOverallRatingContent: 'Clearly state the proposed final rating (e.g., Exceeds Expectations, Meets Expectations, Needs Improvement).',
+                epjKeyContributions: 'Summary of Key Contributions & Achievements:',
+                epjKeyContributionsLink: 'Link to Goals:',
+                epjKeyContributionsLinkContent: 'Explicitly connect accomplishments to pre-defined goals and objectives (SMART goals are ideal).',
+                epjKeyContributionsQuantifiable: 'Quantifiable Results:',
+                epjKeyContributionsQuantifiableContent: 'Prioritize metrics demonstrating impact (e.g., "% increase in sales," "reduced errors by X%," "completed project $Y under budget," "improved customer satisfaction score to Z").',
+                epjKeyContributionsQualitative: 'Qualitative Impact:',
+                epjKeyContributionsQualitativeContent: 'Describe significant contributions that may be harder to quantify but are valuable (e.g., "led successful cross-functional team initiative," "mentored junior colleague leading to their promotion," "resolved critical client escalation preserving key account").',
+                epjKeyContributionsScope: 'Scope & Complexity:',
+                epjKeyContributionsScopeContent: 'Contextualize achievements by describing the difficulty, scale, and complexity of the work undertaken.',
+                epjAssessmentCompetencies: 'Assessment Against Competencies:',
+                epjAssessmentCompetenciesContent: 'Evaluate the employee\'s demonstration of core organizational and role-specific competencies (e.g., Communication, Collaboration, Problem-Solving, Leadership, Technical Expertise).',
+                epjBehavioralExamples: 'Provide Specific Behavioral Examples:',
+                epjBehavioralExamplesContent: 'For each competency rated, cite concrete instances observed during the review period that illustrate the level of proficiency demonstrated. Avoid vague statements.',
+                epjStrengths: 'Strengths:',
+                epjStrengthsContent: 'Clearly identify areas of excellence with supporting examples.',
+                epjDevelopmentAreas: 'Development Areas:',
+                epjDevelopmentAreasContent: 'Honestly identify areas needing improvement, again supported by specific behavioral observations or results gaps. Frame these constructively.',
+                epjRationale: 'Rationale for the Rating:',
+                epjRationaleContent: 'This is the heart of the justification.',
+                epjRationaleSynthesize: 'Synthesize Evidence:',
+                epjRationaleSynthesizeContent: 'Explain how the documented achievements and demonstrated competencies collectively support the proposed overall rating.',
+                epjRationaleScale: 'Address the Scale:',
+                epjRationaleScaleContent: 'Explicitly state how the employee\'s performance compares against the defined standards for each rating level.',
+                epjRationaleContext: 'Acknowledge Context (If Relevant):',
+                epjRationaleContextContent: 'Briefly mention any significant mitigating circumstances (e.g., major organizational change, market downturn, temporary reassignment) that impacted performance, without using them as excuses for core underperformance.',
+                epjRecommendations: 'Recommendations & Forward Look:',
+                epjRecommendationsContent: 'Outline clear, actionable next steps endorsed by the manager, based on the performance assessment:',
+                epjRecommendationsCompensation: 'Compensation:',
+                epjRecommendationsCompensationContent: 'Justify proposed merit increase, bonus, or promotion.',
+                epjRecommendationsDevelopment: 'Development Plan:',
+                epjRecommendationsDevelopmentContent: 'Propose specific development activities or resources to address skill gaps or prepare for future roles.',
+                epjRecommendationsPIP: 'Performance Improvement Plan (PIP):',
+                epjRecommendationsPIPContent: 'If applicable, clearly state the rationale for initiating a PIP, referencing specific performance gaps and the failure to meet expectations despite prior feedback.',
+                epjBestPractices: 'Best Practices for Managers Writing Justifications',
+                epjBestPracticesSpecific: 'Be Specific and Evidence-Based:',
+                epjBestPracticesSpecificContent: 'Use concrete examples, data, and observable behaviors. Replace "good communicator" with "consistently produced clear, concise project status reports that were praised by stakeholders, reducing follow-up questions by 30%.".',
+                epjBestPracticesObjective: 'Be Objective and Unbiased:',
+                epjBestPracticesObjectiveContent: 'Focus on job-related factors and documented performance. Utilize rubrics and competency definitions. Be aware of potential biases (halo/horn effect, recency bias, similarity bias) and actively mitigate them (CIPD, 2023).',
+                epjBestPracticesTimely: 'Be Timely:',
+                epjBestPracticesTimelyContent: 'Document performance observations throughout the year, not just at review time. Maintain a performance log.',
+                epjBestPracticesBalanced: 'Be Balanced:',
+                epjBestPracticesBalancedContent: 'Acknowledge both strengths and areas for improvement, even for top performers or those struggling.',
+                epjBestPracticesConstructive: 'Be Constructive:',
+                epjBestPracticesConstructiveContent: 'Frame development areas as opportunities for growth. Avoid overly harsh or personal language.',
+                epjBestPracticesAligned: 'Be Aligned:',
+                epjBestPracticesAlignedContent: 'Ensure justifications align with organizational values, strategic priorities, and the defined performance management process.',
+                epjBestPracticesConcise: 'Be Concise Yet Comprehensive:',
+                epjBestPracticesConciseContent: 'Provide sufficient detail for the PRC to understand the rationale without unnecessary filler. Follow any prescribed templates or formats.',
+                epjBestPracticesReference: 'Reference Documentation:',
+                epjBestPracticesReferenceContent: 'Explicitly mention supporting documents like project reports, customer feedback, peer reviews, or goal-tracking sheets that the PRC can access if needed.',
+                epjCommitteePerspective: 'The Committee\'s Perspective: What Makes a Justification Credible',
+                epjCommitteePerspectiveClear: 'Clear and Logical:',
+                epjCommitteePerspectiveClearContent: 'The connection between evidence, competency assessment, and final rating is easy to follow.',
+                epjCommitteePerspectiveConsistent: 'Consistent:',
+                epjCommitteePerspectiveConsistentContent: 'The assessment aligns with the employee\'s history and feedback documented throughout the year.',
+                epjCommitteePerspectiveGrounded: 'Grounded in Standards:',
+                epjCommitteePerspectiveGroundedContent: 'Ratings are demonstrably linked to the organization\'s defined performance levels and competencies.',
+                epjCommitteePerspectiveDataDriven: 'Data-Driven:',
+                epjCommitteePerspectiveDataDrivenContent: 'Relies on quantifiable results and specific behavioral observations rather than generalizations.',
+                epjCommitteePerspectiveJobRequirements: 'Focused on Job Requirements:',
+                epjCommitteePerspectiveJobRequirementsContent: 'Stays relevant to the employee\'s role and responsibilities.',
+                epjCommitteePerspectiveForwardLooking: 'Forward-Looking:',
+                epjCommitteePerspectiveForwardLookingContent: 'Includes actionable recommendations for development or performance management.',
+                epjConclusion: 'Conclusion: The Justification as a Cornerstone of Fairness',
+                epjConclusionContent: 'An Employee Performance Justification is not merely administrative paperwork; it is a fundamental exercise in managerial accountability and organizational fairness. By demanding evidence-based reasoning, it elevates the performance review process from subjective opinion to objective evaluation. For the Performance Review Committee, a well-written, credible justification provides the indispensable foundation for making equitable, defensible, and impactful decisions regarding talent recognition, development, and management. Managers who master the art of crafting clear, objective, and evidence-rich justifications contribute significantly to a robust, transparent, and motivating performance culture.',
+                epjKeyTakeaways: 'Key Takeaways for Managers:',
+                epjKeyTakeawaysEPJ: 'EPJ is Persuasive Evidence:',
+                epjKeyTakeawaysEPJContent: 'It\'s your case to the committee.',
+                epjKeyTakeawaysSpecificity: 'Specificity is King:',
+                epjKeyTakeawaysSpecificityContent: 'Use data, dates, projects, and verbatim feedback.',
+                epjKeyTakeawaysAnchor: 'Anchor to Standards:',
+                epjKeyTakeawaysAnchorContent: 'Constantly refer back to goals and competency definitions.',
+                epjKeyTakeawaysBalance: 'Balance is Essential:',
+                epjKeyTakeawaysBalanceContent: 'Show the full picture – strengths and growth areas.',
+                epjKeyTakeawaysDocument: 'Document Year-Round:',
+                epjKeyTakeawaysDocumentContent: 'Build your justification continuously, not in a panic at year-end.'
             },
             ar: {
                 employeePerformanceHub: 'مركز أداء الموظفين',
@@ -735,6 +965,11 @@
                 generateFeedback: 'توليد ملاحظات',
                 generatedFeedback: 'الملاحظات المتولدة:',
                 fillAppraisalMandatoryFields: 'الرجاء تحديد مستوى الأداء وملء جميع الحقول الإلزامية للمستوى المحدد.',
+                exceededTheTarget: 'تجاوز الهدف',
+                additionalResponsibilities: 'مسؤوليات إضافية',
+                justificationAdditionalResponsibilities: 'مبرر للمسؤوليات "الإضافية"',
+                impactResponsibilitiesAchievements: 'تأثير هذه المسؤوليات / الإنجازات',
+
 
                 performanceNotes: 'ملاحظات الأداء',
                 dateOfObservation: 'تاريخ الملاحظة',
@@ -763,7 +998,7 @@
 
                 developmentTarget: 'المهارة/الكفاءة/الهدف المستهدف للتطوير',
                 developmentActivities: 'أنشطة التطوير',
-                addActivity: 'إضافة',
+                addActivity: 'إضافة نشاط',
                 trainingCourses: 'التدريب/الدورات',
                 workshopsCertifications: 'ورش العمل/الشهادات',
                 jobShadowingMentoring: 'التدريب العملي/التوجيه',
@@ -776,6 +1011,8 @@
                 toolsSystemsNeeded: 'الأدوات/الأنظمة المطلوبة',
                 activityTypeLabel: 'نوع النشاط',
                 detailedDescription: 'وصف تفصيلي',
+                addDevelopmentTarget: 'إضافة هدف تطوير',
+                removeTarget: 'إزالة الهدف',
 
                 regularCheckInFeedback: 'ملاحظات دورية',
                 dateOfCheckIn: 'تاريخ المراجعة',
@@ -802,7 +1039,7 @@
                 placeholderStrengthsWeaknessesAnalysis: 'حلل نقاط القوة الرئيسية ومجالات التطوير.',
                 placeholderProjectsGoalsUnmet: 'اذكر المشاريع أو الأهداف التي لم يتم تحقيق التوقعات فيها.',
                 placeholderDocumentedBehaviorResults: 'قدم أمثلة على السلوكيات أو النتائج التي لم تحقق التوقعات.',
-                placeholderManagerSupportToImprove: 'أمثلة على الدعم الإداري لتحسين الأداء.',
+                placeholderManagerSupportToImprove: 'أمثلة على الدعم الإداري لتحسين السلوك.',
                 placeholderProposedTrainingPlan: 'حدد خطة تدريب فردية مقترحة.',
                 placeholderSkillsForFutureAdvancement: 'حدد المهارات والمعرفة والخبرات اللازمة للنمو الوظيفي.',
                 placeholderPlannedResponsibilities: 'مثال: مسؤول عن تقرير مبيعات الربع الأول، إدارة قاعدة بيانات العملاء.',
@@ -812,7 +1049,7 @@
                 placeholderJustificationAdditional: 'اشرح لماذا تعتبر هذه الإنجازات الإضافية مهمة.',
                 placeholderAchievementsImpact: 'صف تأثير هذه الإنجازات.',
                 placeholderMissionDetails: 'قدم تفاصيل حول المهمة، الموقع، الوقت، وسياق المخاطر.',
-                placeholderSolutionDescription: 'صف الحل المبتكر الذي تم إنشاؤه.',
+                placeholderSolutionDescription: 'وصف الحل',
                 placeholderBusinessImpactMetrics: 'حدد كميًا التأثير التجاري للابتكار (مثل: توفير التكاليف، زيادة الإيرادات).',
                 placeholderTargetSurpassMetrics: 'قدم تفاصيل كمية حول كيفية تجاوز الأهداف.',
                 placeholderImpactExceededTarget: 'صف تأثير تجاوز الهدف.',
@@ -830,22 +1067,159 @@
                 placeholderProgressOnGoals: 'مثال: تم الانتهاء من المرحلة الأولى من المشروع X، وتم الوفاء بجميع المواعيد النهائية.',
                 placeholderChallenges: 'مثال: واجهت مشاكل فنية مع البرنامج Y، وتم حلها بالتعاون مع فريق Z.',
                 placeholderAccomplishments: 'مثال: تم إطلاق الميزة A بنجاح، وتلقينا ردود فعل إيجابية من المستخدمين.',
-                placeholderManagerObservations: 'مثال: لاحظت نهج الموظف الاستباقي في حل المشكلات.',
+                placeholderManagerObservations: "مثال: لاحظت نهج الموظف الاستباقي في حل المشكلات.",
                 placeholderNextStepsCheckIn: 'مثال: متابعة تحديثات البرنامج Y، البحث عن فرص تدريب جديدة.',
                 learnGrowIntroContent: 'يقدم هذا القسم مصادر ومراجع لممارسات إدارة الأداء الفعالة، مما يساعدك وفريقك على التعلم والنمو:',
-                performancePlanningSubcategory: 'تخطيط أداء الموظفين: تحديد أهداف SMART والأهداف المتسلسلة',
-                performancePlanningContent: 'يقدم هذا القسم مصادر لتحديد الأهداف الفعال وتخطيط الأداء، بما في ذلك تقنيات إنشاء أهداف SMART والأهداف المتسلسلة داخل المنظمة:',
-                reference1: '1. Harvard Business Review: "How to Give Performance Reviews" - [رابط](https://hbr.org/2021/01/how-to-give-performance-reviews)',
-                reference2: '2. Forbes: "The Importance Of Employee Performance Reviews" - [رابط](https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f)',
-                reference3: '3. SHRM: "Performance Management" - [رابط](https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx)',
-                // New translations for article cards
-                reference1Title: 'كيفية تقديم تقييمات الأداء',
-                reference1Description: 'دليل شامل من هارفارد بيزنس ريفيو حول تقييمات الأداء الفعالة.',
-                reference2Title: 'أهمية تقييمات أداء الموظفين',
-                reference2Description: 'تناقش فوربس سبب أهمية تقييمات الأداء المنتظمة لنمو الموظفين ونجاح المنظمة.',
-                reference3Title: 'إدارة الأداء (SHRM)',
-                reference3Description: 'نظرة عامة من SHRM على إدارة الأداء، تغطي جوانب وممارسات مختلفة.',
-                readMore: 'اقرأ المزيد'
+                smartGoalsCategory: 'تحقيق الإنجاز: قوة أهداف SMART', // Changed from performancePlanningSubcategory
+                smartGoalsCategoryContentIntro: 'يعد تحديد الأهداف أمرًا أساسيًا للتقدم، سواء في حياتنا الشخصية أو المهنية أو في المؤسسات. ومع ذلك، غالبًا ما تتلاشى التطلعات الغامضة مثل "الحصول على اللياقة البدنية" أو "القيام بعمل أفضل في العمل" أو "زيادة المبيعات" في الخلفية، مما يتركنا نشعر بالركود. وهنا تبرز إطار عمل أهداف SMART كأداة قوية وعملية لتحويل الرغبات الغامضة إلى خطط قابلة للتنفيذ والتحقيق. من خلال تطبيق معايير SMART، يزيد الأفراد والفرق بشكل كبير من فرص نجاحهم.',
+                whatAreSmartGoals: 'ما هي أهداف SMART؟',
+                smartSpecific: 'S - محدد (Specific):',
+                smartSpecificContent: 'يجب أن تكون الأهداف واضحة، لا لبس فيها، ومحددة جيدًا. تجيب على الأسئلة: ما الذي يجب إنجازه بالضبط؟ لماذا هو مهم؟ من يشارك؟ أين سيحدث؟ ما هي الموارد أو القيود ذات الصلة؟',
+                smartSpecificNotExample: 'غير ذكي: "تحسين خدمة العملاء."',
+                smartSpecificExample: 'ذكي: "تقليل متوسط وقت انتظار مكالمات العملاء بنسبة 15% داخل قسم الدعم بحلول الربع الرابع من خلال توظيف وكيلين إضافيين وتطبيق برنامج جديد لتوجيه المكالمات."',
+                smartMeasurable: 'M - قابل للقياس (Measurable):',
+                smartMeasurableContent: 'يجب أن تتضمن الأهداف معايير ملموسة لتتبع التقدم وتحديد متى تم تحقيق الهدف. كم؟ كم عدد؟ كيف ستعرف أنك نجحت؟',
+                smartMeasurableNotExample: 'غير ذكي: "كتابة المزيد من التقارير."',
+                smartMeasurableExample: 'ذكي: "إكمال وتقديم تقرير التحليل المالي الشهري بحلول اليوم الخامس من كل شهر للأشهر الستة القادمة."',
+                smartAchievable: 'A - قابل للتحقيق (Achievable or Attainable):',
+                smartAchievableContent: 'يجب أن تكون الأهداف واقعية وقابلة للتحقيق، بالنظر إلى الموارد والمهارات والوقت المتاح. بينما يجب أن تتحدى القدرات، يجب ألا تكون مستحيلة. هل الهدف ممكن؟',
+                smartAchievableNotExample: 'غير ذكي: "مضاعفة حصة الشركة في السوق في شهر واحد."',
+                smartAchievableExample: 'ذكي: "زيادة حصة السوق بنسبة 5% في منطقة الشمال الشرقي بحلول نهاية السنة المالية من خلال حملة تسويق رقمي مستهدفة وشراكة مع اثنين من الموزعين الإقليميين."',
+                smartRelevant: 'R - ذو صلة (Relevant or Realistic):',
+                smartRelevantContent: 'يجب أن تكون الأهداف مهمة وتتوافق مع الأهداف الأوسع. هل يساهم هذا الهدف في المهمة الأكبر أو الخطة الاستراتيجية؟ هل هذا هو الوقت المناسب؟ هل يتناسب مع السياق الحالي؟',
+                smartRelevantNotExample: 'غير ذكي (لمهندس مبتدئ): "أصبح الرئيس التنفيذي العام القادم."',
+                smartRelevantExample: 'ذكي: "إكمال شهادة إدارة المشاريع المتقدمة خلال الـ 12 شهرًا القادمة للتأهل لدور مهندس أول، بما يتماشى مع هدف القسم لتعزيز القيادة الفنية."',
+                smartTimeBound: 'T - محدد بوقت (Time-bound):',
+                smartTimeBoundContent: 'تحتاج الأهداف إلى موعد نهائي أو إطار زمني محدد بوضوح. هذا يخلق شعورًا بالإلحاح، ويمنع التسويف، ويوفر هدفًا للعمل نحوه. متى سيتم تحقيق ذلك؟ ماذا يمكن أن يتم اليوم؟ في ستة أسابيع؟',
+                smartTimeBoundNotExample: 'غير ذكي: "تعلم اللغة الإسبانية."',
+                smartTimeBoundExample: 'ذكي: "تحقيق الطلاقة في اللغة الإسبانية (القدرة على إجراء مناقشة لمدة 30 دقيقة حول مواضيع يومية) بحلول 31 ديسمبر من خلال إكمال دورة عبر الإنترنت من المستوى B1 وحضور جلسات ممارسة المحادثة الأسبوعية."',
+                whyUseSmartGoals: 'لماذا نستخدم أهداف SMART؟',
+                whyUseSmartGoalsContentIntro: 'تكمن قوة إطار عمل SMART في هيكله ووضوحه:',
+                enhancedClarityFocus: 'وضوح وتركيز معزز:',
+                enhancedClarityFocusContent: 'يزيل الغموض، ويضمن فهم الجميع لما يجب القيام به بالضبط.',
+                improvedMotivationCommitment: 'تحسين الدافع والالتزام:',
+                improvedMotivationCommitmentContent: 'يوفر التقدم القابل للقياس والخطوات القابلة للتحقيق معالم تعزز الدافع وتنمي الشعور بالإنجاز.',
+                betterResourceAllocation: 'تخصيص أفضل للموارد:',
+                betterResourceAllocationContent: 'معرفة التفاصيل تساعد في تخصيص الوقت والمال والموظفين بفعالية.',
+                objectiveEvaluation: 'تقييم موضوعي:',
+                objectiveEvaluationContent: 'تسمح المعايير القابلة للقياس بالتقييم الموضوعي للتقدم والنجاح، مما يزيل الذاتية.',
+                increasedAccountability: 'زيادة المساءلة:',
+                increasedAccountabilityContent: 'الملكية الواضحة والمواعيد النهائية تسهل تتبع المسؤولية والأداء.',
+                higherSuccessRates: 'معدلات نجاح أعلى:',
+                higherSuccessRatesContent: 'من خلال معالجة الجدوى والملاءمة مقدمًا، تزيد أهداف SMART بشكل كبير من احتمالية التحقيق الفعلي مقارنة بالنوايا الغامضة.',
+                puttingSmartGoalsIntoPractice: 'تطبيق أهداف SMART عمليًا',
+                puttingSmartGoalsIntoPracticeContentIntro: 'تطبيق أهداف SMART بسيط ومباشر:',
+                defineTheObjective: 'تحديد الهدف:',
+                defineTheObjectiveContent: 'ابدأ بطموحك العام.',
+                applyTheSmartFilter: 'تطبيق مرشح SMART:',
+                applyTheSmartFilterContent: 'قم بتقييم الهدف وتحسينه بشكل منهجي مقابل كل من المعايير الخمسة.',
+                documentCommunicate: 'التوثيق والتواصل:',
+                documentCommunicateContent: 'اكتب الهدف بوضوح باستخدام هيكل SMART وشاركه مع أصحاب المصلحة المعنيين.',
+                createActionSteps: 'إنشاء خطوات عمل:',
+                createActionStepsContent: 'قسّم هدف SMART إلى مهام أصغر يمكن إدارتها بمواعيد نهائية خاصة بها.',
+                trackProgress: 'تتبع التقدم:',
+                trackProgressContent: 'راقب التقدم بانتظام باستخدام المعايير القابلة للقياس. اضبط التكتيكات إذا لزم الأمر، ولكن كن حذرًا بشأن تغيير الهدف الأساسي ما لم تتغير الظروف بشكل جذري.',
+                reviewReflect: 'المراجعة والتفكير:',
+                reviewReflectContent: 'عند الوصول إلى الموعد النهائي، قم بتقييم النتيجة. ما الذي نجح؟ وما الذي لم ينجح؟ طبق هذه الدروس على أهداف SMART المستقبلية.',
+                conclusion: 'الخلاصة',
+                conclusionContent: 'إطار عمل أهداف SMART هو أكثر من مجرد اختصار؛ إنه منهجية مثبتة لتحويل الطموح إلى واقع. من خلال المطالبة بالدقة، والقابلية للقياس، والقابلية للتحقيق، والأهمية، والتحديد الزمني، فإنه يوفر الهيكل اللازم للجهد المركز، والتتبع الفعال، والنجاح النهائي. سواء كنت تهدف إلى التطوير الشخصي، أو التقدم الوظيفي، أو الأهداف التنظيمية، فإن تطبيق مبادئ SMART يحول مهمة تحقيق الأهداف الشاقة إلى عملية واضحة، قابلة للإدارة، وقابلة للتحقيق بدرجة كبيرة. احتضن إطار عمل SMART واطلق العنان لإمكانياتك لتحقيق إنجازات ذات مغزى.',
+                // Removed specific reference titles and descriptions
+                readMore: 'اقرا المزيد',
+
+                // New content for Performance Justification article
+                epjTitle: 'فن وعلم تبرير أداء الموظف: دليل المدير للجان المراجعة',
+                epjIntro: 'في النظام البيئي المنظم لإدارة الأداء، يعتبر تبرير أداء الموظف (EPJ) وثيقة بالغة الأهمية. إنه الجسر بين الملاحظة المباشرة للمدير والمنظور التنظيمي الأوسع الذي تمثله لجنة مراجعة الأداء (PRC). أكثر بكثير من مجرد إعادة ذكر التقييم، يوفر تبرير أداء الموظف المصاغ جيدًا السياق الأساسي والأدلة والمنطق الذي يحول التقييم الذاتي إلى أداة صنع قرار قابلة للدفاع وموضوعية للجنة. تحدد هذه المقالة الغرض والمكونات الرئيسية وأفضل الممارسات للمديرين الذين يكتبون تبريرات أداء فعالة.',
+                epjPurpose: 'الغرض الأساسي من تبرير الأداء',
+                epjPurposeTransparency: 'الشفافية والمساءلة:',
+                epjPurposeTransparencyContent: 'يجبر المديرين على توضيح "السبب" وراء التقييم، متجاوزين الشعور الغريزي إلى التفكير الموثق. هذا يعزز العدالة ويقلل من التحيز المحتمل.',
+                epjPurposeEvidence: 'اتخاذ القرارات القائمة على الأدلة:',
+                epjPurposeEvidenceContent: 'يوفر للجنة مراجعة الأداء أمثلة ملموسة ونقاط بيانات تدعم تقييم المدير، مما يتيح مداولات مستنيرة حول الترقيات، التعويضات، احتياجات التطوير، أو خطط تحسين الأداء.',
+                epjPurposeConsistency: 'الاتساق والمعايرة:',
+                epjPurposeConsistencyContent: 'من خلال مطالبة المديرين بتبرير التقييمات صراحة باستخدام معايير متفق عليها، تساعد تبريرات أداء الموظف لجنة مراجعة الأداء على تحديد ومعالجة التناقضات بين الأقسام أو المديرين، مما يؤدي إلى نتائج أكثر عدلاً على مستوى المنظمة.',
+                epjPurposeLegal: 'الحماية القانونية والأخلاقية:',
+                epjPurposeLegalContent: 'يعمل التبرير الموثق جيدًا كدليل حاسم في حال الطعن في تقييم الأداء، مما يدل على أن القرار استند إلى عوامل موضوعية تتعلق بالوظيفة.',
+                epjPurposeDevelopment: 'التركيز على التطوير:',
+                epjPurposeDevelopmentContent: 'تسليط الضوء على نقاط القوة والضعف المحددة بأمثلة ملموسة يوفر أساسًا متينًا للجنة مراجعة الأداء للموافقة على خطط أو موارد تطوير مستهدفة.',
+                epjComponents: 'المكونات الأساسية لتبرير الأداء الفعال',
+                epjOverallRating: 'التقييم العام للأداء:',
+                epjOverallRatingContent: 'اذكر بوضوح التقييم النهائي المقترح (مثل: يتجاوز التوقعات، يلبي التوقعات، يحتاج إلى تحسين).',
+                epjKeyContributions: 'ملخص المساهمات والإنجازات الرئيسية:',
+                epjKeyContributionsLink: 'الربط بالأهداف:',
+                epjKeyContributionsLinkContent: 'ربط الإنجازات صراحة بالأهداف المحددة مسبقًا (أهداف SMART مثالية).',
+                epjKeyContributionsQuantifiable: 'النتائج القابلة للقياس الكمي:',
+                epjKeyContributionsQuantifiableContent: 'إعطاء الأولوية للمقاييس التي توضح التأثير (مثل: "زيادة بنسبة % في المبيعات"، "تقليل الأخطاء بنسبة X%"، "إكمال المشروع بتكلفة أقل من الميزانية بـ Y دولار"، "تحسين نقاط رضا العملاء إلى Z").',
+                epjKeyContributionsQualitative: 'التأثير النوعي:',
+                epjKeyContributionsQualitativeContent: 'وصف المساهمات الهامة التي قد يكون من الصعب قياسها كميًا ولكنها ذات قيمة (مثل: "قاد مبادرة فريق متعدد الوظائف بنجاح"، "وجه زميلًا مبتدئًا مما أدى إلى ترقيته"، "حل تصعيدًا حرجًا للعميل مما حافظ على حساب رئيسي").',
+                epjKeyContributionsScope: 'النطاق والتعقيد:',
+                epjKeyContributionsQuantifiableContent: 'تحديد أولويات المقاييس التي توضح التأثير (على سبيل المثال، "زيادة بنسبة % في المبيعات"، "تقليل الأخطاء بنسبة X%"، "إكمال المشروع بميزانية أقل من Y دولار"، "تحسين درجة رضا العملاء إلى Z").', // Corrected to use the right translation key
+                epjKeyContributionsScopeContent: 'تحديد سياق الإنجازات من خلال وصف صعوبة العمل المنجز وحجمه وتعقيده.',
+                epjAssessmentCompetencies: 'التقييم مقابل الكفاءات:',
+                epjAssessmentCompetenciesContent: 'تقييم مدى إظهار الموظف للكفاءات التنظيمية والخاصة بالدور (مثل: التواصل، التعاون، حل المشكلات، القيادة، الخبرة الفنية).',
+                epjBehavioralExamples: 'تقديم أمثلة سلوكية محددة:',
+                epjBehavioralExamplesContent: 'لكل كفاءة تم تقييمها، اذكر أمثلة ملموسة تمت ملاحظتها خلال فترة المراجعة توضح مستوى الكفاءة الذي تم إظهاره. تجنب العبارات الغامضة.',
+                epjStrengths: 'نقاط القوة:',
+                epjStrengthsContent: 'تحديد مجالات التميز بوضوح مع أمثلة داعمة.',
+                epjDevelopmentAreas: 'مجالات التطوير:',
+                epjDevelopmentAreasContent: 'تحديد المجالات التي تحتاج إلى تحسين بصدق، مدعومة مرة أخرى بملاحظات سلوكية محددة أو فجوات في النتائج. صياغة هذه بشكل بناء.',
+                epjRationale: 'مبرر التقييم:',
+                epjRationaleContent: 'هذا هو جوهر التبرير.',
+                epjRationaleSynthesize: 'تجميع الأدلة:',
+                epjRationaleSynthesizeContent: 'اشرح كيف تدعم الإنجازات الموثقة والكفاءات الموضحة مجتمعة التقييم العام المقترح.',
+                epjRationaleScale: 'معالجة المقياس:',
+                epjRationaleScaleContent: 'اذكر صراحة كيف يقارن أداء الموظف بالمعايير المحددة لكل مستوى تقييم.',
+                epjRationaleContext: 'الإقرار بالسياق (إذا كان ذا صلة):',
+                epjRationaleContextContent: 'اذكر باختصار أي ظروف مخففة مهمة (مثل: تغيير تنظيمي كبير، تراجع السوق، إعادة تعيين مؤقتة) أثرت على الأداء، دون استخدامها كأعذار للأداء الضعيف الأساسي.',
+                epjRecommendations: 'التوصيات والنظرة المستقبلية:',
+                epjRecommendationsContent: 'تحديد الخطوات التالية الواضحة والقابلة للتنفيذ التي يوافق عليها المدير، بناءً على تقييم الأداء:',
+                epjRecommendationsCompensation: 'التعويضات:',
+                epjRecommendationsCompensationContent: 'تبرير الزيادة المقترحة في الراتب، أو المكافأة، أو الترقية.',
+                epjRecommendationsDevelopment: 'خطة التطوير:',
+                epjRecommendationsDevelopmentContent: 'اقتراح أنشطة أو موارد تطوير محددة لمعالجة فجوات المهارات أو التحضير لأدوار مستقبلية.',
+                epjRecommendationsPIP: 'خطة تحسين الأداء (PIP):',
+                epjRecommendationsPIPContent: 'إذا كان ذلك منطبقًا، اذكر بوضوح الأساس المنطقي لبدء خطة تحسين الأداء، مع الإشارة إلى فجوات الأداء المحددة والفشل في تلبية التوقعات على الرغم من الملاحظات السابقة.',
+                epjBestPractices: 'أفضل الممارسات للمديرين عند كتابة التبريرات',
+                epjBestPracticesSpecific: 'كن محددًا وقائمًا على الأدلة:',
+                epjBestPracticesSpecificContent: 'استخدم أمثلة ملموسة، وبيانات، وسلوكيات قابلة للملاحظة. استبدل "متواصل جيد" بـ "أنتج باستمرار تقارير حالة مشروع واضحة وموجزة أشاد بها أصحاب المصلحة، مما قلل من أسئلة المتابعة بنسبة 30%".',
+                epjBestPracticesObjective: 'كن موضوعيًا وغير متحيز:',
+                epjBestPracticesObjectiveContent: 'ركز على العوامل المتعلقة بالوظيفة والأداء الموثق. استخدم القوالب وتعريفات الكفاءة. كن على دراية بالتحيزات المحتملة (تأثير الهالة/القرن، تحيز الحداثة، تحيز التشابه) وتخفيفها بنشاط (CIPD، 2023).',
+                epjBestPracticesTimely: 'كن في الوقت المناسب:',
+                epjBestPracticesTimelyContent: 'وثق ملاحظات الأداء على مدار العام، وليس فقط في وقت المراجعة. احتفظ بسجل أداء.',
+                epjBestPracticesBalanced: 'كن متوازنًا:',
+                epjBestPracticesBalancedContent: 'اعترف بنقاط القوة ومجالات التحسين، حتى بالنسبة لأفضل الأداء أو أولئك الذين يواجهون صعوبات.',
+                epjBestPracticesConstructive: 'كن بناءً:',
+                epjBestPracticesConstructiveContent: 'صياغة مجالات التطوير كفرص للنمو. تجنب اللغة القاسية أو الشخصية بشكل مفرط.',
+                epjBestPracticesAligned: 'كن متوافقًا:',
+                epjBestPracticesAlignedContent: 'تأكد من توافق التبريرات مع القيم التنظيمية، والأولويات الاستراتيجية، وعملية إدارة الأداء المحددة.',
+                epjBestPracticesConcise: 'كن موجزًا وشاملًا في نفس الوقت:',
+                epjBestPracticesConciseContent: 'قدم تفاصيل كافية للجنة مراجعة الأداء لفهم الأساس المنطقي دون حشو غير ضروري. اتبع أي قوالب أو تنسيقات محددة.',
+                epjBestPracticesReference: 'توثيق المراجع:',
+                epjBestPracticesReferenceContent: 'اذكر صراحة المستندات الداعمة مثل تقارير المشروع، وملاحظات العملاء، ومراجعات الزملاء، أو أوراق تتبع الأهداف التي يمكن للجنة مراجعة الأداء الوصول إليها إذا لزم الأمر.',
+                epjCommitteePerspective: 'منظور اللجنة: ما الذي يجعل التبرير موثوقًا به',
+                epjCommitteePerspectiveClear: 'واضح ومنطقي:',
+                epjCommitteePerspectiveClearContent: 'الصلة بين الأدلة وتقييم الكفاءة والتقييم النهائي سهلة المتابعة.',
+                epjCommitteePerspectiveConsistent: 'متسق:',
+                epjCommitteePerspectiveConsistentContent: 'يتوافق التقييم مع تاريخ الموظف والملاحظات الموثقة على مدار العام.',
+                epjCommitteePerspectiveGrounded: 'مستند إلى المعايير:',
+                epjCommitteePerspectiveGroundedContent: 'ترتبط التقييمات بشكل واضح بمستويات الأداء والكفاءات المحددة للمنظمة.',
+                epjCommitteePerspectiveDataDriven: 'مدفوع بالبيانات:',
+                epjCommitteePerspectiveDataDrivenContent: 'يعتمد على النتائج القابلة للقياس الكمي والملاحظات السلوكية المحددة بدلاً من التعميمات.',
+                epjCommitteePerspectiveJobRequirements: 'يركز على متطلبات الوظيفة:',
+                epjCommitteePerspectiveJobRequirementsContent: 'يبقى ذا صلة بدور الموظف ومسؤولياته.',
+                epjCommitteePerspectiveForwardLooking: 'تطلعي:',
+                epjCommitteePerspectiveForwardLookingContent: 'يتضمن توصيات قابلة للتنفيذ للتطوير أو إدارة الأداء.',
+                epjConclusion: 'الخلاصة: التبرير حجر الزاوية في العدالة',
+                epjConclusionContent: 'تبرير أداء الموظف ليس مجرد عمل إداري؛ إنه ممارسة أساسية في مساءلة المديرين والعدالة التنظيمية. من خلال المطالبة بمنطق قائم على الأدلة، فإنه يرفع عملية مراجعة الأداء من الرأي الذاتي إلى التقييم الموضوعي. بالنسبة للجنة مراجعة الأداء، يوفر التبرير المكتوب جيدًا والموثوق به الأساس الذي لا غنى عنه لاتخاذ قرارات عادلة وقابلة للدفاع وذات تأثير فيما يتعلق بالتعرف على المواهب وتطويرها وإدارتها. يساهم المديرون الذين يتقنون فن صياغة تبريرات واضحة وموضوعية وغنية بالأدلة بشكل كبير في ثقافة أداء قوية وشفافة ومحفزة.',
+                epjKeyTakeaways: 'النقاط الرئيسية للمديرين:',
+                epjKeyTakeawaysEPJ: 'تبرير أداء الموظف هو دليل مقنع:',
+                epjKeyTakeawaysEPJContent: 'إنها قضيتك أمام اللجنة.',
+                epjKeyTakeawaysSpecificity: 'التحديد هو الأهم:',
+                epjKeyTakeawaysSpecificityContent: 'استخدم البيانات والتواريخ والمشاريع والملاحظات الحرفية.',
+                epjKeyTakeawaysAnchor: 'الربط بالمعايير:',
+                epjKeyTakeawaysAnchorContent: 'ارجع باستمرار إلى الأهداف وتعريفات الكفاءات.',
+                epjKeyTakeawaysBalance: 'التوازن ضروري:',
+                epjKeyTakeawaysBalanceContent: 'أظهر الصورة الكاملة - نقاط القوة ومجالات النمو.',
+                epjKeyTakeawaysDocument: 'وثق على مدار العام:',
+                epjKeyTakeawaysDocumentContent: 'ابنِ تبريرك باستمرار، وليس في حالة ذعر في نهاية العام.'
             }
         };
 
@@ -932,8 +1306,8 @@
                 'documentedBehaviorResults': 'placeholderDocumentedBehaviorResults',
                 'managerSupportToImprove': 'placeholderManagerSupportToImprove',
                 'proposedTrainingPlan': 'placeholderProposedTrainingPlan',
-                'skillsForFutureAdvancement': 'placeholderSkillsForFutureAdvancement',
-                'plannedResponsibilities': 'placeholderPlannedResponsibilities',
+                // 'skillsForFutureAdvancement': 'placeholderSkillsForFutureAdvancement', // Removed as per request
+                'plannedResponsibilities': 'placeholderPlannedResponsibilities', // This is no longer used in meetExpectations, but kept for consistency in translations
                 'accomplishedResponsibilities': 'placeholderAccomplishedResponsibilities',
                 'coreResponsibilities': 'placeholderCoreResponsibilities',
                 'additionalAchievements': 'placeholderAdditionalAchievements',
@@ -1136,7 +1510,7 @@
                 generateButton.innerHTML = `${loaderIcon} ${translations[currentLanguage].generateSmartGoal}`;
                 smartGoalOutput.classList.add('hidden'); // Hide previous output
 
-                let prompt = `As an HR assistant, draft a SMART goal based on the following details, considering the user's language preference (${currentLanguage}):\n\n`;
+                let prompt = `As an HR assistant, draft 3 distinct SMART goals based on the following details, considering the user's language preference (${currentLanguage}). Each goal should be Specific, Measurable, Achievable, Relevant, and Time-bound. If requested, include actionable subtasks and suggested success criteria for each goal:\n\n`;
                 prompt += `Goal Name: ${goalName}\n`;
                 prompt += `Target/KPI: ${targetKpi}\n`;
                 prompt += `Deadline: ${deadline}\n`;
@@ -1145,27 +1519,28 @@
                     prompt += `User-provided Success Criteria: ${userSuccessCriteria}\n`;
                 }
 
-                prompt += `Ensure the goal is Specific, Measurable, Achievable, Relevant, and Time-bound.\n`;
-
                 const schema = {
-                    type: "OBJECT",
-                    properties: {
-                        smartGoal: { "type": "STRING" },
-                        subtasks: {
-                            type: "ARRAY",
-                            items: { "type": "STRING" }
+                    type: "ARRAY",
+                    items: {
+                        type: "OBJECT",
+                        properties: {
+                            smartGoal: { "type": "STRING" },
+                            subtasks: {
+                                type: "ARRAY",
+                                items: { "type": "STRING" }
+                            },
+                            suggestedSuccessCriteria: {
+                                type: "ARRAY",
+                                items: { "type": "STRING" }
+                            }
                         },
-                        suggestedSuccessCriteria: {
-                            type: "ARRAY",
-                            items: { "type": "STRING" }
-                        }
-                    },
-                    propertyOrdering: ["smartGoal", "subtasks", "suggestedSuccessCriteria"]
+                        propertyOrdering: ["smartGoal", "subtasks", "suggestedSuccessCriteria"]
+                    }
                 };
 
-                let generatedContent;
+                let generatedContents;
                 try {
-                    generatedContent = await callGeminiApi(prompt, schema);
+                    generatedContents = await callGeminiApi(prompt, schema);
                 } catch (error) {
                     console.error("Error during API call for SMART Goal:", error);
                     displayMessage(`${translations[currentLanguage].failedToGenerate} ${error.message}`, 'error', moduleSection);
@@ -1178,65 +1553,68 @@
                 generateButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 18V12"></path><path d="M9 15h6"></path></svg><span data-i18n="generateSmartGoal">${translations[currentLanguage].generateSmartGoal}</span>`;
 
 
-                if (generatedContent && generatedContent.smartGoal) {
+                if (generatedContents && generatedContents.length > 0) {
                     smartGoalOutput.innerHTML = `<h3 class="mb-4" data-i18n="generatedDrafts">Generated Drafts:</h3>`;
 
-                    // SMART Goal Draft
-                    const goalItem = document.createElement('div');
-                    goalItem.className = 'output-item';
-                    goalItem.innerHTML = `
-                        <h4 data-i18n="smartGoalDraft">Smart Goal Draft</h4>
-                        <p><strong data-i18n="goalLabel">Goal:</strong> ${generatedContent.smartGoal}</p>
-                        <p><strong data-i18n="targetKpiLabel">Target/KPI:</strong> ${targetKpi || translations[currentLanguage].targetKpiNotAvailable}</p>
-                        <p><strong>${translations[currentLanguage].deadline}:</strong> ${deadline}</p>
-                        <button class="copy-button">${copyIcon} <span data-i18n="copyToClipboard">${translations[currentLanguage].copyToClipboard}</span></button>
-                    `;
-                    goalItem.querySelector('.copy-button').onclick = (e) => {
-                        e.preventDefault();
-                        const textToCopy = `Goal: ${generatedContent.smartGoal}\nTarget/KPI: ${targetKpi || translations[currentLanguage].targetKpiNotAvailable}\nDeadline: ${deadline}`;
-                        copyTextToClipboard(textToCopy, e.currentTarget);
-                    };
-                    smartGoalOutput.appendChild(goalItem);
-
-                    // Suggested Subtasks
-                    if (shouldGenerateSubtasks && generatedContent.subtasks && generatedContent.subtasks.length > 0) {
-                        const subtasksItem = document.createElement('div');
-                        subtasksItem.className = 'output-item';
-                        const subtasksList = generatedContent.subtasks.map(task => `<li>${task}</li>`).join('');
-                        subtasksItem.innerHTML = `
-                            <h4 data-i18n="suggestedSubtasks">Suggested Subtasks:</h4>
-                            <ul class="list-disc pl-5">
-                                ${subtasksList}
-                            </ul>
+                    generatedContents.forEach((content, index) => {
+                        // SMART Goal Draft
+                        const goalItem = document.createElement('div');
+                        goalItem.className = 'output-item';
+                        goalItem.innerHTML = `
+                            <h4>${translations[currentLanguage].smartGoalDraft} ${index + 1}</h4>
+                            <p><strong data-i18n="goalLabel">Goal:</strong> ${content.smartGoal}</p>
+                            <p><strong data-i18n="targetKpiLabel">Target/KPI:</strong> ${targetKpi || translations[currentLanguage].targetKpiNotAvailable}</p>
+                            <p><strong>${translations[currentLanguage].deadline}:</strong> ${deadline}</p>
                             <button class="copy-button">${copyIcon} <span data-i18n="copyToClipboard">${translations[currentLanguage].copyToClipboard}</span></button>
                         `;
-                        subtasksItem.querySelector('.copy-button').onclick = (e) => {
+                        goalItem.querySelector('.copy-button').onclick = (e) => {
                             e.preventDefault();
-                            const textToCopy = generatedContent.subtasks.map((task, index) => `${index + 1}. ${task}`).join('\n');
+                            const textToCopy = `Goal: ${content.smartGoal}\nTarget/KPI: ${targetKpi || translations[currentLanguage].targetKpiNotAvailable}\nDeadline: ${deadline}`;
                             copyTextToClipboard(textToCopy, e.currentTarget);
                         };
-                        smartGoalOutput.appendChild(subtasksItem);
-                    }
+                        smartGoalOutput.appendChild(goalItem);
 
-                    // Suggested Success Criteria
-                    if (shouldSuggestSuccessCriteria && generatedContent.suggestedSuccessCriteria && generatedContent.suggestedSuccessCriteria.length > 0) {
-                        const successCriteriaItem = document.createElement('div');
-                        successCriteriaItem.className = 'output-item';
-                        const criteriaList = generatedContent.suggestedSuccessCriteria.map(criteria => `<li>${criteria}</li>`).join('');
-                        successCriteriaItem.innerHTML = `
-                            <h4 data-i18n="suggestedSuccessCriteria">Suggested Success Criteria:</h4>
-                            <ul class="list-disc pl-5">
-                                ${criteriaList}
-                            </ul>
-                            <button class="copy-button">${copyIcon} <span data-i18n="copyToClipboard">${translations[currentLanguage].copyToClipboard}</span></button>
-                        `;
-                        successCriteriaItem.querySelector('.copy-button').onclick = (e) => {
-                            e.preventDefault();
-                            const textToCopy = generatedContent.suggestedSuccessCriteria.map((criteria, index) => `${index + 1}. ${criteria}`).join('\n');
-                            copyTextToClipboard(textToCopy, e.currentTarget);
-                        };
-                        smartGoalOutput.appendChild(successCriteriaItem);
-                    }
+                        // Suggested Subtasks
+                        if (shouldGenerateSubtasks && content.subtasks && content.subtasks.length > 0) {
+                            const subtasksItem = document.createElement('div');
+                            subtasksItem.className = 'output-item';
+                            const subtasksList = content.subtasks.map(task => `<li>${task}</li>`).join('');
+                            subtasksItem.innerHTML = `
+                                <h4 data-i18n="suggestedSubtasks">Suggested Subtasks for Draft ${index + 1}:</h4>
+                                <ul class="list-disc pl-5">
+                                    ${subtasksList}
+                                </ul>
+                                <button class="copy-button">${copyIcon} <span data-i18n="copyToClipboard">${translations[currentLanguage].copyToClipboard}</span></button>
+                            `;
+                            subtasksItem.querySelector('.copy-button').onclick = (e) => {
+                                e.preventDefault();
+                                const textToCopy = content.subtasks.map((task, idx) => `${idx + 1}. ${task}`).join('\n');
+                                copyTextToClipboard(textToCopy, e.currentTarget);
+                            };
+                            smartGoalOutput.appendChild(subtasksItem);
+                        }
+
+                        // Suggested Success Criteria
+                        if (shouldSuggestSuccessCriteria && content.suggestedSuccessCriteria && content.suggestedSuccessCriteria.length > 0) {
+                            const successCriteriaItem = document.createElement('div');
+                            successCriteriaItem.className = 'output-item';
+                            const criteriaList = content.suggestedSuccessCriteria.map(criteria => `<li>${criteria}</li>`).join('');
+                            successCriteriaItem.innerHTML = `
+                                <h4 data-i18n="suggestedSuccessCriteria">Suggested Success Criteria for Draft ${index + 1}:</h4>
+                                <ul class="list-disc pl-5">
+                                    ${criteriaList}
+                                </ul>
+                                <button class="copy-button">${copyIcon} <span data-i18n="copyToClipboard">${translations[currentLanguage].copyToClipboard}</span></button>
+                            `;
+                            successCriteriaItem.querySelector('.copy-button').onclick = (e) => {
+                                e.preventDefault();
+                                const textToCopy = content.suggestedSuccessCriteria.map((criteria, idx) => `${idx + 1}. ${criteria}`).join('\n');
+                                copyTextToClipboard(textToCopy, e.currentTarget);
+                            };
+                            smartGoalOutput.appendChild(successCriteriaItem);
+                        }
+                    });
+
 
                     smartGoalOutput.classList.remove('hidden');
                     applyTranslations(); // Apply translations to newly added elements
@@ -1338,10 +1716,6 @@
                                 <label for="proposedTrainingPlan" data-i18n="proposedTrainingPlan">Proposed individual training plan</label>
                                 <textarea id="proposedTrainingPlan" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderProposedTrainingPlan}"></textarea>
                             </div>
-                            <div class="input-group">
-                                <label for="skillsForFutureAdvancement" data-i18n="skillsForFutureAdvancement">Skills and experiences required for future advancement</label>
-                                <textarea id="skillsForFutureAdvancement" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderSkillsForFutureAdvancement}"></textarea>
-                            </div>
                         `;
                         break;
                     case 'meetExpectations':
@@ -1351,46 +1725,26 @@
                                 <label for="accomplishedResponsibilities" data-i18n="accomplishedResponsibilities">Accomplished Responsibilities</label>
                                 <textarea id="accomplishedResponsibilities" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderAccomplishedResponsibilities}"></textarea>
                             </div>
-                            <div class="input-group">
-                                <label for="coreResponsibilities" data-i18n="coreResponsibilities">Core responsibilities</label>
-                                <textarea id="coreResponsibilities" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderCoreResponsibilities}"></textarea>
-                            </div>
-                            <div class="input-group">
-                                <label for="additionalAchievements" data-i18n="additionalAchievements">Additional achievements (Optional)</label>
-                                <textarea id="additionalAchievements" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderAdditionalAchievements}"></textarea>
-                            </div>
-                            <div class="input-group" id="justificationGroup" style="display:none;">
-                                <label for="justificationAdditional" data-i18n="justificationAdditional">Justification for “additional” classification</label>
-                                <textarea id="justificationAdditional" rows="2" class="rounded-md" placeholder="${translations[currentLanguage].placeholderJustificationAdditional}"></textarea>
-                            </div>
-                            <div class="input-group">
-                                <label for="achievementsImpact" data-i18n="achievementsImpact">Impact of these achievements</label>
-                                <textarea id="achievementsImpact" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderAchievementsImpact}"></textarea>
-                            </div>
                         `;
                         break;
                     case 'exceedExpectations':
                         inputsHtml = `
                             <h4 class="text-xl font-semibold mb-4 text-linkedin-blue-dark" data-i18n="inputsFor">${translations[currentLanguage].inputsFor} ${translations[currentLanguage].exceedExpectations}</h4>
                             <div class="input-group">
-                                <label for="accomplishedResponsibilities" data-i18n="accomplishedResponsibilities">Accomplished Responsibilities</label>
-                                <textarea id="accomplishedResponsibilities" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderAccomplishedResponsibilities}"></textarea>
+                                <label for="exceededTheTarget" data-i18n="exceededTheTarget">Exceeded the target (Optional)</label>
+                                <textarea id="exceededTheTarget" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderTargetSurpassMetrics}"></textarea>
                             </div>
                             <div class="input-group">
-                                <label for="additionalAchievements" data-i18n="additionalAchievements">Additional achievements</label>
-                                <textarea id="additionalAchievements" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderAdditionalAchievements}"></textarea>
+                                <label for="additionalResponsibilities" data-i18n="additionalResponsibilities">Additional Responsibilities (Optional)</label>
+                                <textarea id="additionalResponsibilities" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderAdditionalAchievements}"></textarea>
+                            </div>
+                            <div class="input-group" id="justificationAdditionalResponsibilitiesGroup" style="display: none;">
+                                <label for="justificationAdditionalResponsibilities" data-i18n="justificationAdditionalResponsibilities">Justification for “additional” Responsibilities</label>
+                                <textarea id="justificationAdditionalResponsibilities" rows="2" class="rounded-md" placeholder="${translations[currentLanguage].placeholderJustificationAdditional}"></textarea>
                             </div>
                             <div class="input-group">
-                                <label for="justificationAdditional" data-i18n="justificationAdditional">Justification for “additional” classification</label>
-                                <textarea id="justificationAdditional" rows="2" class="rounded-md" placeholder="${translations[currentLanguage].placeholderJustificationAdditional}"></textarea>
-                            </div>
-                            <div class="input-group">
-                                <label for="achievementsImpact" data-i18n="achievementsImpact">Impact of these achievements</label>
-                                <textarea id="achievementsImpact" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderAchievementsImpact}"></textarea>
-                            </div>
-                            <div class="input-group">
-                                <label for="skillsForFutureAdvancement" data-i18n="skillsForFutureAdvancement">Skills and experiences required for future advancement</label>
-                                <textarea id="skillsForFutureAdvancement" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderSkillsForFutureAdvancement}"></textarea>
+                                <label for="impactResponsibilitiesAchievements" data-i18n="impactResponsibilitiesAchievements">Impact of these Responsibilities / achievements</label>
+                                <textarea id="impactResponsibilitiesAchievements" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderAchievementsImpact}"></textarea>
                             </div>
                         `;
                         break;
@@ -1409,10 +1763,6 @@
                             <div id="outstandingSpecificInputs">
                                 <!-- Sub-options inputs will be loaded here -->
                             </div>
-                            <div class="input-group">
-                                <label for="skillsForFutureAdvancement" data-i18n="skillsForFutureAdvancement">Skills and experiences required for future advancement</label>
-                                <textarea id="skillsForFutureAdvancement" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].placeholderSkillsForFutureAdvancement}"></textarea>
-                            </div>
                         `;
                         break;
                     default:
@@ -1421,20 +1771,23 @@
                 tierSpecificInputs.innerHTML = inputsHtml;
                 applyTranslations(); // Apply translations to newly rendered inputs
 
-                if (tier === 'meetExpectations') {
-                    const additionalAchievementsInput = document.getElementById('additionalAchievements');
-                    const justificationGroup = document.getElementById('justificationGroup');
-                    if (additionalAchievementsInput) {
-                        additionalAchievementsInput.oninput = () => {
-                            if (additionalAchievementsInput.value.trim() !== '') {
-                                justificationGroup.style.display = 'block';
+                // Logic for showing/hiding justification field for Exceed Expectations
+                if (tier === 'exceedExpectations') {
+                    const additionalResponsibilitiesInput = document.getElementById('additionalResponsibilities');
+                    const justificationAdditionalResponsibilitiesGroup = document.getElementById('justificationAdditionalResponsibilitiesGroup');
+                    if (additionalResponsibilitiesInput && justificationAdditionalResponsibilitiesGroup) {
+                        additionalResponsibilitiesInput.oninput = () => {
+                            if (additionalResponsibilitiesInput.value.trim() !== '') {
+                                justificationAdditionalResponsibilitiesGroup.style.display = 'block';
                             } else {
-                                justificationGroup.style.display = 'none';
+                                justificationAdditionalResponsibilitiesGroup.style.display = 'none';
                             }
                         };
                         // Initial check in case there's pre-filled content (e.g., from a back action)
-                        if (additionalAchievementsInput.value.trim() !== '') {
-                            justificationGroup.style.display = 'block';
+                        if (additionalResponsibilitiesInput.value.trim() !== '') {
+                            justificationAdditionalResponsibilitiesGroup.style.display = 'block';
+                        } else {
+                            justificationAdditionalResponsibilitiesGroup.style.display = 'none';
                         }
                     }
                 }
@@ -1512,10 +1865,9 @@
 
                 let prompt = `As an HR assistant, draft a performance appraisal feedback for an employee based on the "${tier}" performance tier. Use the following details, formatted for ${currentLanguage}:\n\n`;
                 let allFieldsFilled = true;
-                const requiredFields = []; // Array to collect required field names
+                const data = {};
 
                 // Collect data and check for mandatory fields based on the tier
-                const data = {};
                 switch (tier) {
                     case 'poorPerformance':
                         data.employeeDidntAchieveGoals = document.getElementById('employeeDidntAchieveGoals')?.value.trim();
@@ -1536,8 +1888,7 @@
                         data.documentedBehaviorResults = document.getElementById('documentedBehaviorResults')?.value.trim();
                         data.managerSupportToImprove = document.getElementById('managerSupportToImprove')?.value.trim();
                         data.proposedTrainingPlan = document.getElementById('proposedTrainingPlan')?.value.trim();
-                        data.skillsForFutureAdvancement = document.getElementById('skillsForFutureAdvancement')?.value.trim();
-                        if (!data.projectsGoalsUnmet || !data.documentedBehaviorResults || !data.managerSupportToImprove || !data.proposedTrainingPlan || !data.skillsForFutureAdvancement) {
+                        if (!data.projectsGoalsUnmet || !data.documentedBehaviorResults || !data.managerSupportToImprove || !data.proposedTrainingPlan) {
                             allFieldsFilled = false;
                         }
                         prompt += `Performance Tier: Below Expectations\n`;
@@ -1545,46 +1896,45 @@
                         prompt += `Documented behavior/result examples that didn’t meet expectations: ${data.documentedBehaviorResults}\n`;
                         prompt += `Manager support examples to improve behavior: ${data.managerSupportToImprove}\n`;
                         prompt += `Proposed individual training plan: ${data.proposedTrainingPlan}\n`;
-                        prompt += `Skills and experiences required for future advancement: ${data.skillsForFutureAdvancement}\n`;
                         break;
                     case 'meetExpectations':
                         data.accomplishedResponsibilities = document.getElementById('accomplishedResponsibilities')?.value.trim();
-                        data.coreResponsibilities = document.getElementById('coreResponsibilities')?.value.trim();
-                        data.additionalAchievements = document.getElementById('additionalAchievements')?.value.trim(); // Optional
-                        data.justificationAdditional = document.getElementById('justificationAdditional')?.value.trim(); // Optional, depends on additionalAchievements
-                        data.achievementsImpact = document.getElementById('achievementsImpact')?.value.trim();
-                        if (!data.accomplishedResponsibilities || !data.coreResponsibilities || !data.achievementsImpact || (data.additionalAchievements && !data.justificationAdditional)) {
+                        
+                        if (!data.accomplishedResponsibilities) {
                             allFieldsFilled = false;
                         }
                         prompt += `Performance Tier: Meet Expectations\n`;
                         prompt += `Accomplished Responsibilities: ${data.accomplishedResponsibilities}\n`;
-                        prompt += `Core Responsibilities: ${data.coreResponsibilities}\n`;
-                        if (data.additionalAchievements) {
-                            prompt += `Additional achievements: ${data.additionalAchievements}\n`;
-                            prompt += `Justification for “additional” classification: ${data.justificationAdditional}\n`;
-                        }
-                        prompt += `Impact of these achievements: ${data.achievementsImpact}\n`;
                         break;
                     case 'exceedExpectations':
-                        data.accomplishedResponsibilities = document.getElementById('accomplishedResponsibilities')?.value.trim();
-                        data.additionalAchievements = document.getElementById('additionalAchievements')?.value.trim();
-                        data.justificationAdditional = document.getElementById('justificationAdditional')?.value.trim();
-                        data.achievementsImpact = document.getElementById('achievementsImpact')?.value.trim();
-                        data.skillsForFutureAdvancement = document.getElementById('skillsForFutureAdvancement')?.value.trim();
-                        if (!data.accomplishedResponsibilities || !data.additionalAchievements || !data.justificationAdditional || !data.achievementsImpact || !data.skillsForFutureAdvancement) {
+                        data.exceededTheTarget = document.getElementById('exceededTheTarget')?.value.trim(); // Optional
+                        data.additionalResponsibilities = document.getElementById('additionalResponsibilities')?.value.trim(); // Optional
+                        data.justificationAdditionalResponsibilities = document.getElementById('justificationAdditionalResponsibilities')?.value.trim(); // Optional, depends on additionalResponsibilities
+                        data.impactResponsibilitiesAchievements = document.getElementById('impactResponsibilitiesAchievements')?.value.trim(); // Mandatory
+                        
+                        // Check if mandatory fields are filled.
+                        // For 'exceedExpectations', 'impactResponsibilitiesAchievements' is mandatory.
+                        // 'justificationAdditionalResponsibilities' is mandatory if 'additionalResponsibilities' is provided.
+                        if (!data.impactResponsibilitiesAchievements || (data.additionalResponsibilities && !data.justificationAdditionalResponsibilities)) {
                             allFieldsFilled = false;
                         }
+
                         prompt += `Performance Tier: Exceed Expectations\n`;
-                        prompt += `Accomplished Responsibilities: ${data.accomplishedResponsibilities}\n`;
-                        prompt += `Additional achievements: ${data.additionalAchievements}\n`;
-                        prompt += `Justification for “additional” classification: ${data.justificationAdditional}\n`;
-                        prompt += `Impact of these achievements: ${data.achievementsImpact}\n`;
-                        prompt += `Skills and experiences required for future advancement: ${data.skillsForFutureAdvancement}\n`;
+                        if (data.exceededTheTarget) { // Only add if provided
+                            prompt += `Exceeded the target: ${data.exceededTheTarget}\n`;
+                        }
+                        if (data.additionalResponsibilities) {
+                            prompt += `Additional Responsibilities: ${data.additionalResponsibilities}\n`;
+                            // Only add justification to prompt if additional responsibilities are provided
+                            if (data.justificationAdditionalResponsibilities) {
+                                prompt += `Justification for “additional” Responsibilities: ${data.justificationAdditionalResponsibilities}\n`;
+                            }
+                        }
+                        prompt += `Impact of these Responsibilities / achievements: ${data.impactResponsibilitiesAchievements}\n`;
                         break;
                     case 'outstanding':
                         const subOption = document.getElementById('outstandingSubOption')?.value;
-                        data.skillsForFutureAdvancement = document.getElementById('skillsForFutureAdvancement')?.value.trim();
-                        if (!subOption || !data.skillsForFutureAdvancement) {
+                        if (!subOption) {
                              allFieldsFilled = false;
                         }
                         prompt += `Performance Tier: Outstanding\n`;
@@ -1611,7 +1961,6 @@
                                 prompt += `Impact of Exceeding Target: ${data.impactExceededTarget}\n`;
                                 break;
                         }
-                        prompt += `Skills and experiences required for future advancement: ${data.skillsForFutureAdvancement}\n`;
                         break;
                 }
 
@@ -1732,7 +2081,7 @@
             const contextSituationInput = document.getElementById('contextSituation');
             const impactOutcomeInput = document.getElementById('impactOutcome');
             const sentimentIndicatorSelect = document.getElementById('sentimentIndicator');
-            const alignmentGoalsValuesInput = document.getElementById('alignmentGoalsValues');
+            const alignmentGoalsValuesInput = document.getElementById('alignmentGoalsValues'); // This is now optional
             const nextStepsInput = document.getElementById('nextSteps');
             const moduleSection = appContent.querySelector('.module-section');
 
@@ -1747,6 +2096,7 @@
                 const alignmentGoalsValues = alignmentGoalsValuesInput.value.trim();
                 const nextSteps = nextStepsInput.value.trim();
 
+                // Removed alignmentGoalsValues from mandatory check
                 if (!dateOfObservation || !feedbackType || !observedBehaviorAction || !contextSituation || !impactOutcome || !sentimentIndicator) {
                     displayMessage(translations[currentLanguage].fillNoteMandatoryFields, 'error', moduleSection);
                     return;
@@ -1763,7 +2113,7 @@
                 prompt += `Context/Situation: ${contextSituation}\n`;
                 prompt += `Impact/Outcome: ${impactOutcome}\n`;
                 prompt += `Sentiment Indicator: ${sentimentIndicator}\n`;
-                if (alignmentGoalsValues) {
+                if (alignmentGoalsValues) { // Still include if provided
                     prompt += `Alignment with Goals/Values: ${alignmentGoalsValues}\n`;
                 }
                 if (nextSteps) {
@@ -1832,32 +2182,13 @@
                         <textarea id="careerAspirations" rows="3" class="rounded-md" placeholder="${translations[currentLanguage].careerAspirations}"></textarea>
                     </div>
 
-                    <h4 class="text-xl font-semibold mb-4 text-linkedin-blue-dark" data-i18n="developmentActivities">Development Activities</h4>
-                    <div class="input-group">
-                        <label for="developmentTarget" data-i18n="developmentTarget">Development Target Skill/Competency/Goal</label>
-                        <input type="text" id="developmentTarget" class="rounded-md" placeholder="${translations[currentLanguage].placeholderDevelopmentTarget}">
+                    <h4 class="text-xl font-semibold mb-4 text-linkedin-blue-dark" data-i18n="developmentTarget">Development Targets</h4>
+                    <div id="developmentTargetsContainer">
+                        <!-- Dynamic development target blocks will be added here -->
                     </div>
-                    <div id="developmentActivitiesContainer">
-                        <!-- Dynamic activity inputs will be added here -->
-                    </div>
-                    <button id="addActivityBtn" class="button-generate mt-4 mb-6 !w-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        <span data-i18n="addActivity">Add</span>
+                    <button id="addDevelopmentTargetBtn" class="button-generate mt-4 mb-6 !w-auto">
+                        ${addIcon} <span data-i18n="addDevelopmentTarget">Add Development Target</span>
                     </button>
-
-                    <h4 class="text-xl font-semibold mb-4 text-linkedin-blue-dark" data-i18n="supportResources">Support & Resources</h4>
-                    <div class="input-group">
-                        <label for="managerOrgSupport" data-i18n="managerOrgSupport">Manager/Org Support Required</label>
-                        <textarea id="managerOrgSupport" rows="2" class="rounded-md" placeholder="${translations[currentLanguage].placeholderManagerOrgSupport}"></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label for="budgetTimeEstimates" data-i18n="budgetTimeEstimates">Budget/Time Estimates</label>
-                        <textarea id="budgetTimeEstimates" rows="2" class="rounded-md" placeholder="${translations[currentLanguage].placeholderBudgetTimeEstimates}"></textarea>
-                    </div>
-                    <div class="input-group">
-                        <label for="toolsSystemsNeeded" data-i18n="toolsSystemsNeeded">Tools/Systems Needed</label>
-                        <textarea id="toolsSystemsNeeded" rows="2" class="rounded-md" placeholder="${translations[currentLanguage].placeholderToolsSystemsNeeded}"></textarea>
-                    </div>
 
                     <button id="generateIdpBtn" class="button-generate">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 18V12"></path><path d="M9 15h6"></path></svg>
@@ -1870,37 +2201,104 @@
             `;
             applyTranslations();
 
-            const addActivityBtn = document.getElementById('addActivityBtn');
-            const developmentActivitiesContainer = document.getElementById('developmentActivitiesContainer');
+            const addDevelopmentTargetBtn = document.getElementById('addDevelopmentTargetBtn');
+            const developmentTargetsContainer = document.getElementById('developmentTargetsContainer');
             const generateIdpBtn = document.getElementById('generateIdpBtn');
             const idpOutput = document.getElementById('idpOutput');
             const employeeCurrentRoleInput = document.getElementById('employeeCurrentRole');
             const currentSkillsStrengthsInput = document.getElementById('currentSkillsStrengths');
             const desiredSkillsDevelopmentInput = document.getElementById('desiredSkillsDevelopment');
             const careerAspirationsInput = document.getElementById('careerAspirations');
-            const developmentTargetInput = document.getElementById('developmentTarget');
-            const managerOrgSupportInput = document.getElementById('managerOrgSupport');
-            const budgetTimeEstimatesInput = document.getElementById('budgetTimeEstimates');
-            const toolsSystemsNeededInput = document.getElementById('toolsSystemsNeeded');
             const moduleSection = appContent.querySelector('.module-section');
 
-
-            let activityCounter = 0;
+            let targetCounter = 0;
 
             /**
-             * Adds a new development activity input group.
+             * Adds a new development target block with its own activities and support resources.
              */
-            function addDevelopmentActivity() {
-                activityCounter++;
+            function addDevelopmentTargetBlock() {
+                targetCounter++;
+                const targetBlock = document.createElement('div');
+                targetBlock.className = 'development-target-block';
+                targetBlock.setAttribute('data-target-id', targetCounter); // Unique ID for this block
+                targetBlock.innerHTML = `
+                    <button class="remove-block-btn" title="${translations[currentLanguage].removeTarget}">
+                        ${removeIcon}
+                    </button>
+                    <h4 class="text-lg font-semibold mb-4">${translations[currentLanguage].developmentTarget} ${targetCounter}</h4>
+                    <div class="input-group">
+                        <label for="developmentTarget-${targetCounter}" data-i18n="developmentTarget">Development Target Skill/Competency/Goal</label>
+                        <input type="text" id="developmentTarget-${targetCounter}" class="rounded-md development-target-input" placeholder="${translations[currentLanguage].placeholderDevelopmentTarget}">
+                    </div>
+
+                    <h5 class="text-md font-semibold mt-6 mb-3 text-linkedin-blue-dark" data-i18n="developmentActivities">Development Activities</h5>
+                    <div id="developmentActivitiesContainer-${targetCounter}">
+                        <!-- Dynamic activity inputs for this target will be added here -->
+                    </div>
+                    <button class="add-button add-activity-btn" data-target-id="${targetCounter}">
+                        ${addIcon} <span data-i18n="addActivity">Add Activity</span>
+                    </button>
+
+                    <h5 class="text-md font-semibold mt-6 mb-3 text-linkedin-blue-dark" data-i18n="supportResources">Support & Resources</h5>
+                    <div id="supportResourcesContainer-${targetCounter}">
+                        <div class="support-group">
+                            <div class="input-group">
+                                <label for="managerOrgSupport-${targetCounter}" data-i18n="managerOrgSupport">Manager/Org Support Required</label>
+                                <textarea id="managerOrgSupport-${targetCounter}" rows="2" class="rounded-md manager-org-support" placeholder="${translations[currentLanguage].placeholderManagerOrgSupport}"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="budgetTimeEstimates-${targetCounter}" data-i18n="budgetTimeEstimates">Budget/Time Estimates</label>
+                                <textarea id="budgetTimeEstimates-${targetCounter}" rows="2" class="rounded-md budget-time-estimates" placeholder="${translations[currentLanguage].placeholderBudgetTimeEstimates}"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label for="toolsSystemsNeeded-${targetCounter}" data-i18n="toolsSystemsNeeded">Tools/Systems Needed</label>
+                                <textarea id="toolsSystemsNeeded-${targetCounter}" rows="2" class="rounded-md tools-systems-needed" placeholder="${translations[currentLanguage].placeholderToolsSystemsNeeded}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                developmentTargetsContainer.appendChild(targetBlock);
+                applyTranslations(); // Apply translations to newly added elements
+
+                // Attach event listener for removing the entire target block
+                targetBlock.querySelector('.remove-block-btn').onclick = () => {
+                    targetBlock.remove();
+                    // Re-index target block titles if needed (optional, but good for UX)
+                    document.querySelectorAll('.development-target-block h4').forEach((h4, idx) => {
+                        h4.textContent = `${translations[currentLanguage].developmentTarget} ${idx + 1}`;
+                    });
+                };
+
+                // Attach event listener for adding activities within this target block
+                targetBlock.querySelector('.add-activity-btn').onclick = (e) => {
+                    const currentTargetId = e.currentTarget.getAttribute('data-target-id');
+                    addDevelopmentActivity(currentTargetId);
+                };
+
+                // Add an initial activity for the new target block
+                addDevelopmentActivity(targetCounter);
+            }
+
+            let activitySubCounter = 0; // Global counter for unique activity IDs
+
+            /**
+             * Adds a new development activity input group within a specific target block.
+             * @param {number} targetId The ID of the parent development target block.
+             */
+            function addDevelopmentActivity(targetId) {
+                activitySubCounter++;
+                const activitiesContainer = document.getElementById(`developmentActivitiesContainer-${targetId}`);
+                if (!activitiesContainer) return;
+
                 const activityDiv = document.createElement('div');
                 activityDiv.className = 'activity-group border border-linkedin-gray-100 p-4 rounded-md mb-4 relative';
                 activityDiv.innerHTML = `
                     <button class="remove-activity-btn absolute top-2 right-2 text-linkedin-red hover:text-linkedin-blue-dark" title="Remove Activity">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                        ${removeIcon}
                     </button>
                     <div class="input-group">
-                        <label for="activityType-${activityCounter}" data-i18n="activityTypeLabel">Activity Type</label>
-                        <select id="activityType-${activityCounter}" class="rounded-md activity-type">
+                        <label for="activityType-${targetId}-${activitySubCounter}" data-i18n="activityTypeLabel">Activity Type</label>
+                        <select id="activityType-${targetId}-${activitySubCounter}" class="rounded-md activity-type">
                             <option value="" data-i18n="selectAnOption">${translations[currentLanguage].selectAnOption}</option>
                             <option value="trainingCourses" data-i18n="trainingCourses">${translations[currentLanguage].trainingCourses}</option>
                             <option value="workshopsCertifications" data-i18n="workshopsCertifications">${translations[currentLanguage].workshopsCertifications}</option>
@@ -1911,11 +2309,11 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="activityDescription-${activityCounter}" data-i18n="detailedDescription">Detailed Description</label>
-                        <textarea id="activityDescription-${activityCounter}" rows="2" class="rounded-md activity-description" placeholder="${translations[currentLanguage].placeholderActivityDescription}"></textarea>
+                        <label for="activityDescription-${targetId}-${activitySubCounter}" data-i18n="detailedDescription">Detailed Description</label>
+                        <textarea id="activityDescription-${targetId}-${activitySubCounter}" rows="2" class="rounded-md activity-description" placeholder="${translations[currentLanguage].placeholderActivityDescription}"></textarea>
                     </div>
                 `;
-                developmentActivitiesContainer.appendChild(activityDiv);
+                activitiesContainer.appendChild(activityDiv);
                 applyTranslations();
 
                 // Add event listener for remove button
@@ -1924,34 +2322,57 @@
                 };
             }
 
-            // Add first activity automatically on load
-            addDevelopmentActivity();
+            // Add first development target block automatically on load
+            addDevelopmentTargetBlock();
 
-            addActivityBtn.onclick = addDevelopmentActivity;
+            addDevelopmentTargetBtn.onclick = addDevelopmentTargetBlock;
 
             generateIdpBtn.onclick = async () => {
                 const employeeCurrentRole = employeeCurrentRoleInput.value.trim();
                 const currentSkillsStrengths = currentSkillsStrengthsInput.value.trim();
                 const desiredSkillsDevelopment = desiredSkillsDevelopmentInput.value.trim();
                 const careerAspirations = careerAspirationsInput.value.trim();
-                const developmentTarget = developmentTargetInput.value.trim();
-                const managerOrgSupport = managerOrgSupportInput.value.trim();
-                const budgetTimeEstimates = budgetTimeEstimatesInput.value.trim();
-                const toolsSystemsNeeded = toolsSystemsNeededInput.value.trim();
 
-                const activities = [];
-                let allActivitiesFilled = true;
-                document.querySelectorAll('.activity-group').forEach(activityDiv => {
-                    const type = activityDiv.querySelector('.activity-type')?.value;
-                    const description = activityDiv.querySelector('.activity-description')?.value.trim();
-                    if (type && description) {
-                        activities.push({ type: translations[currentLanguage][type], description });
-                    } else {
-                        allActivitiesFilled = false;
+                if (!employeeCurrentRole || !currentSkillsStrengths || !desiredSkillsDevelopment || !careerAspirations) {
+                    displayMessage(translations[currentLanguage].fillIdpMandatoryFields, 'error', moduleSection);
+                    return;
+                }
+
+                const developmentTargets = [];
+                let allTargetsFilled = true;
+
+                document.querySelectorAll('.development-target-block').forEach(targetBlock => {
+                    const targetId = targetBlock.getAttribute('data-target-id');
+                    const developmentTarget = targetBlock.querySelector(`#developmentTarget-${targetId}`)?.value.trim();
+                    const managerOrgSupport = targetBlock.querySelector(`#managerOrgSupport-${targetId}`)?.value.trim();
+                    const budgetTimeEstimates = targetBlock.querySelector(`#budgetTimeEstimates-${targetId}`)?.value.trim();
+                    const toolsSystemsNeeded = targetBlock.querySelector(`#toolsSystemsNeeded-${targetId}`)?.value.trim();
+
+                    const activities = [];
+                    targetBlock.querySelectorAll(`#developmentActivitiesContainer-${targetId} .activity-group`).forEach(activityDiv => {
+                        const type = activityDiv.querySelector('.activity-type')?.value;
+                        const description = activityDiv.querySelector('.activity-description')?.value.trim();
+                        if (type && description) {
+                            activities.push({ type: translations[currentLanguage][type], description });
+                        } else {
+                            allTargetsFilled = false; // An activity within a target is not fully filled
+                        }
+                    });
+
+                    if (!developmentTarget || activities.length === 0 || !managerOrgSupport || !budgetTimeEstimates || !toolsSystemsNeeded) {
+                        allTargetsFilled = false; // A target block itself is not fully filled
                     }
+
+                    developmentTargets.push({
+                        developmentTarget,
+                        activities,
+                        managerOrgSupport,
+                        budgetTimeEstimates,
+                        toolsSystemsNeeded
+                    });
                 });
 
-                if (!employeeCurrentRole || !currentSkillsStrengths || !desiredSkillsDevelopment || !careerAspirations || !developmentTarget || !allActivitiesFilled || !managerOrgSupport || !budgetTimeEstimates || !toolsSystemsNeeded) {
+                if (!allTargetsFilled || developmentTargets.length === 0) {
                     displayMessage(translations[currentLanguage].fillIdpMandatoryFields, 'error', moduleSection);
                     return;
                 }
@@ -1965,15 +2386,20 @@
                 prompt += `Current Skills and Strengths: ${currentSkillsStrengths}\n`;
                 prompt += `Desired Skills/Areas for Development: ${desiredSkillsDevelopment}\n`;
                 prompt += `Career Aspirations: ${careerAspirations}\n\n`;
-                prompt += `Development Target Skill/Competency/Goal: ${developmentTarget}\n\n`;
-                prompt += `Development Activities:\n`;
-                activities.forEach(activity => {
-                    prompt += `- Type: ${activity.type}, Description: ${activity.description}\n`;
+
+                developmentTargets.forEach((target, index) => {
+                    prompt += `--- Development Target ${index + 1} ---\n`;
+                    prompt += `Development Target Skill/Competency/Goal: ${target.developmentTarget}\n\n`;
+                    prompt += `Development Activities:\n`;
+                    target.activities.forEach(activity => {
+                        prompt += `- Type: ${activity.type}, Description: ${activity.description}\n`;
+                    });
+                    prompt += `\nSupport & Resources:\n`;
+                    prompt += `Manager/Org Support Required: ${target.managerOrgSupport}\n`;
+                    prompt += `Budget/Time Estimates: ${target.budgetTimeEstimates}\n`;
+                    prompt += `Tools/Systems Needed: ${target.toolsSystemsNeeded}\n\n`;
                 });
-                prompt += `\nSupport & Resources:\n`;
-                prompt += `Manager/Org Support Required: ${managerOrgSupport}\n`;
-                prompt += `Budget/Time Estimates: ${budgetTimeEstimates}\n`;
-                prompt += `Tools/Systems Needed: ${toolsSystemsNeeded}\n`;
+
                 prompt += `The IDP should be comprehensive and actionable.`;
 
                 let generatedIdp;
@@ -2096,7 +2522,7 @@
                     prompt += `Manager Observations/Feedback: ${managerObservations}\n`;
                 }
                 if (nextStepsCheckIn) {
-                    prompt += `Next Steps/Action Items: ${nextStepsCheckIn}\n`;
+                    prompt += `Next Steps: ${nextStepsCheckIn}\n`;
                 }
                 prompt += `The feedback should be constructive and concise.`;
 
@@ -2148,53 +2574,173 @@
                     <p class="mb-4 text-linkedin-text-dark" data-i18n="learnGrowIntroContent"></p>
 
                     <div class="subcategory-section mb-8">
-                        <button class="flex items-center justify-between w-full text-left py-2 px-4 rounded-md bg-linkedin-blue-light hover:bg-linkedin-blue-primary hover:text-white transition-colors duration-200 group" id="togglePerformancePlanning">
-                            <h4 class="text-xl font-semibold text-linkedin-blue-dark group-hover:text-white m-0 p-0" data-i18n="performancePlanningSubcategory"></h4>
-                            <svg id="arrowIcon" class="w-6 h-6 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <button class="flex items-center justify-between w-full text-left py-2 px-4 rounded-full bg-linkedin-blue-light hover:bg-linkedin-blue-primary hover:text-white transition-colors duration-200 group nav-button" id="toggleSmartGoalsCategory">
+                            <h4 class="text-xl font-semibold text-linkedin-blue-dark group-hover:text-white m-0 p-0" data-i18n="smartGoalsCategory"></h4>
+                            <svg id="arrowIconSmart" class="w-6 h-6 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <div id="performancePlanningContentArea" class="mt-4">
-                            <p class="mb-4 text-linkedin-text-medium" data-i18n="performancePlanningContent"></p>
+                        <div id="smartGoalsCategoryContentArea" class="mt-4">
+                            <p class="mb-4 text-linkedin-text-medium" data-i18n="smartGoalsCategoryContentIntro"></p>
 
-                            <div class="articles-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <!-- Article Card 1 -->
-                                <div class="article-card">
-                                    <div class="article-icon">📚</div>
-                                    <h5 class="article-title" data-i18n="reference1Title"></h5>
-                                    <p class="article-description" data-i18n="reference1Description"></p>
-                                    <a href="https://hbr.org/2021/01/how-to-give-performance-reviews" target="_blank" class="article-link" data-i18n="readMore"></a>
-                                </div>
-                                <!-- Article Card 2 -->
-                                <div class="article-card">
-                                    <div class="article-icon">💡</div>
-                                    <h5 class="article-title" data-i18n="reference2Title"></h5>
-                                    <p class="article-description" data-i18n="reference2Description"></p>
-                                    <a href="https://www.forbes.com/sites/forbeshumanresourcescouncil/2023/07/28/the-importance-of-employee-performance-reviews/?sh=5f0f3e6a4b1f" target="_blank" class="article-link" data-i18n="readMore"></a>
-                                </div>
-                                <!-- Article Card 3 -->
-                                <div class="article-card">
-                                    <div class="article-icon">📊</div>
-                                    <h5 class="article-title" data-i18n="reference3Title"></h5>
-                                    <p class="article-description" data-i18n="reference3Description"></p>
-                                    <a href="https://www.shrm.org/resourcesandtools/tools-and-samples/hr-qa/pages/whatisperformancemanagement.aspx" target="_blank" class="article-link" data-i18n="readMore"></a>
-                                </div>
-                            </div>
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="whatAreSmartGoals"></h4>
+                            <ul class="list-disc pl-5 mb-4 text-linkedin-text-dark">
+                                <li><strong><span data-i18n="smartSpecific"></span></strong> <span data-i18n="smartSpecificContent"></span><br>
+                                    <em><span data-i18n="smartSpecificNotExample"></span></em><br>
+                                    <em><span data-i18n="smartSpecificExample"></span></em>
+                                </li>
+                                <li><strong><span data-i18n="smartMeasurable"></span></strong> <span data-i18n="smartMeasurableContent"></span><br>
+                                    <em><span data-i18n="smartMeasurableNotExample"></span></em><br>
+                                    <em><span data-i18n="smartMeasurableExample"></span></em>
+                                </li>
+                                <li><strong><span data-i18n="smartAchievable"></span></strong> <span data-i18n="smartAchievableContent"></span><br>
+                                    <em><span data-i18n="smartAchievableNotExample"></span></em><br>
+                                    <em><span data-i18n="smartAchievableExample"></span></em>
+                                </li>
+                                <li><strong><span data-i18n="smartRelevant"></span></strong> <span data-i18n="smartRelevantContent"></span><br>
+                                    <em><span data-i18n="smartRelevantNotExample"></span></em><br>
+                                    <em><span data-i18n="smartRelevantExample"></span></em>
+                                </li>
+                                <li><strong><span data-i18n="smartTimeBound"></span></strong> <span data-i18n="smartTimeBoundContent"></span><br>
+                                    <em><span data-i18n="smartTimeBoundNotExample"></span></em><br>
+                                    <em><span data-i18n="smartTimeBoundExample"></span></em>
+                                </li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="whyUseSmartGoals"></h4>
+                            <p class="mb-2 text-linkedin-text-medium" data-i18n="whyUseSmartGoalsContentIntro"></p>
+                            <ul class="list-disc pl-5 mb-4 text-linkedin-text-dark">
+                                <li><strong><span data-i18n="enhancedClarityFocus"></span></strong> <span data-i18n="enhancedClarityFocusContent"></span></li>
+                                <li><strong><span data-i18n="improvedMotivationCommitment"></span></strong> <span data-i18n="improvedMotivationCommitmentContent"></span></li>
+                                <li><strong><span data-i18n="betterResourceAllocation"></span></strong> <span data-i18n="betterResourceAllocationContent"></span></li>
+                                <li><strong><span data-i18n="objectiveEvaluation"></span></strong> <span data-i18n="objectiveEvaluationContent"></span></li>
+                                <li><strong><span data-i18n="increasedAccountability"></span></strong> <span data-i18n="increasedAccountabilityContent"></span></li>
+                                <li><strong><span data-i18n="higherSuccessRates"></span></strong> <span data-i18n="higherSuccessRatesContent"></span></li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="puttingSmartGoalsIntoPractice"></h4>
+                            <p class="mb-2 text-linkedin-text-medium" data-i18n="puttingSmartGoalsIntoPracticeContentIntro"></p>
+                            <ul class="list-disc pl-5 mb-4 text-linkedin-text-dark">
+                                <li><strong><span data-i18n="defineTheObjective"></span></strong> <span data-i18n="defineTheObjectiveContent"></span></li>
+                                <li><strong><span data-i18n="applyTheSmartFilter"></span></strong> <span data-i18n="applyTheSmartFilterContent"></span></li>
+                                <li><strong><span data-i18n="documentCommunicate"></span></strong> <span data-i18n="documentCommunicateContent"></span></li>
+                                <li><strong><span data-i18n="createActionSteps"></span></strong> <span data-i18n="createActionStepsContent"></span></li>
+                                <li><strong><span data-i18n="trackProgress"></span></strong> <span data-i18n="trackProgressContent"></span></li>
+                                <li><strong><span data-i18n="reviewReflect"></span></strong> <span data-i18n="reviewReflectContent"></span></li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="conclusion"></h4>
+                            <p class="mb-4 text-linkedin-text-medium" data-i18n="conclusionContent"></p>
+                        </div>
+                    </div>
+
+                    <div class="subcategory-section mb-8">
+                        <button class="flex items-center justify-between w-full text-left py-2 px-4 rounded-full bg-linkedin-blue-light hover:bg-linkedin-blue-primary hover:text-white transition-colors duration-200 group nav-button" id="toggleEpjCategory">
+                            <h4 class="text-xl font-semibold text-linkedin-blue-dark group-hover:text-white m-0 p-0" data-i18n="epjTitle"></h4>
+                            <svg id="arrowIconEpj" class="w-6 h-6 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="epjCategoryContentArea" class="mt-4">
+                            <p class="mb-4 text-linkedin-text-medium" data-i18n="epjIntro"></p>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="epjPurpose"></h4>
+                            <ul class="list-disc pl-5 mb-4 text-linkedin-text-dark">
+                                <li><strong><span data-i18n="epjPurposeTransparency"></span></strong> <span data-i18n="epjPurposeTransparencyContent"></span></li>
+                                <li><strong><span data-i18n="epjPurposeEvidence"></span></strong> <span data-i18n="epjPurposeEvidenceContent"></span></li>
+                                <li><strong><span data-i18n="epjPurposeConsistency"></span></strong> <span data-i18n="epjPurposeConsistencyContent"></span></li>
+                                <li><strong><span data-i18n="epjPurposeLegal"></span></strong> <span data-i18n="epjPurposeLegalContent"></span></li>
+                                <li><strong><span data-i18n="epjPurposeDevelopment"></span></strong> <span data-i18n="epjPurposeDevelopmentContent"></span></li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="epjComponents"></h4>
+                            <ul class="list-disc pl-5 mb-4 text-linkedin-text-dark">
+                                <li><strong><span data-i18n="epjOverallRating"></span></strong> <span data-i18n="epjOverallRatingContent"></span></li>
+                                <li><strong><span data-i18n="epjKeyContributions"></span></strong>
+                                    <ul class="list-circle pl-5 mt-1">
+                                        <li><strong><span data-i18n="epjKeyContributionsLink"></span></strong> <span data-i18n="epjKeyContributionsLinkContent"></span></li>
+                                        <li><strong><span data-i18n="epjKeyContributionsQuantifiable"></span></strong> <span data-i18n="epjKeyContributionsQuantifiableContent"></span></li>
+                                        <li><strong><span data-i18n="epjKeyContributionsQualitative"></span></strong> <span data-i18n="epjKeyContributionsQualitativeContent"></span></li>
+                                        <li><strong><span data-i18n="epjKeyContributionsScope"></span></strong> <span data-i18n="epjKeyContributionsScopeContent"></span></li>
+                                    </ul>
+                                </li>
+                                <li><strong><span data-i18n="epjAssessmentCompetencies"></span></strong> <span data-i18n="epjAssessmentCompetenciesContent"></span></li>
+                                <li><strong><span data-i18n="epjBehavioralExamples"></span></strong> <span data-i18n="epjBehavioralExamplesContent"></span></li>
+                                <li><strong><span data-i18n="epjStrengths"></span></strong> <span data-i18n="epjStrengthsContent"></span></li>
+                                <li><strong><span data-i18n="epjDevelopmentAreas"></span></strong> <span data-i18n="epjDevelopmentAreasContent"></span></li>
+                                <li><strong><span data-i18n="epjRationale"></span></strong> <span data-i18n="epjRationaleContent"></span>
+                                    <ul class="list-circle pl-5 mt-1">
+                                        <li><strong><span data-i18n="epjRationaleSynthesize"></span></strong> <span data-i18n="epjRationaleSynthesizeContent"></span></li>
+                                        <li><strong><span data-i18n="epjRationaleScale"></span></strong> <span data-i18n="epjRationaleScaleContent"></span></li>
+                                        <li><strong><span data-i18n="epjRationaleContext"></span></strong> <span data-i18n="epjRationaleContextContent"></span></li>
+                                    </ul>
+                                </li>
+                                <li><strong><span data-i18n="epjRecommendations"></span></strong> <span data-i18n="epjRecommendationsContent"></span>
+                                    <ul class="list-circle pl-5 mt-1">
+                                        <li><strong><span data-i18n="epjRecommendationsCompensation"></span></strong> <span data-i18n="epjRecommendationsCompensationContent"></span></li>
+                                        <li><strong><span data-i18n="epjRecommendationsDevelopment"></span></strong> <span data-i18n="epjRecommendationsDevelopmentContent"></span></li>
+                                        <li><strong><span data-i18n="epjRecommendationsPIP"></span></strong> <span data-i18n="epjRecommendationsPIPContent"></span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="epjBestPractices"></h4>
+                            <ul class="list-disc pl-5 mb-4 text-linkedin-text-dark">
+                                <li><strong><span data-i18n="epjBestPracticesSpecific"></span></strong> <span data-i18n="epjBestPracticesSpecificContent"></span></li>
+                                <li><strong><span data-i18n="epjBestPracticesObjective"></span></strong> <span data-i18n="epjBestPracticesObjectiveContent"></span></li>
+                                <li><strong><span data-i18n="epjBestPracticesTimely"></span></strong> <span data-i18n="epjBestPracticesTimelyContent"></span></li>
+                                <li><strong><span data-i18n="epjBestPracticesBalanced"></span></strong> <span data-i18n="epjBestPracticesBalancedContent"></span></li>
+                                <li><strong><span data-i18n="epjBestPracticesConstructive"></span></strong> <span data-i18n="epjBestPracticesConstructiveContent"></span></li>
+                                <li><strong><span data-i18n="epjBestPracticesAligned"></span></strong> <span data-i18n="epjBestPracticesAlignedContent"></span></li>
+                                <li><strong><span data-i18n="epjBestPracticesConcise"></span></strong> <span data-i18n="epjBestPracticesConciseContent"></span></li>
+                                <li><strong><span data-i18n="epjBestPracticesReference"></span></strong> <span data-i18n="epjBestPracticesReferenceContent"></span></li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="epjCommitteePerspective"></h4>
+                            <ul class="list-disc pl-5 mb-4 text-linkedin-text-dark">
+                                <li><strong><span data-i18n="epjCommitteePerspectiveClear"></span></strong> <span data-i18n="epjCommitteePerspectiveClearContent"></span></li>
+                                <li><strong><span data-i18n="epjCommitteePerspectiveConsistent"></span></strong> <span data-i18n="epjCommitteePerspectiveConsistentContent"></span></li>
+                                <li><strong><span data-i18n="epjCommitteePerspectiveGrounded"></span></strong> <span data-i18n="epjCommitteePerspectiveGroundedContent"></span></li>
+                                <li><strong><span data-i18n="epjCommitteePerspectiveDataDriven"></span></strong> <span data-i18n="epjCommitteePerspectiveDataDrivenContent"></span></li>
+                                <li><strong><span data-i18n="epjCommitteePerspectiveJobRequirements"></span></strong> <span data-i18n="epjCommitteePerspectiveJobRequirementsContent"></span></li>
+                                <li><strong><span data-i18n="epjCommitteePerspectiveForwardLooking"></span></strong> <span data-i18n="epjCommitteePerspectiveForwardLookingContent"></span></li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="epjKeyTakeaways"></h4>
+                            <ul class="list-disc pl-5 mb-4 text-linkedin-text-dark">
+                                <li><strong><span data-i18n="epjKeyTakeawaysEPJ"></span></strong> <span data-i18n="epjKeyTakeawaysEPJContent"></span></li>
+                                <li><strong><span data-i18n="epjKeyTakeawaysSpecificity"></span></strong> <span data-i18n="epjKeyTakeawaysSpecificityContent"></span></li>
+                                <li><strong><span data-i18n="epjKeyTakeawaysAnchor"></span></strong> <span data-i18n="epjKeyTakeawaysAnchorContent"></span></li>
+                                <li><strong><span data-i18n="epjKeyTakeawaysBalance"></span></strong> <span data-i18n="epjKeyTakeawaysBalanceContent"></span></li>
+                                <li><strong><span data-i18n="epjKeyTakeawaysDocument"></span></strong> <span data-i18n="epjKeyTakeawaysDocumentContent"></span></li>
+                            </ul>
+
+                            <h4 class="text-lg font-semibold mb-2 text-linkedin-blue-dark" data-i18n="conclusion"></h4>
+                            <p class="mb-4 text-linkedin-text-medium" data-i18n="epjConclusionContent"></p>
                         </div>
                     </div>
                 </section>
             `;
             applyTranslations(); // Apply translations to newly rendered elements
 
-            const toggleButton = document.getElementById('togglePerformancePlanning');
-            const contentArea = document.getElementById('performancePlanningContentArea');
-            const arrowIcon = document.getElementById('arrowIcon');
+            const toggleSmartGoalsButton = document.getElementById('toggleSmartGoalsCategory');
+            const smartGoalsContentArea = document.getElementById('smartGoalsCategoryContentArea');
+            const arrowIconSmart = document.getElementById('arrowIconSmart');
 
-            // Initial state: collapsed by default
-            contentArea.classList.add('hidden');
-            arrowIcon.classList.remove('rotate-180'); // Ensure arrow points down
+            const toggleEpjButton = document.getElementById('toggleEpjCategory');
+            const epjContentArea = document.getElementById('epjCategoryContentArea');
+            const arrowIconEpj = document.getElementById('arrowIconEpj');
 
-            toggleButton.onclick = () => {
-                contentArea.classList.toggle('hidden');
-                arrowIcon.classList.toggle('rotate-180'); // Rotate arrow up when expanded
+            // Initial state: collapsed by default for both
+            smartGoalsContentArea.classList.add('hidden');
+            arrowIconSmart.classList.remove('rotate-180');
+            epjContentArea.classList.add('hidden');
+            arrowIconEpj.classList.remove('rotate-180');
+
+            toggleSmartGoalsButton.onclick = () => {
+                smartGoalsContentArea.classList.toggle('hidden');
+                arrowIconSmart.classList.toggle('rotate-180');
+            };
+
+            toggleEpjButton.onclick = () => {
+                epjContentArea.classList.toggle('hidden');
+                arrowIconEpj.classList.toggle('rotate-180');
             };
         }
 
@@ -2259,11 +2805,7 @@
                 renderSmartGoalDrafting(); // Render the default module
             }
 
-            // Update logo src to a placeholder image if it's the original "Sudani_logo.png"
-            const sudaniLogo = document.getElementById('sudani-logo');
-            if (sudaniLogo && sudaniLogo.src.includes('Sudani_logo.png')) {
-                sudaniLogo.src = 'https://placehold.co/100x45/004182/FFFFFF?text=Logo';
-            }
+            // Removed logo update logic as the logo is removed
         });
 
     </script>
